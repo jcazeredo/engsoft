@@ -1,7 +1,6 @@
 from controller.controlador import Controlador
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtWidgets
 import sip
-import sys
 
 class Interface(object):
     def __init__(self, MainWindow):
@@ -241,10 +240,3 @@ class Interface(object):
 
     def setar_mensagem_status(self, mensagem):
         self.statusBar.showMessage(mensagem)
-
-if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-    engsoft = QtWidgets.QMainWindow()
-    user_interface = Interface(engsoft)
-    engsoft.show()
-    sys.exit(app.exec_())
