@@ -2,24 +2,38 @@ from controller.controlador import Controlador
 from PyQt5 import QtCore, QtWidgets
 import sip
 
+# View
 class Interface(object):
     def __init__(self, MainWindow):
-
+        """
+        A interface é composta de dois frames: sidemenu e mainframe. Dentro de cada frame estão os
+        elementos (botão, label, input e etc).
+        """
         self.controlador = Controlador(self)
 
-        # Padrão
+        """
+        Todos os elementos criados no mainframe são adicionados nessa lista.
+        Quando é necessário trocar de layout, é chamada uma função que exclui todos elementos dessa lista
+        """
+        self.elementos = []
+
+        # Código configuração da janela
         MainWindow.setObjectName("engsoft")
         MainWindow.resize(761, 433)
         self.centralWidget = QtWidgets.QWidget(MainWindow)
         self.centralWidget.setObjectName("centralWidget")
         MainWindow.setCentralWidget(self.centralWidget)
-        # self.mainToolBar = QtWidgets.QToolBar(MainWindow)
-        # self.mainToolBar.setObjectName("mainToolBar")
-        # MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.mainToolBar)
         self.statusBar = QtWidgets.QStatusBar(MainWindow)
         self.statusBar.setObjectName("statusBar")
         MainWindow.setStatusBar(self.statusBar)
 
+        _translate = QtCore.QCoreApplication.translate
+        MainWindow.setWindowTitle(_translate("MainWindow", "engsoft"))
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+        """
+        Side Menu é o frame da esquerda, que contêm o menu do usuário (só é ativado quando logado)
+        """
         # Define Side Menu Frame
         self.sidemenu = QtWidgets.QFrame(self.centralWidget)
         self.sidemenu.setGeometry(QtCore.QRect(0, 0, 161, 411))
@@ -27,6 +41,20 @@ class Interface(object):
         self.sidemenu.setFrameShadow(QtWidgets.QFrame.Raised)
         self.sidemenu.setObjectName("sidemenu")
 
+        """
+        Main Frame é o frame do meio-direita, é onde ficarão todos os elementos principais do programa.
+        Note que esse frame vai alterar seu layout conforme a função que o usuário estiver executando.
+        A estratégia para trocar de layout é a seguinte: Criar o layout colocando todos os elementos na lista
+        self.elementos, para quando for criar o próximo layout, poder excluir todos os elementos ativos.
+        
+        Exemplo: criar_login() é a função que cria todos os elementos necessários para fazer o login. Antes
+        de começar a adicionar os elementos, é chamada a função novo_frame(), que deleta todos os elementos
+        atuais do main frame.
+        
+        É necessário sempre chamar novo_frame() antes de criar os elementos, e ao terminar, chamar
+        self.mainframe.setVisible(True)
+        """
+        # Define Main Frame
         self.mainframe = QtWidgets.QFrame(self.centralWidget)
         self.mainframe.setEnabled(True)
         self.mainframe.setGeometry(QtCore.QRect(160, 0, 601, 411))
@@ -34,100 +62,80 @@ class Interface(object):
         self.mainframe.setFrameShadow(QtWidgets.QFrame.Raised)
         self.mainframe.setObjectName("mainframe")
 
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "engsoft"))
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
-        self.atualFrame = ""
+        # Cria o layout login no mainframe
         self.criar_login()
 
-    def esconde_frame_atual(self):
-        if self.atualFrame == "":
-            pass
-
-        elif self.atualFrame == "login":
-            self.remover_login()
-
-        elif self.atualFrame == "login2":
-            self.login2.setVisible(False)
+    # Deleta todos os elementos adicionados no main frame
+    def novo_frame(self):
+        for elemento in self.elementos:
+            sip.delete(elemento)
+        self.elementos.clear()
 
         self.mainframe.setVisible(False)
 
-    def novo_frame(self, frame_atual):
-        self.esconde_frame_atual()
-        self.atualFrame = frame_atual
-
-
-
+    # Cria elementos do layout login
     def criar_login(self):
-        self.novo_frame("login")
+        self.novo_frame()
 
-        self.label_login = QtWidgets.QLabel(self.mainframe)
-        self.label_login.setGeometry(QtCore.QRect(70, 150, 41, 21))
-        self.label_login.setObjectName("label_login")
-        self.label_login.setText("Login:")
+        #1 - Label Login
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(70, 150, 41, 21))
+        dummy.setObjectName("label_login")
+        dummy.setText("Login:")
+        self.elementos.append(dummy)
 
-        self.label_senha = QtWidgets.QLabel(self.mainframe)
-        self.label_senha.setGeometry(QtCore.QRect(70, 180, 41, 21))
-        self.label_senha.setObjectName("label_senha")
-        self.label_senha.setText("Senha:")
+        #2 - Label Senha
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(70, 180, 41, 21))
+        dummy.setObjectName("label_senha")
+        dummy.setText("Senha:")
+        self.elementos.append(dummy)
 
-        self.input_login = QtWidgets.QLineEdit(self.mainframe)
-        self.input_login.setGeometry(QtCore.QRect(120, 150, 113, 22))
-        self.input_login.setObjectName("input_login")
+        #3 - Input Login
+        dummy = QtWidgets.QLineEdit(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(120, 150, 113, 22))
+        dummy.setObjectName("input_login")
+        self.elementos.append(dummy)
 
-        self.input_senha = QtWidgets.QLineEdit(self.mainframe)
-        self.input_senha.setGeometry(QtCore.QRect(120, 180, 113, 22))
-        self.input_senha.setEchoMode(QtWidgets.QLineEdit.Password)
-        self.input_senha.setObjectName("input_senha")
+        #4 - Input Senha
+        dummy = QtWidgets.QLineEdit(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(120, 180, 113, 22))
+        dummy.setEchoMode(QtWidgets.QLineEdit.Password)
+        dummy.setObjectName("input_senha")
+        self.elementos.append(dummy)
 
-        self.botao_login = QtWidgets.QPushButton(self.mainframe)
-        self.botao_login.setGeometry(QtCore.QRect(160, 210, 80, 22))
-        self.botao_login.setObjectName("botao_login")
-        self.botao_login.setText("Login")
+        #5 - Botao login
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(160, 210, 80, 22))
+        dummy.setObjectName("botao_login")
+        dummy.setText("Login")
+        dummy.clicked.connect(self.botao_login_pressionado)
+        self.elementos.append(dummy)
 
-        self.label_mensagem_login = QtWidgets.QLabel(self.mainframe)
-        self.label_mensagem_login.setGeometry(QtCore.QRect(70, 240, 231, 21))
-        self.label_mensagem_login.setObjectName("label_mensagem_login")
-        self.label_mensagem_login.setText("Faça o login ou crie uma nova conta.")
+        #6 - Label Mensagem Login
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(70, 240, 231, 21))
+        dummy.setObjectName("label_mensagem_login")
+        dummy.setText("Faça o login ou crie uma nova conta.")
+        self.elementos.append(dummy)
 
-        self.botao_criarConta = QtWidgets.QPushButton(self.mainframe)
-        self.botao_criarConta.setGeometry(QtCore.QRect(70, 210, 80, 22))
-        self.botao_criarConta.setObjectName("botao_criarConta")
-        self.botao_criarConta.setText("Criar Conta")
-
-        self.botao_login.clicked.connect(self.botao_login_pressionado)
+        #7 - Botao Criar Conta
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(70, 210, 80, 22))
+        dummy.setObjectName("botao_criarConta")
+        dummy.setText("Criar Conta")
+        self.elementos.append(dummy)
 
         self.mainframe.setVisible(True)
 
-    def remover_login(self):
-        sip.delete(self.botao_criarConta)
-        self.botao_criarConta = None
-
-        sip.delete(self.label_login)
-        self.label_login = None
-
-        sip.delete(self.label_senha)
-        self.label_senha = None
-
-        sip.delete(self.input_login)
-        self.input_login = None
-
-        sip.delete(self.input_senha)
-        self.input_senha = None
-
-        sip.delete(self.label_mensagem_login)
-        self.label_mensagem_login = None
-
-        sip.delete(self.botao_login)
-        self.botao_login = None
-
+    # Função chamada após fazer login com sucesso
     def pos_login(self):
         self.mainframe.setVisible(True)
         self.setar_mensagem_status("Login efetuado com sucesso!")
 
-    def criar_sidemenu(self, dados):
-        self.novo_frame("")
+    # Cria elementos do menu lateral esquerdo, baseado no privilegio do usuário logado
+    def criar_sidemenu(self, nome, privilegio):
+        self.novo_frame()
         self.sidemenu.setVisible(False)
 
         self.logo = QtWidgets.QLabel(self.sidemenu)
@@ -145,14 +153,14 @@ class Interface(object):
         self.label_boas_vindas.setText("")
         self.label_boas_vindas.setWordWrap(True)
         self.label_boas_vindas.setObjectName("label_boas_vindas")
-        self.label_boas_vindas.setText("Bem vindo, " + dados['nome'])
+        self.label_boas_vindas.setText("Bem vindo, " + nome)
 
         self.botao_perfil = QtWidgets.QPushButton(self.sidemenu)
         self.botao_perfil.setGeometry(QtCore.QRect(10, 130, 51, 22))
         self.botao_perfil.setObjectName("botao_perfil")
         self.botao_perfil.setText("Perfil")
 
-        if dados['privilegio'] == 0:
+        if privilegio == 0:
             self.label_admin = QtWidgets.QLabel(self.sidemenu)
             self.label_admin.setGeometry(QtCore.QRect(10, 180, 131, 16))
             self.label_admin.setObjectName("label_admin")
@@ -177,66 +185,68 @@ class Interface(object):
 
         self.sidemenu.setVisible(True)
 
-    def criar_perfil(self, dados, cursos):
-        self.novo_frame("perfil")
+    # Cria elementos necessários para fazer login
+    def criar_perfil(self, nome, senha):
+        self.novo_frame()
 
-        self.label_curso = QtWidgets.QLabel(self.mainframe)
-        self.label_curso.setGeometry(QtCore.QRect(70, 100, 41, 21))
-        self.label_curso.setObjectName("label_curso")
-        self.label_curso.setText("Curso:")
+        #1
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(70, 140, 80, 22))
+        dummy.setObjectName("botao_atualizar")
+        dummy.setText("Atualizar")
+        dummy.clicked.connect(self.botao_atualizar_pressionado)
+        self.elementos.append(dummy)
 
-        self.botao_atualizar = QtWidgets.QPushButton(self.mainframe)
-        self.botao_atualizar.setGeometry(QtCore.QRect(70, 300, 80, 22))
-        self.botao_atualizar.setObjectName("botao_atualizar")
-        self.botao_atualizar.setText("Atualizar")
+        #2
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(70, 100, 41, 21))
+        dummy.setObjectName("label_senha")
+        dummy.setText("Senha:")
+        self.elementos.append(dummy)
 
-        self.label_senha = QtWidgets.QLabel(self.mainframe)
-        self.label_senha.setGeometry(QtCore.QRect(70, 150, 41, 21))
-        self.label_senha.setObjectName("label_senha")
-        self.label_senha.setText("Senha:")
+        #3
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(70, 70, 41, 21))
+        dummy.setObjectName("label_nome")
+        dummy.setText("Nome:")
+        self.elementos.append(dummy)
 
-        self.label_nome = QtWidgets.QLabel(self.mainframe)
-        self.label_nome.setGeometry(QtCore.QRect(70, 70, 41, 21))
-        self.label_nome.setObjectName("label_nome")
-        self.label_nome.setText("Nome:")
+        #4
+        dummy = QtWidgets.QLineEdit(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(120, 100, 113, 22))
+        dummy.setEchoMode(QtWidgets.QLineEdit.Password)
+        dummy.setObjectName("input_senha")
+        dummy.setText(senha)
+        self.elementos.append(dummy)
 
-        self.input_curso = QtWidgets.QListWidget(self.mainframe)
-        self.input_curso.setGeometry(QtCore.QRect(120, 100, 256, 41))
-        self.input_curso.setObjectName("input_curso")
-        self.input_curso.addItems(cursos.keys())
-        # to-do: deixar selecionado o curso q ja ta
-
-        self.input_senha = QtWidgets.QLineEdit(self.mainframe)
-        self.input_senha.setGeometry(QtCore.QRect(120, 150, 113, 22))
-        self.input_senha.setEchoMode(QtWidgets.QLineEdit.Password)
-        self.input_senha.setObjectName("input_senha")
-        self.input_senha.setText(dados["senha"])
-
-        self.input_nome = QtWidgets.QLineEdit(self.mainframe)
-        self.input_nome.setGeometry(QtCore.QRect(120, 70, 311, 22))
-        self.input_nome.setObjectName("input_nome")
-        self.input_nome.setText(dados["nome"])
-
-        self.botao_atualizar.clicked.connect(self.botao_atualizar_pressionado)
+        #5
+        dummy = QtWidgets.QLineEdit(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(120, 70, 311, 22))
+        dummy.setObjectName("input_nome")
+        dummy.setText(nome)
+        self.elementos.append(dummy)
 
         self.mainframe.setVisible(True)
 
+    # Função chamada quando o botão atualizar (Layout Perfil) for pressionado
     def botao_atualizar_pressionado(self):
-        if len(self.input_curso.selectedItems()) != 0:
-            self.controlador.core.atualizar_perfil(self.input_nome.text(), self.input_curso.selectedItems()[0].text(), self.input_senha.text())
-        else:
-            pass
-            self.setar_mensagem_status("Erro! Selecione um curso.")
+        input_nome = self.elementos[4].text()
+        input_senha = self.elementos[3].text()
+        self.controlador.atualizar_perfil(input_nome, input_senha)
 
+    # Função chamada quando o botão Ver Perfil (Menu Lateral) for pressionado
     def botao_perfil_pressionado(self):
         self.controlador.ver_perfil()
 
+    # Função chamada quando o botão Login (Layout Login) for pressionado
     def botao_login_pressionado(self):
-        self.controlador.login(self.input_login.text(), self.input_senha.text())
+        self.controlador.login(self.elementos[2].text(), self.elementos[3].text())
 
+    # Exibe erro de login mal sucedido
     def login_error(self):
-        self.label_mensagem_login.setText("Dados Inválidos.")
+        self.elementos[5].setText("Dados Inválidos.")
         self.setar_mensagem_status("Dados Inválidos.")
 
+    # Função para setar mensagem na barra de status da janela
     def setar_mensagem_status(self, mensagem):
         self.statusBar.showMessage(mensagem)
