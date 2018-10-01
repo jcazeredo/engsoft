@@ -36,4 +36,16 @@ class Core(object):
 
         return dao.atualizar_usuario(self.usuario)
 
+    def carregar_nomes_cursos(self):
+        dao = DAO()
+        return dao.carregar_nomes_cursos()
+
+    def verificar_dados_unicos(self, usuario, cartao_aluno):
+        dao = DAO()
+        return (dao.verificar_usuario_unico(usuario), dao.verificar_cartao_unico(cartao_aluno))
+
+    def criar_conta(self, senha, usuario, nome, cartao_aluno, curso, privilegio):
+        dao = DAO()
+        return dao.criar_conta(senha, usuario, nome, cartao_aluno, curso, privilegio)
+
 

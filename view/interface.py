@@ -77,11 +77,11 @@ class Interface(object):
     def criar_login(self):
         self.novo_frame()
 
-        #1 - Label Login
+        #1 - Label Usuário
         dummy = QtWidgets.QLabel(self.mainframe)
-        dummy.setGeometry(QtCore.QRect(70, 150, 41, 21))
+        dummy.setGeometry(QtCore.QRect(60, 150, 51, 21))
         dummy.setObjectName("label_login")
-        dummy.setText("Login:")
+        dummy.setText("Usuário:")
         self.elementos.append(dummy)
 
         #2 - Label Senha
@@ -122,8 +122,9 @@ class Interface(object):
         #7 - Botao Criar Conta
         dummy = QtWidgets.QPushButton(self.mainframe)
         dummy.setGeometry(QtCore.QRect(70, 210, 80, 22))
-        dummy.setObjectName("botao_criarConta")
+        dummy.setObjectName("botao_criar_conta")
         dummy.setText("Criar Conta")
+        dummy.clicked.connect(self.botao_criar_conta_pressionado)
         self.elementos.append(dummy)
 
         self.mainframe.setVisible(True)
@@ -228,11 +229,134 @@ class Interface(object):
 
         self.mainframe.setVisible(True)
 
+    def criar_cadastro(self):
+        self.novo_frame()
+
+        #1 - Label Senha
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(70, 180, 41, 21))
+        dummy.setObjectName("label_senha")
+        dummy.setText("Senha:")
+        self.elementos.append(dummy)
+
+        #2 - Input Senha
+        dummy = QtWidgets.QLineEdit(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(120, 180, 113, 22))
+        dummy.setEchoMode(QtWidgets.QLineEdit.Password)
+        dummy.setObjectName("input_senha")
+        self.elementos.append(dummy)
+
+        #3 - Label Mensagem
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(40, 310, 311, 21))
+        dummy.setText("")
+        dummy.setObjectName("label_mensagem")
+        self.elementos.append(dummy)
+
+        #4 - Botão Criar Conta
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(270, 280, 80, 22))
+        dummy.setObjectName("botao_criar_conta")
+        dummy.setText("Criar Conta")
+        dummy.clicked.connect(self.botao_nova_conta_pressionado)
+        self.elementos.append(dummy)
+
+        #5 - Label Usuário
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(60, 150, 113, 22))
+        dummy.setObjectName("label_usuario")
+        dummy.setText("Usuário:")
+        self.elementos.append(dummy)
+
+        #6 - Input Usuário
+        dummy = QtWidgets.QLineEdit(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(120, 150, 113, 22))
+        dummy.setObjectName("input_usuario")
+        self.elementos.append(dummy)
+
+        #7 - Label Nome
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(70, 120, 41, 21))
+        dummy.setObjectName("label_nome")
+        dummy.setText("Nome:")
+        self.elementos.append(dummy)
+
+        #8 - Input Nome
+        dummy = QtWidgets.QLineEdit(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(120, 120, 231, 22))
+        dummy.setObjectName("input_nome")
+        self.elementos.append(dummy)
+
+        #9 - Input Cartão do Aluno
+        dummy = QtWidgets.QLineEdit(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(120, 210, 113, 22))
+        dummy.setEchoMode(QtWidgets.QLineEdit.Password)
+        dummy.setObjectName("input_cartao_aluno")
+        self.elementos.append(dummy)
+
+        #10 - Label Cartão do Aluno
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(30, 210, 81, 21))
+        dummy.setObjectName("label_cartao_aluno")
+        dummy.setText("Cartão Aluno:")
+        self.elementos.append(dummy)
+
+        #11 - Label Curso
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(70, 240, 41, 21))
+        dummy.setObjectName("label_curso")
+        dummy.setText("Curso:")
+        self.elementos.append(dummy)
+
+        #12 - Input Curso
+        dummy = QtWidgets.QComboBox(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(120, 240, 231, 22))
+        dummy.setObjectName("input_curso")
+        cursos = self.controlador.obter_cursos()
+        for curso in cursos:
+            dummy.addItem(curso)
+        self.elementos.append(dummy)
+
+        #13 - Botão Voltar
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(210, 280, 51, 22))
+        dummy.setObjectName("botao_voltar")
+        dummy.setText("Voltar")
+        dummy.clicked.connect(self.botao_voltar_cadastro_pressionado)
+        self.elementos.append(dummy)
+
+        self.mainframe.setVisible(True)
+
     # Função chamada quando o botão atualizar (Layout Perfil) for pressionado
     def botao_atualizar_pressionado(self):
         input_nome = self.elementos[4].text()
         input_senha = self.elementos[3].text()
         self.controlador.atualizar_perfil(input_nome, input_senha)
+
+    def botao_criar_conta_pressionado(self):
+        self.criar_cadastro()
+
+    def botao_voltar_cadastro_pressionado(self):
+        self.criar_login()
+
+    def botao_nova_conta_pressionado(self):
+
+        # Verifica se todos os campos foram preenchidos
+        senha = self.elementos[1].text()
+        usuario = self.elementos[5].text()
+        nome = self.elementos[7].text()
+        cartao_aluno = self.elementos[8].text()
+        curso = self.elementos[11].currentText()
+
+        if(senha == "" or usuario == "" or nome == "" or cartao_aluno == ""):
+            self.setar_mensagem_cadastro("Preencha todos os campos.")
+        else:
+            try :
+                cartao_aluno = int(cartao_aluno)
+                self.controlador.nova_conta(senha, usuario, nome, cartao_aluno, curso)
+            except ValueError:
+                self.setar_mensagem_cadastro("Cartão do aluno deve ter apenas números")
+
 
     # Função chamada quando o botão Ver Perfil (Menu Lateral) for pressionado
     def botao_perfil_pressionado(self):
@@ -242,10 +366,14 @@ class Interface(object):
     def botao_login_pressionado(self):
         self.controlador.login(self.elementos[2].text(), self.elementos[3].text())
 
-    # Exibe erro de login mal sucedido
-    def login_error(self):
-        self.elementos[5].setText("Dados Inválidos.")
-        self.setar_mensagem_status("Dados Inválidos.")
+    # Exibe mensagem no layout de login
+    def setar_mensagem_login(self, mensagem):
+        self.elementos[5].setText(mensagem)
+        self.setar_mensagem_status(mensagem)
+
+    def setar_mensagem_cadastro(self, mensagem):
+        self.elementos[2].setText(mensagem)
+        self.setar_mensagem_status(mensagem)
 
     # Função para setar mensagem na barra de status da janela
     def setar_mensagem_status(self, mensagem):
