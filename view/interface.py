@@ -290,7 +290,6 @@ class Interface(object):
         #9 - Input Cartão do Aluno
         dummy = QtWidgets.QLineEdit(self.mainframe)
         dummy.setGeometry(QtCore.QRect(120, 210, 113, 22))
-        dummy.setEchoMode(QtWidgets.QLineEdit.Password)
         dummy.setObjectName("input_cartao_aluno")
         self.elementos.append(dummy)
 
@@ -378,3 +377,6 @@ class Interface(object):
     # Função para setar mensagem na barra de status da janela
     def setar_mensagem_status(self, mensagem):
         self.statusBar.showMessage(mensagem)
+
+    def setar_boas_vindas(self, mensagem):
+        self.label_boas_vindas.setText(mensagem)

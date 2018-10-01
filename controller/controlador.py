@@ -22,7 +22,7 @@ class Controlador(object):
     def atualizar_perfil(self, nome, senha):
         if self.core.atualizar_perfil(nome, senha):
             self.interface.setar_mensagem_status("Perfil Atualizado com Sucesso!")
-            self.interface.label_boas_vindas.setText("Bem vindo, " + nome)
+            self.interface.setar_boas_vindas("Bem vindo, " + nome)
         else:
             self.interface.setar_mensagem_status("Erro ao atualizar!")
 
