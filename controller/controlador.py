@@ -42,12 +42,13 @@ class Controlador(object):
 
         if existe_usuario:
             self.interface.setar_mensagem_cadastro("Nome de usuário já cadastrado!")
-        if existe_cartao:
+        elif existe_cartao:
             self.interface.setar_mensagem_cadastro("Cartão do Aluno já cadastrado!")
 
-        # Se não existir, cria nova conta e exibe mensagem de sucesso
-        resultado = self.core.criar_conta(senha, usuario, nome, cartao_aluno, curso, 1)
-        if resultado:
-            self.interface.criar_login()
-            self.interface.setar_mensagem_login("Cadastro efetuado com sucesso!")
+        else:
+            # Se não existir, cria nova conta e exibe mensagem de sucesso
+            resultado = self.core.criar_conta(senha, usuario, nome, cartao_aluno, curso, 1)
+            if resultado:
+                self.interface.criar_login()
+                self.interface.setar_mensagem_login("Cadastro efetuado com sucesso!")
 

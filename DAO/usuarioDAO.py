@@ -142,7 +142,6 @@ class UsuarioDAO(object):
         conexao.fechar_conexao()
 
         if cursor.rowcount != 0:
-            print(res[0])
             return True
         else:
             return False
