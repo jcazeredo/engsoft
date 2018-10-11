@@ -1,7 +1,7 @@
-from DAO.datasource import DataSource
-from model.disciplina import Disciplina
+from dao.datasource import DataSource
+from model.objetos.disciplina import Disciplina
 
-class DisciplinaDAO(object):
+class Disciplina_DAO(object):
     """
     Obtém todas disciplinas relacionadas ao curso_id. Retorno: False || Lista[Obj Disciplina]
     """

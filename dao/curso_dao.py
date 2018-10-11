@@ -1,7 +1,7 @@
-from DAO.datasource import DataSource
-from model.curso import Curso
+from dao.datasource import DataSource
+from model.objetos.curso import Curso
 
-class CursoDAO(object):
+class Curso_DAO(object):
     """
     Obtém curso que possui a id. Retorno: False || Obj Curso
     """

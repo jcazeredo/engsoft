@@ -1,5 +1,5 @@
-from DAO.dao import DAO
-from model.usuario import Usuario
+from dao.dao import DAO
+
 
 class Core(object):
     def __init__(self):
