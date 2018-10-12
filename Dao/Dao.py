@@ -1,6 +1,6 @@
-from Dao.UsuarioDao import UsuarioDao
-from Dao.DisciplinaDao import DisciplinaDao
-from Dao.CursoDao import CursoDao
+from Dao.Usuario import UsuarioDao
+from Dao.Disciplina import DisciplinaDao
+from Dao.Curso import CursoDao
 
 class DAO(object):
     def autenticar_login(self, usuario, senha):

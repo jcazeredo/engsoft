@@ -1,11 +1,11 @@
 from Dao.DataSource import DataSource
-from Model.objetos.Curso import Curso
+from Model.Objetos.Curso import Curso
 
 class CursoDao(object):
     """
     Obtém curso que possui a id. Retorno: False || Obj Curso
     """
-    def obter_curso_id(self, id, disciplinas):
+    def obter_curso_id(self, id):
         conexao = DataSource()
 
         if not(conexao.esta_logado):
@@ -27,11 +27,39 @@ class CursoDao(object):
             id = curso_row["id"]
             nome = curso_row["nome"]
 
-            curso = Curso(id, nome, disciplinas)
+            curso_obj = Curso(id, nome)
 
-            return curso
+            return curso_obj
         else:
             return False
+
+    # def obter_curso_id(self, id, disciplinas):
+    #     conexao = DataSource()
+    #
+    #     if not(conexao.esta_logado):
+    #         return False
+    #
+    #     cursor = conexao.obter_cursor
+    #
+    #     sql = ("SELECT * FROM cursos WHERE id = %s")
+    #     valores = (id,)
+    #     cursor.execute(sql, valores)
+    #
+    #     resultado_sql = cursor.fetchall()
+    #     conexao.fechar_conexao()
+    #
+    #     # Curso Existe
+    #     if cursor.rowcount != 0:
+    #         curso_row = resultado_sql[0]
+    #
+    #         id = curso_row["id"]
+    #         nome = curso_row["nome"]
+    #
+    #         curso = Curso(id, nome, disciplinas)
+    #
+    #         return curso
+    #     else:
+    #         return False
 
     def obter_id_curso(self, nome_curso):
         conexao = DataSource()

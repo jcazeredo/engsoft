@@ -1,9 +1,10 @@
 from Dao.DataSource import DataSource
-from Model.objetos.Disciplina import Disciplina
+from Model.Objetos.Disciplina import Disciplina
 
 class DisciplinaDao(object):
     """
-    Obtém todas disciplinas relacionadas ao curso_id. Retorno: False || Lista[Obj Disciplina]
+    Obtém todas disciplinas relacionadas ao curso_id.
+    Retorno: False || Lista[Ids Disciplinas]
     """
     def obter_disciplinas_curso(self, curso_id):
         conexao = DataSource()
@@ -22,14 +23,47 @@ class DisciplinaDao(object):
         # Verfica se retornou algum resultado
         if cursor.rowcount != 0:
             disciplinas = []
-            for disciplina_curso in resultado_sql:
-                id = disciplina_curso["disciplina_id"]
-                disciplina = self.obter_disciplina_id(id)
-                disciplinas.append(disciplina)
+            for row in resultado_sql:
+                id = row["disciplina_id"]
 
-            # Retorna lista com todos objetos de disciplina
+                # Cria a disciplina informada pelo id
+                if self.obter_disciplina_id(id) == False:
+                    return False
+
+                disciplinas.append(id)
+
             return disciplinas
+        else:
+            return False
 
+    """
+    Obtém todas disciplinas relacionadas ao usuario.
+    Retorno: False || Lista[Ids Disciplinas]
+    """
+    def obter_disciplinas_usuario(self, usuario_id):
+        conexao = DataSource()
+
+        if not (conexao.esta_logado):
+            return False
+
+        cursor = conexao.obter_cursor
+
+        sql = ("SELECT * FROM historico WHERE usuario_id = %s")
+        valores = (usuario_id,)
+        cursor.execute(sql, valores)
+
+        resultado_sql = cursor.fetchall()
+        conexao.fechar_conexao()
+
+        # Verfica se retornou algum resultado
+        if cursor.rowcount != 0:
+            disciplinas = []
+            for row in resultado_sql:
+                id = row["disciplina_id"]
+                disciplinas.append(id)
+
+            # Retorna lista com todas ids de disciplina do usuario
+            return disciplinas
         else:
             return False
 
@@ -59,9 +93,9 @@ class DisciplinaDao(object):
             nome = disciplina_row["nome"]
             semestre = disciplina_row["semestre"]
 
-            disciplina = Disciplina(id, nome, semestre)
+            Disciplina(id, nome, semestre)
 
-            return disciplina
+            return True
 
         else:
             return False
@@ -81,8 +115,3 @@ class DisciplinaDao(object):
         # conexao.fechar_conexao()
 
 
-
-
-
-# Core vai ter o usuario, logo vai usar usuarioDAO.
-# Core manda salvar no banco

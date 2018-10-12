@@ -1,9 +1,10 @@
 from Dao.DataSource import DataSource
-from Model.objetos.Usuario import Usuario
+from Model.Objetos.Usuario import Usuario
 
 class UsuarioDao(object):
     """
-    Autentica o login. Retorno: False, None || True, curso_id
+    Autentica o login.
+    Retorno: None caso não autenticar || Objeto Usuário caso autenticar
     """
     def autenticar_login(self, usuario, senha):
         conexao = DataSource()
@@ -22,12 +23,45 @@ class UsuarioDao(object):
 
         # Login Válido
         if cursor.rowcount != 0:
-            usuario = resultado_sql[0]
-            return True, usuario["curso_id"]
+            row = resultado_sql[0]
+            id = row["id"]
+            usuario = row["usuario"]
+            nome = row["nome"]
+            senha = row["senha"]
+            cartao_aluno = row["cartao_aluno"]
+            curso_id = row["curso_id"]
+            privilegio = row["privilegio"]
+            usuario_obj = Usuario(id, usuario, nome, senha, cartao_aluno, curso_id, privilegio)
+
+            return usuario_obj
 
         # Login Inválido
         else:
-            return False, None
+            return False
+
+    # def autenticar_login(self, usuario, senha):
+    #     conexao = DataSource()
+    #
+    #     if not(conexao.esta_logado):
+    #         return False, None
+    #
+    #     cursor = conexao.obter_cursor
+    #
+    #     sql = ("SELECT * FROM usuarios WHERE usuario = %s AND senha = %s")
+    #     valores = (usuario, senha)
+    #     cursor.execute(sql, valores)
+    #
+    #     resultado_sql = cursor.fetchall()
+    #     conexao.fechar_conexao()
+    #
+    #     # Login Válido
+    #     if cursor.rowcount != 0:
+    #         usuario = resultado_sql[0]
+    #         return True, usuario["curso_id"]
+    #
+    #     # Login Inválido
+    #     else:
+    #         return False, None
 
     """
     Obtém todas disciplinas que o usuario_id já cursou.

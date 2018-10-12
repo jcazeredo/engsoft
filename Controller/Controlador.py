@@ -7,8 +7,8 @@ class Controlador(object):
 
     def login(self, usuario, senha):
         if self.core.autenticar_login(usuario, senha):
-            privilegio = self.core.usuario.privilegio
-            nome = self.core.usuario.nome
+            privilegio = self.core.usuario_logado.privilegio
+            nome = self.core.usuario_logado.nome
             self.interface.criar_sidemenu(nome, privilegio)
             self.interface.pos_login()
         else:
