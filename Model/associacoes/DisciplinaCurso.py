@@ -1,3 +1,3 @@
-class Disciplina_Curso(object):
+class DisciplinaCurso(object):
     def __init__(self):
         pass

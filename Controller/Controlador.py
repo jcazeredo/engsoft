@@ -1,4 +1,4 @@
-from model.core import Core
+from Model.Core import Core
 
 class Controlador(object):
     def __init__(self, interface):

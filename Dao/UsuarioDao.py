@@ -1,7 +1,7 @@
-from dao.datasource import DataSource
-from model.objetos.usuario import Usuario
+from Dao.DataSource import DataSource
+from Model.objetos.Usuario import Usuario
 
-class Usuario_DAO(object):
+class UsuarioDao(object):
     """
     Autentica o login. Retorno: False, None || True, curso_id
     """

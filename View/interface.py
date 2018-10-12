@@ -1,4 +1,4 @@
-from controller.controlador import Controlador
+from Controller.Controlador import Controlador
 from PyQt5 import QtCore, QtWidgets
 import sip
 
