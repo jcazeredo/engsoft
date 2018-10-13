@@ -1,11 +1,14 @@
 import mysql.connector
 
+
 class DataSource(object):
     def __init__(self):
-        if not(self.conectar_mysql()):
+        self.mydb = None
+        if not (self.conectar_mysql()):
             print("Erro de conexão do Banco de Dados")
             self.conectado = False
         self.conectado = True
+
 
     def conectar_mysql(self):
         try:

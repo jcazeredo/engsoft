@@ -1,38 +1,37 @@
-from Dao.Usuario import UsuarioDao
-from Dao.Disciplina import DisciplinaDao
 from Dao.Curso import CursoDao
-from Model.Objetos.Usuario import Usuario
-from Model.Objetos.Disciplina import Disciplina
-from Model.Objetos.Curso import Curso
+from Dao.Disciplina import DisciplinaDao
+from Dao.Usuario import UsuarioDao
 from Model.Associacoes.DisciplinaCurso import DisciplinaCurso
 from Model.Associacoes.UsuarioDisciplina import UsuarioDisciplina
+from Model.Objetos.Curso import Curso
+from Model.Objetos.Usuario import Usuario
+from Model.Objetos.Disciplina import Disciplina
+
 
 class Core(object):
     def __init__(self):
         self.__logado = False
-        self.usuario_logado = None
-        self.curso = None
+        self.__usuario_logado = None
 
-    def autenticar_login(self, usuario, senha):
+    def autenticar_login(self, cartao_aluno, senha):
         """ Verifica se o login é válido """
         user_dao = UsuarioDao()
-        usuario = user_dao.autenticar_login(usuario, senha)
+        usuario = user_dao.autenticar_login(cartao_aluno, senha)
 
-        if usuario == False:
+        if not usuario:
             return False
-
-        self.usuario_logado = usuario
+        self.__usuario_logado = usuario
         self.__logado = True
 
-        return self.carrega_dados_login(usuario)
+        return self.carregar_dados_login(usuario)
 
-    def carrega_dados_login(self, usuario):
+    def carregar_dados_login(self, usuario):
         # Carrega Curso
         curso_dao = CursoDao()
         curso_id = usuario.curso_id
         curso = curso_dao.obter_curso_id(curso_id)
 
-        if curso == False:
+        if not curso:
             return False
 
         # Carrega Disciplinas
@@ -43,11 +42,6 @@ class Core(object):
 
         # Recebe lista com as ids de disciplinas cursadas pelo usuário
         disciplinas_usuario = disciplina_dao.obter_disciplinas_usuario(usuario.id)
-
-        # Se alguma for False
-        if not(disciplinas_curso and disciplinas_usuario):
-            print("Erro")
-            return
 
         # Criar Associações Disciplinas-Cursos
         for disciplina in disciplinas_curso:
@@ -65,27 +59,63 @@ class Core(object):
 
         return True
 
-    # @property
-    # def obter_cursos(self):
-    #     pass
-    #
-    # def atualizar_perfil(self, nome, senha):
-    #     self.usuario.nome = nome
-    #     self.usuario.senha = senha
-    #     dao = DAO()
-    #
-    #     return dao.atualizar_usuario(self.usuario)
-    #
-    # def carregar_nomes_cursos(self):
-    #     dao = DAO()
-    #     return dao.carregar_nomes_cursos()
-    #
-    # def verificar_dados_unicos(self, usuario, cartao_aluno):
-    #     dao = DAO()
-    #     return (dao.verificar_usuario_unico(usuario), dao.verificar_cartao_unico(cartao_aluno))
-    #
-    # def criar_conta(self, senha, usuario, nome, cartao_aluno, curso, privilegio):
-    #     dao = DAO()
-    #     return dao.criar_conta(senha, usuario, nome, cartao_aluno, curso, privilegio)
-    #
+    def carregar_dados_sidemenu(self):
+        nome = self.__usuario_logado.nome
+        privilegio = self.__usuario_logado.privilegio
 
+        return nome, privilegio
+
+    def carergar_dados_perfil(self):
+        nome = self.__usuario_logado.nome
+        senha = self.__usuario_logado.senha
+        cartao_aluno = self.__usuario_logado.cartao_aluno
+        curso_id = self.__usuario_logado.curso_id
+        curso = Curso.obter_curso(curso_id).nome
+
+        dados = {
+            "nome": nome,
+            "senha": senha,
+            "cartao_aluno": cartao_aluno,
+            "curso": curso
+        }
+
+        return dados
+
+    def excluir_admin(self, cartao_aluno):
+        usuario_dao = UsuarioDao()
+        id = usuario_dao.obter_id_cartao(cartao_aluno)
+
+        if id != False:
+            if Usuario.obter_usuario(id) != False:
+                Usuario.remover_usuario(id)
+            return usuario_dao.excluir(id)
+
+        return False
+
+    def atualizar_perfil(self, nome, senha):
+        self.__usuario_logado.nome = nome
+        self.__usuario_logado.senha = senha
+        usuario_dao = UsuarioDao()
+
+        return usuario_dao.atualizar(self.__usuario_logado)
+
+    def carregar_nomes_cursos(self):
+        curso_dao = CursoDao()
+        return curso_dao.obter_nome_cursos()
+
+    def carregar_cartoes_admins(self):
+        usuario_dao = UsuarioDao()
+        return usuario_dao.obter_cartao_admins(self.__usuario_logado.id)
+
+    def verificar_dados_unicos(self, cartao_aluno):
+        usuario_dao = UsuarioDao()
+        return usuario_dao.existe_cartao(cartao_aluno)
+
+    def criar_conta(self, senha, nome, cartao_aluno, curso, privilegio):
+        curso_dao = CursoDao()
+        curso_id = curso_dao.obter_id_curso(curso)
+        usuario_dao = UsuarioDao()
+        return usuario_dao.criar(senha, nome, cartao_aluno, curso_id, privilegio)
+
+    def obter_id_logado(self):
+        return self.__usuario_logado.__id

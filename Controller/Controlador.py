@@ -1,5 +1,6 @@
 from Model.Core import Core
 
+
 class Controlador(object):
     def __init__(self, interface):
         self.interface = interface
@@ -7,17 +8,37 @@ class Controlador(object):
 
     def login(self, usuario, senha):
         if self.core.autenticar_login(usuario, senha):
-            privilegio = self.core.usuario_logado.privilegio
-            nome = self.core.usuario_logado.nome
+            dados = self.core.carregar_dados_sidemenu()
+            nome = dados[0]
+            privilegio = dados[1]
+
             self.interface.criar_sidemenu(nome, privilegio)
             self.interface.pos_login()
         else:
             self.interface.setar_mensagem_login("Dados Inválidos.")
 
+    def gerenciar_admins(self):
+        cursos = self.core.carregar_nomes_cursos()
+        admins = self.core.carregar_cartoes_admins()
+
+        if cursos == False:
+            print("Erro ao obter cursos")
+        elif admins == False:
+            print("Erro ao obter admins")
+        else:
+            self.interface.criar_gerenciar_admins(admins, cursos)
+
+    def criar_cadastro(self):
+        cursos = self.core.carregar_nomes_cursos()
+        if not cursos:
+            print("Erro ao obter cursos")
+        else:
+            self.interface.criar_cadastro(cursos)
+
+
     def ver_perfil(self):
-        nome = self.core.usuario.nome
-        senha = self.core.usuario.senha
-        self.interface.criar_perfil(nome, senha)
+        dados = self.core.carergar_dados_perfil()
+        self.interface.criar_perfil(dados)
 
     def atualizar_perfil(self, nome, senha):
         if self.core.atualizar_perfil(nome, senha):
@@ -26,29 +47,39 @@ class Controlador(object):
         else:
             self.interface.setar_mensagem_status("Erro ao atualizar!")
 
-    def obter_cursos(self):
-        cursos = self.core.carregar_nomes_cursos()
-        if cursos == False:
-            print("Erro")
-        else:
-            return cursos
 
-    def nova_conta(self, senha, usuario, nome, cartao_aluno, curso):
-        # Verifica se já existe usuário e cartão. Se existir, dá mensagem de erro
-        tuple_resultado = self.core.verificar_dados_unicos(usuario, cartao_aluno)
 
-        existe_usuario = tuple_resultado[0]
-        existe_cartao = tuple_resultado[1]
+    def nova_conta(self, senha, nome, cartao_aluno, curso):
+        # Verifica se já existe cartão. Se existir, dá mensagem de erro
+        existe_cartao = self.core.verificar_dados_unicos(cartao_aluno)
 
-        if existe_usuario:
-            self.interface.setar_mensagem_cadastro("Nome de usuário já cadastrado!")
-        elif existe_cartao:
+        if existe_cartao:
             self.interface.setar_mensagem_cadastro("Cartão do Aluno já cadastrado!")
 
         else:
             # Se não existir, cria nova conta e exibe mensagem de sucesso
-            resultado = self.core.criar_conta(senha, usuario, nome, cartao_aluno, curso, 1)
+            resultado = self.core.criar_conta(senha, nome, cartao_aluno, curso, 1)
             if resultado:
                 self.interface.criar_login()
                 self.interface.setar_mensagem_login("Cadastro efetuado com sucesso!")
 
+    def novo_admin(self, senha, nome, cartao_aluno, curso):
+        # Verifica se já existe cartão. Se existir, dá mensagem de erro
+        existe_cartao = self.core.verificar_dados_unicos(cartao_aluno)
+
+        if existe_cartao:
+            self.interface.setar_mensagem_status("Cartão do Aluno já cadastrado!")
+
+        else:
+            # Se não existir, cria nova conta e exibe mensagem de sucesso
+            resultado = self.core.criar_conta(senha, nome, cartao_aluno, curso, 0)
+            if resultado:
+                self.gerenciar_admins()
+                self.interface.setar_mensagem_status("Admin adicionado com sucesso!")
+
+    def excluir_admin(self, admin):
+        if self.core.excluir_admin(admin):
+            self.interface.setar_mensagem_status("Admin excluído com sucesso!")
+            self.gerenciar_admins()
+        else:
+            self.interface.setar_mensagem_status("Erro ao excluir admin!")

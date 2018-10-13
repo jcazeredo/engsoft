@@ -2,9 +2,10 @@ from Controller.Controlador import Controlador
 from PyQt5 import QtCore, QtWidgets
 import sip
 
+
 # View
 class Interface(object):
-    def __init__(self, MainWindow):
+    def __init__(self, main_window):
         """
         A interface é composta de dois frames: sidemenu e mainframe. Dentro de cada frame estão os
         elementos (botão, label, input e etc).
@@ -18,18 +19,18 @@ class Interface(object):
         self.elementos = []
 
         # Código configuração da janela
-        MainWindow.setObjectName("engsoft")
-        MainWindow.resize(761, 433)
-        self.centralWidget = QtWidgets.QWidget(MainWindow)
+        main_window.setObjectName("engsoft")
+        main_window.resize(761, 433)
+        self.centralWidget = QtWidgets.QWidget(main_window)
         self.centralWidget.setObjectName("centralWidget")
-        MainWindow.setCentralWidget(self.centralWidget)
-        self.statusBar = QtWidgets.QStatusBar(MainWindow)
+        main_window.setCentralWidget(self.centralWidget)
+        self.statusBar = QtWidgets.QStatusBar(main_window)
         self.statusBar.setObjectName("statusBar")
-        MainWindow.setStatusBar(self.statusBar)
+        main_window.setStatusBar(self.statusBar)
 
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "engsoft"))
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        main_window.setWindowTitle(_translate("MainWindow", "engsoft"))
+        QtCore.QMetaObject.connectSlotsByName(main_window)
 
         """
         Side Menu é o frame da esquerda, que contêm o menu do usuário (só é ativado quando logado)
@@ -77,54 +78,54 @@ class Interface(object):
     def criar_login(self):
         self.novo_frame()
 
-        #1 - Label Usuário
+        # 1 - Label Cartão do Aluno
         dummy = QtWidgets.QLabel(self.mainframe)
-        dummy.setGeometry(QtCore.QRect(60, 150, 51, 21))
-        dummy.setObjectName("label_login")
-        dummy.setText("Usuário:")
+        dummy.setGeometry(QtCore.QRect(10, 150, 101, 21))
+        dummy.setObjectName("label_cartao_do_aluno")
+        dummy.setText("Cartão do Aluno:")
         self.elementos.append(dummy)
 
-        #2 - Label Senha
+        # 2 - Label Senha
         dummy = QtWidgets.QLabel(self.mainframe)
         dummy.setGeometry(QtCore.QRect(70, 180, 41, 21))
         dummy.setObjectName("label_senha")
         dummy.setText("Senha:")
         self.elementos.append(dummy)
 
-        #3 - Input Login
+        # 3 - Input Cartão do Aluno
         dummy = QtWidgets.QLineEdit(self.mainframe)
         dummy.setGeometry(QtCore.QRect(120, 150, 113, 22))
-        dummy.setObjectName("input_login")
+        dummy.setObjectName("input_cartao_do_aluno")
         self.elementos.append(dummy)
 
-        #4 - Input Senha
+        # 4 - Input Senha
         dummy = QtWidgets.QLineEdit(self.mainframe)
         dummy.setGeometry(QtCore.QRect(120, 180, 113, 22))
         dummy.setEchoMode(QtWidgets.QLineEdit.Password)
         dummy.setObjectName("input_senha")
         self.elementos.append(dummy)
 
-        #5 - Botao login
+        # 5 - Botao login
         dummy = QtWidgets.QPushButton(self.mainframe)
         dummy.setGeometry(QtCore.QRect(160, 210, 80, 22))
-        dummy.setObjectName("botao_login")
+        dummy.setObjectName("login")
         dummy.setText("Login")
-        dummy.clicked.connect(self.botao_login_pressionado)
+        dummy.clicked.connect(self.login_pressionado)
         self.elementos.append(dummy)
 
-        #6 - Label Mensagem Login
+        # 6 - Label Mensagem Login
         dummy = QtWidgets.QLabel(self.mainframe)
         dummy.setGeometry(QtCore.QRect(70, 240, 231, 21))
         dummy.setObjectName("label_mensagem_login")
         dummy.setText("Faça o login ou crie uma nova conta.")
         self.elementos.append(dummy)
 
-        #7 - Botao Criar Conta
+        # 7 - Botao Criar Conta
         dummy = QtWidgets.QPushButton(self.mainframe)
         dummy.setGeometry(QtCore.QRect(70, 210, 80, 22))
-        dummy.setObjectName("botao_criar_conta")
+        dummy.setObjectName("criar_conta")
         dummy.setText("Criar Conta")
-        dummy.clicked.connect(self.botao_criar_conta_pressionado)
+        dummy.clicked.connect(self.criar_conta_pressionado)
         self.elementos.append(dummy)
 
         self.mainframe.setVisible(True)
@@ -144,10 +145,10 @@ class Interface(object):
         self.logo.setObjectName("logo")
         self.logo.setText("ENGSOFT")
 
-        self.botao_gerenciar_horarios = QtWidgets.QPushButton(self.sidemenu)
-        self.botao_gerenciar_horarios.setGeometry(QtCore.QRect(10, 100, 131, 22))
-        self.botao_gerenciar_horarios.setObjectName("botao_gerenciar_horarios")
-        self.botao_gerenciar_horarios.setText("Gerenciar Horários")
+        self.gerenciar_horarios = QtWidgets.QPushButton(self.sidemenu)
+        self.gerenciar_horarios.setGeometry(QtCore.QRect(10, 100, 131, 22))
+        self.gerenciar_horarios.setObjectName("gerenciar_horarios")
+        self.gerenciar_horarios.setText("Gerenciar Horários")
 
         self.label_boas_vindas = QtWidgets.QLabel(self.sidemenu)
         self.label_boas_vindas.setGeometry(QtCore.QRect(10, 50, 141, 41))
@@ -156,213 +157,369 @@ class Interface(object):
         self.label_boas_vindas.setObjectName("label_boas_vindas")
         self.label_boas_vindas.setText("Bem vindo, " + nome)
 
-        self.botao_perfil = QtWidgets.QPushButton(self.sidemenu)
-        self.botao_perfil.setGeometry(QtCore.QRect(10, 130, 51, 22))
-        self.botao_perfil.setObjectName("botao_perfil")
-        self.botao_perfil.setText("Perfil")
+        self.perfil = QtWidgets.QPushButton(self.sidemenu)
+        self.perfil.setGeometry(QtCore.QRect(10, 130, 51, 22))
+        self.perfil.setObjectName("perfil")
+        self.perfil.setText("Perfil")
 
         if privilegio == 0:
             self.label_admin = QtWidgets.QLabel(self.sidemenu)
             self.label_admin.setGeometry(QtCore.QRect(10, 180, 131, 16))
             self.label_admin.setObjectName("label_admin")
-            self.label_admin.setText("vc eh admin caraio")
+            self.label_admin.setText("Administrador")
 
-            self.botao_gerenciar_cursos = QtWidgets.QPushButton(self.sidemenu)
-            self.botao_gerenciar_cursos.setGeometry(QtCore.QRect(10, 200, 121, 22))
-            self.botao_gerenciar_cursos.setObjectName("botao_gerenciar_cursos")
-            self.botao_gerenciar_cursos.setText("Gerenciar Cursos")
+            self.gerenciar_cursos = QtWidgets.QPushButton(self.sidemenu)
+            self.gerenciar_cursos.setGeometry(QtCore.QRect(10, 200, 121, 22))
+            self.gerenciar_cursos.setObjectName("gerenciar_cursos")
+            self.gerenciar_cursos.setText("Gerenciar Cursos")
 
-            self.botao_gerenciar_disciplinas = QtWidgets.QPushButton(self.sidemenu)
-            self.botao_gerenciar_disciplinas.setGeometry(QtCore.QRect(10, 230, 141, 22))
-            self.botao_gerenciar_disciplinas.setObjectName("botao_gerenciar_disciplinas")
-            self.botao_gerenciar_disciplinas.setText("Gerenciar Disciplinas")
+            self.gerenciar_disciplinas = QtWidgets.QPushButton(self.sidemenu)
+            self.gerenciar_disciplinas.setGeometry(QtCore.QRect(10, 230, 141, 22))
+            self.gerenciar_disciplinas.setObjectName("gerenciar_disciplinas")
+            self.gerenciar_disciplinas.setText("Gerenciar Disciplinas")
 
-            self.botao_gerenciar_admins = QtWidgets.QPushButton(self.sidemenu)
-            self.botao_gerenciar_admins.setGeometry(QtCore.QRect(10, 260, 121, 22))
-            self.botao_gerenciar_admins.setObjectName("botao_gerenciar_admins")
-            self.botao_gerenciar_admins.setText("Gerenciar Admins")
+            self.gerenciar_admins = QtWidgets.QPushButton(self.sidemenu)
+            self.gerenciar_admins.setGeometry(QtCore.QRect(10, 260, 121, 22))
+            self.gerenciar_admins.setObjectName("gerenciar_admins")
+            self.gerenciar_admins.clicked.connect(self.gerenciar_admins_pressionado)
+            self.gerenciar_admins.setText("Gerenciar Admins")
 
-        self.botao_perfil.clicked.connect(self.botao_perfil_pressionado)
+
+        self.perfil.clicked.connect(self.ver_perfil_pressionado)
 
         self.sidemenu.setVisible(True)
 
     # Cria elementos necessários para fazer login
-    def criar_perfil(self, nome, senha):
+    def criar_perfil(self, dados):
         self.novo_frame()
 
-        #1
+        # 1 - Botão Atualizar
         dummy = QtWidgets.QPushButton(self.mainframe)
-        dummy.setGeometry(QtCore.QRect(70, 140, 80, 22))
-        dummy.setObjectName("botao_atualizar")
+        dummy.setGeometry(QtCore.QRect(70, 220, 80, 22))
+        dummy.setObjectName("atualizar")
         dummy.setText("Atualizar")
-        dummy.clicked.connect(self.botao_atualizar_pressionado)
+        dummy.clicked.connect(self.atualizar_pressionado)
         self.elementos.append(dummy)
 
-        #2
+        # 2 - Label Senha
         dummy = QtWidgets.QLabel(self.mainframe)
-        dummy.setGeometry(QtCore.QRect(70, 100, 41, 21))
+        dummy.setGeometry(QtCore.QRect(70, 130, 41, 21))
         dummy.setObjectName("label_senha")
         dummy.setText("Senha:")
         self.elementos.append(dummy)
 
-        #3
+        # 3 -Label Nome
         dummy = QtWidgets.QLabel(self.mainframe)
-        dummy.setGeometry(QtCore.QRect(70, 70, 41, 21))
+        dummy.setGeometry(QtCore.QRect(70, 100, 41, 21))
         dummy.setObjectName("label_nome")
         dummy.setText("Nome:")
         self.elementos.append(dummy)
 
-        #4
+        # 4 - Input Nome
         dummy = QtWidgets.QLineEdit(self.mainframe)
-        dummy.setGeometry(QtCore.QRect(120, 100, 113, 22))
-        dummy.setEchoMode(QtWidgets.QLineEdit.Password)
-        dummy.setObjectName("input_senha")
-        dummy.setText(senha)
+        dummy.setGeometry(QtCore.QRect(120, 100, 311, 22))
+        dummy.setObjectName("input_nome")
+        dummy.setText(str(dados["nome"]))
         self.elementos.append(dummy)
 
-        #5
+        # 5 - Input Senha
         dummy = QtWidgets.QLineEdit(self.mainframe)
-        dummy.setGeometry(QtCore.QRect(120, 70, 311, 22))
-        dummy.setObjectName("input_nome")
-        dummy.setText(nome)
+        dummy.setGeometry(QtCore.QRect(120, 130, 113, 22))
+        dummy.setEchoMode(QtWidgets.QLineEdit.Password)
+        dummy.setObjectName("input_senha")
+        dummy.setText(str(dados["senha"]))
+        self.elementos.append(dummy)
+
+        # 6 - Input Cartão Aluno
+        dummy = QtWidgets.QLineEdit(self.mainframe)
+        dummy.setEnabled(False)
+        dummy.setGeometry(QtCore.QRect(120, 160, 113, 22))
+        dummy.setObjectName("input_cartao_aluno")
+        dummy.setText(str(dados["cartao_aluno"]))
+        self.elementos.append(dummy)
+
+        # 7 - Label Cartão do Aluno
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(10, 160, 111, 21))
+        dummy.setObjectName("label_cartao_aluno")
+        dummy.setText("Cartão do Aluno:")
+        self.elementos.append(dummy)
+
+        # 8 - Input Curso
+        dummy = QtWidgets.QComboBox(self.mainframe)
+        dummy.setEnabled(False)
+        dummy.setGeometry(QtCore.QRect(120, 190, 211, 22))
+        dummy.setObjectName("input_curso")
+        dummy.addItem(str(dados["curso"]))
+        self.elementos.append(dummy)
+
+        # 9 - Label Curso
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(70, 190, 41, 21))
+        dummy.setObjectName("label_curso")
+        dummy.setText("Curso:")
+        self.elementos.append(dummy)
+
+        # 10 - Botão Editar Histórico
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(170, 220, 101, 22))
+        dummy.setObjectName("editar_historico")
+        dummy.setText("Editar Historico")
+        dummy.clicked.connect(self.editar_historico_pressionado)
         self.elementos.append(dummy)
 
         self.mainframe.setVisible(True)
 
-    def criar_cadastro(self):
+    def criar_cadastro(self, cursos):
         self.novo_frame()
 
-        #1 - Label Senha
-        dummy = QtWidgets.QLabel(self.mainframe)
-        dummy.setGeometry(QtCore.QRect(70, 180, 41, 21))
-        dummy.setObjectName("label_senha")
-        dummy.setText("Senha:")
+        # 1 - Input Nome
+        dummy = QtWidgets.QLineEdit(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(120, 150, 231, 22))
+        dummy.setObjectName("input_nome")
         self.elementos.append(dummy)
 
-        #2 - Input Senha
+        # 2 - Input Senha
         dummy = QtWidgets.QLineEdit(self.mainframe)
         dummy.setGeometry(QtCore.QRect(120, 180, 113, 22))
         dummy.setEchoMode(QtWidgets.QLineEdit.Password)
         dummy.setObjectName("input_senha")
         self.elementos.append(dummy)
 
-        #3 - Label Mensagem
+        # 3 - Input Cartão do Aluno
+        dummy = QtWidgets.QLineEdit(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(120, 210, 113, 22))
+        dummy.setObjectName("input_cartao_aluno")
+        self.elementos.append(dummy)
+
+        # 4 - Input Curso
+        dummy = QtWidgets.QComboBox(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(120, 240, 231, 22))
+        dummy.setObjectName("input_curso")
+        for curso in cursos:
+            dummy.addItem(curso)
+        self.elementos.append(dummy)
+
+        # 5 - Label Senha
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(70, 180, 41, 21))
+        dummy.setObjectName("label_senha")
+        dummy.setText("Senha:")
+        self.elementos.append(dummy)
+
+        # 6 - Label Mensagem
         dummy = QtWidgets.QLabel(self.mainframe)
         dummy.setGeometry(QtCore.QRect(40, 310, 311, 21))
         dummy.setText("")
         dummy.setObjectName("label_mensagem")
         self.elementos.append(dummy)
 
-        #4 - Botão Criar Conta
+        # 7 - Botão Criar Conta
         dummy = QtWidgets.QPushButton(self.mainframe)
         dummy.setGeometry(QtCore.QRect(270, 280, 80, 22))
-        dummy.setObjectName("botao_criar_conta")
+        dummy.setObjectName("criar_conta")
         dummy.setText("Criar Conta")
-        dummy.clicked.connect(self.botao_nova_conta_pressionado)
+        dummy.clicked.connect(self.nova_conta_pressionado)
         self.elementos.append(dummy)
 
-        #5 - Label Usuário
+        # 8 - Label Nome
         dummy = QtWidgets.QLabel(self.mainframe)
-        dummy.setGeometry(QtCore.QRect(60, 150, 113, 22))
-        dummy.setObjectName("label_usuario")
-        dummy.setText("Usuário:")
-        self.elementos.append(dummy)
-
-        #6 - Input Usuário
-        dummy = QtWidgets.QLineEdit(self.mainframe)
-        dummy.setGeometry(QtCore.QRect(120, 150, 113, 22))
-        dummy.setObjectName("input_usuario")
-        self.elementos.append(dummy)
-
-        #7 - Label Nome
-        dummy = QtWidgets.QLabel(self.mainframe)
-        dummy.setGeometry(QtCore.QRect(70, 120, 41, 21))
+        dummy.setGeometry(QtCore.QRect(70, 150, 41, 21))
         dummy.setObjectName("label_nome")
         dummy.setText("Nome:")
         self.elementos.append(dummy)
 
-        #8 - Input Nome
-        dummy = QtWidgets.QLineEdit(self.mainframe)
-        dummy.setGeometry(QtCore.QRect(120, 120, 231, 22))
-        dummy.setObjectName("input_nome")
-        self.elementos.append(dummy)
-
-        #9 - Input Cartão do Aluno
-        dummy = QtWidgets.QLineEdit(self.mainframe)
-        dummy.setGeometry(QtCore.QRect(120, 210, 113, 22))
-        dummy.setObjectName("input_cartao_aluno")
-        self.elementos.append(dummy)
-
-        #10 - Label Cartão do Aluno
+        # 9 - Label Cartão do Aluno
         dummy = QtWidgets.QLabel(self.mainframe)
         dummy.setGeometry(QtCore.QRect(30, 210, 81, 21))
         dummy.setObjectName("label_cartao_aluno")
         dummy.setText("Cartão Aluno:")
         self.elementos.append(dummy)
 
-        #11 - Label Curso
+        # 10 - Label Curso
         dummy = QtWidgets.QLabel(self.mainframe)
         dummy.setGeometry(QtCore.QRect(70, 240, 41, 21))
         dummy.setObjectName("label_curso")
         dummy.setText("Curso:")
         self.elementos.append(dummy)
 
-        #12 - Input Curso
-        dummy = QtWidgets.QComboBox(self.mainframe)
-        dummy.setGeometry(QtCore.QRect(120, 240, 231, 22))
-        dummy.setObjectName("input_curso")
-        cursos = self.controlador.obter_cursos()
-        for curso in cursos:
-            dummy.addItem(curso)
-        self.elementos.append(dummy)
-
-        #13 - Botão Voltar
+        # 11 - Botão Voltar
         dummy = QtWidgets.QPushButton(self.mainframe)
         dummy.setGeometry(QtCore.QRect(210, 280, 51, 22))
-        dummy.setObjectName("botao_voltar")
+        dummy.setObjectName("voltar")
         dummy.setText("Voltar")
-        dummy.clicked.connect(self.botao_voltar_cadastro_pressionado)
+        dummy.clicked.connect(self.voltar_cadastro_pressionado)
         self.elementos.append(dummy)
 
         self.mainframe.setVisible(True)
 
+    def criar_gerenciar_admins(self, admins, cursos):
+        self.novo_frame()
+
+        # 1 - Label Curso
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(80, 220, 41, 21))
+        dummy.setObjectName("label_curso")
+        dummy.setText("Curso:")
+        self.elementos.append(dummy)
+
+        # 2 - Botão Criar Admin
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(80, 260, 91, 22))
+        dummy.setObjectName("botao_criarAdmin")
+        dummy.setText("Criar Admin")
+        dummy.clicked.connect(self.criar_admin_pressionado)
+        self.elementos.append(dummy)
+
+        # 3 - Label Admnistradores
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(60, 70, 101, 21))
+        dummy.setObjectName("label_administradores")
+        dummy.setText("Admnistradores:")
+        self.elementos.append(dummy)
+
+        # 4 - Botão Editar Admin
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(220, 90, 61, 22))
+        dummy.setObjectName("botao_editarAdmin")
+        dummy.setText("Editar")
+        self.elementos.append(dummy)
+
+        # 5 - Botão Excluir Admin
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(290, 90, 61, 22))
+        dummy.setObjectName("botao_excluirAdmin")
+        dummy.setText("Excluir")
+        dummy.clicked.connect(self.excluir_admin_pressionado)
+        self.elementos.append(dummy)
+
+        # 6 - Label Cartão Aluno
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(20, 130, 111, 21))
+        dummy.setObjectName("label_cartao_aluno")
+        dummy.setText("Cartão do Aluno:")
+        self.elementos.append(dummy)
+
+        # 7 - Label Senha
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(80, 190, 41, 21))
+        dummy.setObjectName("label_senha")
+        dummy.setText("Senha:")
+        self.elementos.append(dummy)
+
+        # 8 - Label Nome
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(80, 160, 41, 21))
+        dummy.setObjectName("label_nome")
+        dummy.setText("Nome:")
+        self.elementos.append(dummy)
+
+        # 9 - Input Cartão Aluno
+        dummy = QtWidgets.QLineEdit(self.mainframe)
+        dummy.setEnabled(True)
+        dummy.setGeometry(QtCore.QRect(130, 130, 113, 22))
+        dummy.setObjectName("input_cartao_aluno")
+        self.elementos.append(dummy)
+
+        # 10 - Input Nome
+        dummy = QtWidgets.QLineEdit(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(130, 160, 311, 22))
+        dummy.setObjectName("input_nome")
+        self.elementos.append(dummy)
+
+        # 11 - Input Senha
+        dummy = QtWidgets.QLineEdit(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(130, 190, 113, 22))
+        dummy.setObjectName("input_senha")
+        self.elementos.append(dummy)
+
+        # 12 - Input Curso
+        dummy = QtWidgets.QComboBox(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(130, 220, 211, 22))
+        dummy.setObjectName("input_curso")
+        dummy.addItem("Nenhum")
+        for curso in cursos:
+            dummy.addItem(curso)
+        self.elementos.append(dummy)
+
+        # 13 - Input Admin
+        dummy = QtWidgets.QComboBox(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(60, 90, 151, 22))
+        dummy.setObjectName("input_admin")
+        for admin in admins:
+            dummy.addItem(admin)
+        self.elementos.append(dummy)
+
+
+        self.mainframe.setVisible(True)
+
+    def excluir_admin_pressionado(self):
+        admin = self.elementos[12].currentText()
+        self.controlador.excluir_admin(admin)
+
+    def gerenciar_admins_pressionado(self):
+        self.controlador.gerenciar_admins()
+
+    def editar_historico_pressionado(self):
+        # TO-DO
+        pass
+
     # Função chamada quando o botão atualizar (Layout Perfil) for pressionado
-    def botao_atualizar_pressionado(self):
-        input_nome = self.elementos[4].text()
-        input_senha = self.elementos[3].text()
+    def atualizar_pressionado(self):
+        input_nome = self.elementos[3].text()
+        input_senha = self.elementos[4].text()
         self.controlador.atualizar_perfil(input_nome, input_senha)
 
-    def botao_criar_conta_pressionado(self):
-        self.criar_cadastro()
+    def criar_conta_pressionado(self):
+        self.controlador.criar_cadastro()
 
-    def botao_voltar_cadastro_pressionado(self):
+    def voltar_cadastro_pressionado(self):
         self.criar_login()
 
-    def botao_nova_conta_pressionado(self):
-
+    def nova_conta_pressionado(self):
         # Verifica se todos os campos foram preenchidos
         senha = self.elementos[1].text()
-        usuario = self.elementos[5].text()
-        nome = self.elementos[7].text()
-        cartao_aluno = self.elementos[8].text()
-        curso = self.elementos[11].currentText()
+        nome = self.elementos[0].text()
+        cartao_aluno = self.elementos[2].text()
+        curso = self.elementos[3].currentText()
 
-        if(senha == "" or usuario == "" or nome == "" or cartao_aluno == ""):
+        if senha == "" or nome == "" or cartao_aluno == "":
             self.setar_mensagem_cadastro("Preencha todos os campos.")
         else:
-            try :
+            try:
                 cartao_aluno = int(cartao_aluno)
-                self.controlador.nova_conta(senha, usuario, nome, cartao_aluno, curso)
+                self.controlador.nova_conta(senha, nome, cartao_aluno, curso)
             except ValueError:
                 self.setar_mensagem_cadastro("Cartão do aluno deve ter apenas números")
 
+    def criar_admin_pressionado(self):
+        # Verifica se todos os campos foram preenchidos
+        senha = self.elementos[10].text()
+        nome = self.elementos[9].text()
+        cartao_aluno = self.elementos[8].text()
+        curso = self.elementos[11].currentText()
+
+        if senha == "" or nome == "" or cartao_aluno == "":
+            self.setar_mensagem_status("Preencha todos os campos.")
+        else:
+            try:
+                cartao_aluno = int(cartao_aluno)
+                self.controlador.novo_admin(senha, nome, cartao_aluno, curso)
+            except ValueError:
+                self.setar_mensagem_status("Cartão do aluno deve ter apenas números")
 
     # Função chamada quando o botão Ver Perfil (Menu Lateral) for pressionado
-    def botao_perfil_pressionado(self):
+    def ver_perfil_pressionado(self):
         self.controlador.ver_perfil()
 
+    def gerenciar_cursos_pressionado(self):
+        pass
+
+    def gerenciar_disciplinas_pressionado(self):
+        pass
+
     # Função chamada quando o botão Login (Layout Login) for pressionado
-    def botao_login_pressionado(self):
+    def login_pressionado(self):
         self.controlador.login(self.elementos[2].text(), self.elementos[3].text())
 
     # Exibe mensagem no layout de login

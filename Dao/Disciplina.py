@@ -1,84 +1,87 @@
 from Dao.DataSource import DataSource
 from Model.Objetos.Disciplina import Disciplina
 
+
 class DisciplinaDao(object):
     """
     Obtém todas disciplinas relacionadas ao curso_id.
     Retorno: False || Lista[Ids Disciplinas]
     """
+
     def obter_disciplinas_curso(self, curso_id):
         conexao = DataSource()
 
-        if not(conexao.esta_logado):
+        if not conexao.esta_logado:
             return False
 
         cursor = conexao.obter_cursor
 
-        sql = ("SELECT * FROM disciplinas_curso WHERE curso_id = %s")
+        sql = "SELECT * FROM disciplinas_curso WHERE curso_id = %s"
         valores = (curso_id,)
         cursor.execute(sql, valores)
 
         resultado_sql = cursor.fetchall()
         conexao.fechar_conexao()
         # Verfica se retornou algum resultado
+        disciplinas = []
         if cursor.rowcount != 0:
-            disciplinas = []
+
             for row in resultado_sql:
                 id = row["disciplina_id"]
 
                 # Cria a disciplina informada pelo id
-                if self.obter_disciplina_id(id) == False:
+                if not self.obter_disciplina_id(id):
                     return False
 
                 disciplinas.append(id)
 
-            return disciplinas
-        else:
-            return False
+        return disciplinas
 
     """
     Obtém todas disciplinas relacionadas ao usuario.
     Retorno: False || Lista[Ids Disciplinas]
     """
+
     def obter_disciplinas_usuario(self, usuario_id):
         conexao = DataSource()
 
-        if not (conexao.esta_logado):
+        if not conexao.esta_logado:
             return False
 
         cursor = conexao.obter_cursor
 
-        sql = ("SELECT * FROM historico WHERE usuario_id = %s")
+        sql = "SELECT * FROM historico WHERE usuario_id = %s"
         valores = (usuario_id,)
         cursor.execute(sql, valores)
 
         resultado_sql = cursor.fetchall()
         conexao.fechar_conexao()
 
+        disciplinas = []
         # Verfica se retornou algum resultado
         if cursor.rowcount != 0:
-            disciplinas = []
+
             for row in resultado_sql:
                 id = row["disciplina_id"]
                 disciplinas.append(id)
 
             # Retorna lista com todas ids de disciplina do usuario
-            return disciplinas
-        else:
-            return False
+
+        return disciplinas
 
     """
     Obtém uma disciplina pelo seu id. Retorno: False || Obj Disciplina
     """
+
     def obter_disciplina_id(self, id):
         conexao = DataSource()
 
-        if not(conexao.esta_logado):
+        if not conexao.esta_logado:
             return False
 
         cursor = conexao.obter_cursor
 
-        sql = ("SELECT * FROM disciplinas WHERE id = %s")
+        sql = "SELECT * FROM disciplinas WHERE id = %s"
         valores = (id,)
         cursor.execute(sql, valores)
 
@@ -113,5 +116,3 @@ class DisciplinaDao(object):
         # cursor = conexao.obter_cursor
         #
         # conexao.fechar_conexao()
-
-
