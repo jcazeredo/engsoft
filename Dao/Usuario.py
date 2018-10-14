@@ -7,7 +7,6 @@ class UsuarioDao(object):
     Autentica o login.
     Retorno: None caso não autenticar || Objeto Usuário caso autenticar
     """
-
     def autenticar_login(self, cartao_aluno, senha):
         conexao = DataSource()
 
@@ -18,6 +17,42 @@ class UsuarioDao(object):
 
         sql = "SELECT * FROM usuarios WHERE cartao_aluno = %s AND senha = %s"
         valores = (cartao_aluno, senha)
+        cursor.execute(sql, valores)
+
+        resultado_sql = cursor.fetchall()
+        conexao.fechar_conexao()
+
+        # Login Válido
+        if cursor.rowcount != 0:
+            row = resultado_sql[0]
+            id = row["id"]
+            nome = row["nome"]
+            senha = row["senha"]
+            cartao_aluno = row["cartao_aluno"]
+            curso_id = row["curso_id"]
+            privilegio = row["privilegio"]
+            usuario_obj = Usuario(id, nome, senha, cartao_aluno, curso_id, privilegio)
+
+            return usuario_obj
+
+        # Login Inválido
+        else:
+            return False
+
+    """
+    Obtém um usuário pelo cartão do aluno.
+    Retorno: False || Objeto Usuário
+    """
+    def obter_usuario(self, cartao_aluno):
+        conexao = DataSource()
+
+        if not conexao.esta_logado:
+            return False, None
+
+        cursor = conexao.obter_cursor
+
+        sql = "SELECT * FROM usuarios WHERE cartao_aluno = %s"
+        valores = (cartao_aluno,)
         cursor.execute(sql, valores)
 
         resultado_sql = cursor.fetchall()
@@ -90,7 +125,6 @@ class UsuarioDao(object):
     Atualiza alguns dados do usuário no banco de dados.
     Retorno: False || True
     """
-
     def atualizar(self, usuario):
         conexao = DataSource()
         cursor = conexao.obter_cursor
@@ -98,9 +132,10 @@ class UsuarioDao(object):
         id = usuario.id
         nome = usuario.nome
         senha = usuario.senha
+        curso_id = usuario.curso_id
 
-        sql = "UPDATE usuarios SET nome = %s, senha = %s WHERE id = %s"
-        valores = (nome, senha, id)
+        sql = "UPDATE usuarios SET nome = %s, senha = %s, curso_id = %s WHERE id = %s"
+        valores = (nome, senha, id, curso_id)
         cursor.execute(sql, valores)
 
         conexao.commit()
@@ -132,12 +167,14 @@ class UsuarioDao(object):
 
         return cartoes_admin
 
+
+
     def criar(self, senha, nome, cartao_aluno, curso_id, privilegio):
         conexao = DataSource()
         cursor = conexao.obter_cursor
 
         sql = "INSERT INTO usuarios (nome, senha, cartao_aluno, curso_id, privilegio) VALUES (%s, %s, %s, %s, %s)"
-        valores = (nome, senha, cartao_aluno, curso_id, privilegio)
+        valores = (nome, senha, str(cartao_aluno), curso_id, privilegio)
         cursor.execute(sql, valores)
 
         conexao.commit()

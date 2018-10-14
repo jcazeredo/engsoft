@@ -190,7 +190,7 @@ class Interface(object):
         self.sidemenu.setVisible(True)
 
     # Cria elementos necessários para fazer login
-    def criar_perfil(self, dados):
+    def criar_perfil(self, dados, cursos):
         self.novo_frame()
 
         # 1 - Botão Atualizar
@@ -247,10 +247,16 @@ class Interface(object):
 
         # 8 - Input Curso
         dummy = QtWidgets.QComboBox(self.mainframe)
-        dummy.setEnabled(False)
+        if dados["curso"] == "Nenhum":
+            dummy.setEnabled(True)
+        else:
+            dummy.setEnabled(False)
         dummy.setGeometry(QtCore.QRect(120, 190, 211, 22))
         dummy.setObjectName("input_curso")
-        dummy.addItem(str(dados["curso"]))
+        dummy.addItem("Nenhum")
+        for curso in cursos:
+            dummy.addItem(curso)
+        dummy.setCurrentText(dados["curso"])
         self.elementos.append(dummy)
 
         # 9 - Label Curso
@@ -270,6 +276,7 @@ class Interface(object):
 
         self.mainframe.setVisible(True)
 
+    # Cria elementos necessários para criar uma conta
     def criar_cadastro(self, cursos):
         self.novo_frame()
 
@@ -353,6 +360,7 @@ class Interface(object):
 
         self.mainframe.setVisible(True)
 
+    # Cria layout Gerenciar Admins
     def criar_gerenciar_admins(self, admins, cursos):
         self.novo_frame()
 
@@ -383,6 +391,9 @@ class Interface(object):
         dummy.setGeometry(QtCore.QRect(220, 90, 61, 22))
         dummy.setObjectName("botao_editarAdmin")
         dummy.setText("Editar")
+        dummy.clicked.connect(self.editar_admin_pressionado)
+        if len(admins) == 0:
+            dummy.setEnabled(False)
         self.elementos.append(dummy)
 
         # 5 - Botão Excluir Admin
@@ -391,6 +402,8 @@ class Interface(object):
         dummy.setObjectName("botao_excluirAdmin")
         dummy.setText("Excluir")
         dummy.clicked.connect(self.excluir_admin_pressionado)
+        if len(admins) == 0:
+            dummy.setEnabled(False)
         self.elementos.append(dummy)
 
         # 6 - Label Cartão Aluno
@@ -448,31 +461,174 @@ class Interface(object):
         dummy.setObjectName("input_admin")
         for admin in admins:
             dummy.addItem(admin)
+        # dummy.setCurrentText()
         self.elementos.append(dummy)
 
 
         self.mainframe.setVisible(True)
 
+    # Cria layout Editar Admin
+    def criar_editar_admin(self, admins, cursos, dados):
+        self.novo_frame()
+
+        # 1 - Label Curso
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(80, 220, 41, 21))
+        dummy.setObjectName("label_curso")
+        dummy.setText("Curso:")
+        self.elementos.append(dummy)
+
+        # 2 - Botão Atualizar Admin
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(70, 260, 101, 22))
+        dummy.setObjectName("botao_atualizarAdmin")
+        dummy.setText("Atualizar Admin")
+        dummy.clicked.connect(self.atualizar_admin_pressionado)
+        self.elementos.append(dummy)
+
+        # 3 - Label Admnistradores
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(60, 70, 101, 21))
+        dummy.setObjectName("label_administradores")
+        dummy.setText("Admnistradores:")
+        self.elementos.append(dummy)
+
+        # 4 - Botão Editar Admin
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(220, 90, 61, 22))
+        dummy.setObjectName("botao_editarAdmin")
+        dummy.setText("Editar")
+        dummy.clicked.connect(self.editar_admin_pressionado)
+        self.elementos.append(dummy)
+
+        # 5 - Botão Excluir Admin
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(180, 260, 61, 22))
+        dummy.setObjectName("botao_excluirAdmin")
+        dummy.setText("Excluir")
+        dummy.clicked.connect(self.excluir_admin_pressionado2)
+        if len(admins) == 0:
+            dummy.setEnabled(False)
+        self.elementos.append(dummy)
+
+        # 6 - Botão Voltar
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(250, 260, 61, 22))
+        dummy.setObjectName("botao_voltar")
+        dummy.setText("Voltar")
+        dummy.clicked.connect(self.voltar_editar_admin_pressionado)
+        self.elementos.append(dummy)
+
+        # 7 - Label Cartão Aluno
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(20, 130, 111, 21))
+        dummy.setObjectName("label_cartao_aluno")
+        dummy.setText("Cartão do Aluno:")
+        self.elementos.append(dummy)
+
+        # 8 - Label Senha
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(80, 190, 41, 21))
+        dummy.setObjectName("label_senha")
+        dummy.setText("Senha:")
+        self.elementos.append(dummy)
+
+        # 9 - Label Nome
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(80, 160, 41, 21))
+        dummy.setObjectName("label_nome")
+        dummy.setText("Nome:")
+        self.elementos.append(dummy)
+
+        # 10 - Input Cartão Aluno
+        dummy = QtWidgets.QLineEdit(self.mainframe)
+        dummy.setEnabled(False)
+        dummy.setGeometry(QtCore.QRect(130, 130, 113, 22))
+        dummy.setObjectName("input_cartao_aluno")
+        dummy.setText(dados["cartao_aluno"])
+        self.elementos.append(dummy)
+
+        # 11 - Input Nome
+        dummy = QtWidgets.QLineEdit(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(130, 160, 311, 22))
+        dummy.setObjectName("input_nome")
+        dummy.setText(dados["nome"])
+        self.elementos.append(dummy)
+
+        # 12 - Input Senha
+        dummy = QtWidgets.QLineEdit(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(130, 190, 113, 22))
+        dummy.setObjectName("input_senha")
+        dummy.setText(dados["senha"])
+        self.elementos.append(dummy)
+
+        # 13 - Input Curso
+        dummy = QtWidgets.QComboBox(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(130, 220, 211, 22))
+        dummy.setObjectName("input_curso")
+        dummy.addItem("Nenhum")
+        for curso in cursos:
+            dummy.addItem(curso)
+        self.elementos.append(dummy)
+
+        # 14 - Input Admin
+        dummy = QtWidgets.QComboBox(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(60, 90, 151, 22))
+        dummy.setObjectName("input_admin")
+        for admin in admins:
+            dummy.addItem(admin)
+        dummy.setCurrentText(dados["cartao_aluno"])
+        self.elementos.append(dummy)
+
+        self.mainframe.setVisible(True)
+
+    # Ação para botão de Voltar, no layout Editar Admin
+    def voltar_editar_admin_pressionado(self):
+        self.controlador.gerenciar_admins()
+
+
+
+    # Ação para botão de Excluir, no layout Excluir Admin
     def excluir_admin_pressionado(self):
         admin = self.elementos[12].currentText()
         self.controlador.excluir_admin(admin)
 
+    def editar_admin_pressionado(self):
+        admin = self.elementos[12].currentText()
+        self.controlador.editar_admin(admin)
+
+    def excluir_admin_pressionado2(self):
+        admin = self.elementos[9].text()
+        self.controlador.excluir_admin(admin)
+
+
+
+    # Ação para botão de Gerenciar Admins, no sidemenu
     def gerenciar_admins_pressionado(self):
         self.controlador.gerenciar_admins()
 
+    def atualizar_admin_pressionado(self):
+        pass
+
+
+
+    # Ação para botão de Editar Histórico, no layout Ver Perfil
     def editar_historico_pressionado(self):
         # TO-DO
         pass
 
-    # Função chamada quando o botão atualizar (Layout Perfil) for pressionado
+    # Ação para botão atualizar, no layout Ver Perfil
     def atualizar_pressionado(self):
         input_nome = self.elementos[3].text()
         input_senha = self.elementos[4].text()
-        self.controlador.atualizar_perfil(input_nome, input_senha)
+        input_curso = self.elementos[7].currentText()
+        self.controlador.atualizar_perfil(input_nome, input_senha, input_curso)
 
+    # Ação para botão criar conta, no layout Login
     def criar_conta_pressionado(self):
         self.controlador.criar_cadastro()
 
+    # Ação para voltar atualizar, no layout Cadastro
     def voltar_cadastro_pressionado(self):
         self.criar_login()
 
@@ -503,22 +659,26 @@ class Interface(object):
             self.setar_mensagem_status("Preencha todos os campos.")
         else:
             try:
-                cartao_aluno = int(cartao_aluno)
-                self.controlador.novo_admin(senha, nome, cartao_aluno, curso)
+                x = int(cartao_aluno)
+                self.controlador.novo_admin(senha, nome, str(cartao_aluno), curso)
             except ValueError:
                 self.setar_mensagem_status("Cartão do aluno deve ter apenas números")
 
-    # Função chamada quando o botão Ver Perfil (Menu Lateral) for pressionado
+
+
+    # Ação para botão Ver Perfil, no sidemenu
     def ver_perfil_pressionado(self):
         self.controlador.ver_perfil()
 
+    # Ação para botão Gerenciar Cursos, no sidemenu
     def gerenciar_cursos_pressionado(self):
         pass
 
+    # Ação para botão Gerenciar Disciplinas, no sidemenu
     def gerenciar_disciplinas_pressionado(self):
         pass
 
-    # Função chamada quando o botão Login (Layout Login) for pressionado
+    # Ação para botão login, no layout Login
     def login_pressionado(self):
         self.controlador.login(self.elementos[2].text(), self.elementos[3].text())
 
@@ -527,13 +687,15 @@ class Interface(object):
         self.elementos[5].setText(mensagem)
         self.setar_mensagem_status(mensagem)
 
+    # Exibe mensagem no layout de cadastro
     def setar_mensagem_cadastro(self, mensagem):
         self.elementos[2].setText(mensagem)
         self.setar_mensagem_status(mensagem)
 
-    # Função para setar mensagem na barra de status da janela
+    # Exibe mensagem na barra de status da janela
     def setar_mensagem_status(self, mensagem):
         self.statusBar.showMessage(mensagem)
 
+    # Exibe mensagem no boas vindas do sidemenu
     def setar_boas_vindas(self, mensagem):
         self.label_boas_vindas.setText(mensagem)

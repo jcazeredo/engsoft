@@ -2,6 +2,12 @@ from PyQt5 import QtWidgets
 from View.interface import Interface
 import sys
 
+'''
+TO-DO:
+- Quando alguém altera dados: verificar tudo que tem dependencias
+- Quando alguém exclui um curso ou disciplina: todos que tem esse cursa ou disciplina tem que ficar sem nada
+'''
+
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     engsoft = QtWidgets.QMainWindow()

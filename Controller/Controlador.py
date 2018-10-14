@@ -1,6 +1,5 @@
 from Model.Core import Core
 
-
 class Controlador(object):
     def __init__(self, interface):
         self.interface = interface
@@ -35,15 +34,16 @@ class Controlador(object):
         else:
             self.interface.criar_cadastro(cursos)
 
-
     def ver_perfil(self):
-        dados = self.core.carergar_dados_perfil()
-        self.interface.criar_perfil(dados)
+        dados = self.core.carregar_dados_perfil()
+        cursos = self.core.carregar_nomes_cursos()
+        self.interface.criar_perfil(dados, cursos)
 
-    def atualizar_perfil(self, nome, senha):
-        if self.core.atualizar_perfil(nome, senha):
+    def atualizar_perfil(self, nome, senha, curso):
+        if self.core.atualizar_perfil(nome, senha, curso):
             self.interface.setar_mensagem_status("Perfil Atualizado com Sucesso!")
             self.interface.setar_boas_vindas("Bem vindo, " + nome)
+            self.ver_perfil()
         else:
             self.interface.setar_mensagem_status("Erro ao atualizar!")
 
@@ -83,3 +83,17 @@ class Controlador(object):
             self.gerenciar_admins()
         else:
             self.interface.setar_mensagem_status("Erro ao excluir admin!")
+
+    def editar_admin(self, admin_selecionado):
+        dados = self.core.carregar_dados_usuario(admin_selecionado)
+        cursos = self.core.carregar_nomes_cursos()
+        admins = self.core.carregar_cartoes_admins()
+
+        if cursos == False:
+            print("Erro ao obter cursos")
+        elif admins == False:
+            print("Erro ao obter admins")
+        else:
+            self.interface.criar_editar_admin(admins, cursos, dados)
+
+

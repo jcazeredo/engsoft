@@ -65,12 +65,60 @@ class Core(object):
 
         return nome, privilegio
 
-    def carergar_dados_perfil(self):
+    def carregar_dados_perfil(self):
         nome = self.__usuario_logado.nome
         senha = self.__usuario_logado.senha
         cartao_aluno = self.__usuario_logado.cartao_aluno
         curso_id = self.__usuario_logado.curso_id
-        curso = Curso.obter_curso(curso_id).nome
+        curso = Curso.obter_curso(curso_id)
+
+        if curso == False:
+            curso = self.carregar_curso(curso_id)
+
+        curso = curso.nome
+
+        dados = {
+            "nome": nome,
+            "senha": senha,
+            "cartao_aluno": cartao_aluno,
+            "curso": curso
+        }
+
+        return dados
+
+    def carregar_curso(self, curso_id):
+        curso_dao = CursoDao()
+        curso = curso_dao.obter_curso_id(curso_id)
+
+        if not curso:
+            return False
+
+        # Carrega Disciplinas
+        disciplina_dao = DisciplinaDao()
+
+        # Recebe lista com as ids de disciplinas cursadas pelo curso
+        disciplinas_curso = disciplina_dao.obter_disciplinas_curso(curso_id)
+
+        # Criar Associações Disciplinas-Cursos
+        for disciplina in disciplinas_curso:
+            associacao = DisciplinaCurso(curso_id, disciplina)
+            curso.adicionar_disciplina(disciplina, associacao)
+            disciplina_obj = Disciplina.obter_disciplina(disciplina)
+            disciplina_obj.adicionar_curso(curso_id, associacao)
+        return curso
+
+    def carregar_dados_usuario(self, cartao_aluno):
+        usuario_dao = UsuarioDao()
+        usuario_obj = usuario_dao.obter_usuario(cartao_aluno)
+
+        nome = usuario_obj.nome
+        senha = usuario_obj.senha
+        cartao_aluno = usuario_obj.cartao_aluno
+        curso_id = usuario_obj.curso_id
+        if curso_id == 0:
+            curso = "Nenhum"
+        else:
+            curso = Curso.obter_curso(curso_id).nome
 
         dados = {
             "nome": nome,
@@ -92,9 +140,12 @@ class Core(object):
 
         return False
 
-    def atualizar_perfil(self, nome, senha):
+    def atualizar_perfil(self, nome, senha, curso):
+        curso_dao = CursoDao()
+        curso_id = curso_dao.obter_id_curso(curso)
         self.__usuario_logado.nome = nome
         self.__usuario_logado.senha = senha
+        self.__usuario_logado.curso_id = curso_id
         usuario_dao = UsuarioDao()
 
         return usuario_dao.atualizar(self.__usuario_logado)
