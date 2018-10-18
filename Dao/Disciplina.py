@@ -109,6 +109,47 @@ class DisciplinaDao(object):
         # cursor = conexao.obter_cursor
         #
         # conexao.fechar_conexao()
+    def criar(self, nome,semestre):
+        conexao = DataSource()
+        cursor = conexao.obter_cursor
+
+        sql = "INSERT INTO disciplinas (nome, semestre) VALUES (%s, %s)"
+        valores = (nome, semestre)
+        cursor.execute(sql, valores)
+
+        conexao.commit()
+        conexao.fechar_conexao()
+
+        if cursor.rowcount > 0:
+            return self.obter_id_criado(nome)
+        else:
+            return False
+
+    def obter_id_criado(self, nome):
+        conexao = DataSource()
+
+        if not conexao.esta_logado:
+            return False
+
+        cursor = conexao.obter_cursor
+
+        sql = "SELECT * FROM disciplinas WHERE nome = %s"
+        valores = (nome,)
+        cursor.execute(sql, valores)
+
+        resultado_sql = cursor.fetchall()
+        conexao.fechar_conexao()
+
+        # Disciplina Existe
+        if cursor.rowcount != 0:
+            disciplina_row = resultado_sql[0]
+
+            id = disciplina_row["id"]
+
+            return id
+
+        else:
+            return False
 
     def excluir(self):
         pass

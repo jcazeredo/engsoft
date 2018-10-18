@@ -6,6 +6,7 @@ import sip
 # View
 class Interface(object):
     def __init__(self, main_window):
+
         """
         A interface é composta de dois frames: sidemenu e mainframe. Dentro de cada frame estão os
         elementos (botão, label, input e etc).
@@ -17,6 +18,9 @@ class Interface(object):
         Quando é necessário trocar de layout, é chamada uma função que exclui todos elementos dessa lista
         """
         self.elementos = []
+
+        #testes
+        #self.controlador.criar_disciplinas()
 
         # Código configuração da janela
         main_window.setObjectName("engsoft")

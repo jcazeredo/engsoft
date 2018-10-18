@@ -168,5 +168,11 @@ class Core(object):
         usuario_dao = UsuarioDao()
         return usuario_dao.criar(senha, nome, cartao_aluno, curso_id, privilegio)
 
+    def criar_disciplina(self, nome, semestre):
+        disciplina_dao = DisciplinaDao()
+        id = disciplina_dao.criar(nome, semestre)
+        Disciplina(id, nome, semestre)
+        return True
+
     def obter_id_logado(self):
         return self.__usuario_logado.__id
