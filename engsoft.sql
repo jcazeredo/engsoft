@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 14/10/2018 às 03:28
+-- Tempo de geração: 02/11/2018 às 20:01
 -- Versão do servidor: 10.1.35-MariaDB
 -- Versão do PHP: 7.2.9
 
@@ -113,6 +113,22 @@ CREATE TABLE `historico` (
 
 INSERT INTO `historico` (`id`, `usuario_id`, `disciplina_id`) VALUES
 (7, 8, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `horarios_disciplinas`
+--
+
+CREATE TABLE `horarios_disciplinas` (
+  `id` int(11) NOT NULL,
+  `disciplina_id` int(11) NOT NULL,
+  `segunda` int(11) NOT NULL,
+  `terca` int(11) NOT NULL,
+  `quarta` int(11) NOT NULL,
+  `quinta` int(11) NOT NULL,
+  `sexta` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
