@@ -168,10 +168,16 @@ class Core(object):
         usuario_dao = UsuarioDao()
         return usuario_dao.criar(senha, nome, cartao_aluno, curso_id, privilegio)
 
-    def criar_disciplina(self, nome, semestre):
+    def criar_disciplina(self, nome, semestre, aprovacao):
         disciplina_dao = DisciplinaDao()
-        id = disciplina_dao.criar(nome, semestre)
-        Disciplina(id, nome, semestre)
+        id = disciplina_dao.criar(nome, semestre, aprovacao)
+        Disciplina(id, nome, semestre, aprovacao)
+        return True
+
+    def atualizar_disciplina(self, nome, semestre, aprovacao):
+        disciplina_dao = DisciplinaDao()
+        id = disciplina_dao.criar(nome, semestre, aprovacao)
+        Disciplina(id, nome, semestre, aprovacao)
         return True
 
     def obter_id_logado(self):

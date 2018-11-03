@@ -109,12 +109,12 @@ class DisciplinaDao(object):
         # cursor = conexao.obter_cursor
         #
         # conexao.fechar_conexao()
-    def criar(self, nome,semestre):
+    def criar(self, nome,semestre, aprovacao):
         conexao = DataSource()
         cursor = conexao.obter_cursor
 
-        sql = "INSERT INTO disciplinas (nome, semestre) VALUES (%s, %s)"
-        valores = (nome, semestre)
+        sql = "INSERT INTO disciplinas (nome, semestre, taxa_aprovacao) VALUES (%s, %s, %s)"
+        valores = (nome, semestre, aprovacao)
         cursor.execute(sql, valores)
 
         conexao.commit()

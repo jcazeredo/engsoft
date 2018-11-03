@@ -33,8 +33,12 @@ class Controlador(object):
             print("Erro ao obter cursos")
         else:
             self.interface.criar_cadastro(cursos)
-    def criar_disciplinas(self, nome, semestre):
-        self.core.criar_disciplina(nome, semestre)
+
+    def criar_disciplinas(self, nome, semestre, aprovacao):
+        self.core.criar_disciplina(nome, semestre, aprovacao)
+
+    def atualizar_disciplina(self, nome, semestre, aprovacao):
+        self.core.atualizar_disciplina(nome, semestre, aprovacao)
 
     def ver_perfil(self):
         dados = self.core.carregar_dados_perfil()
