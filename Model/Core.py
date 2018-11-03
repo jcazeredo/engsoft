@@ -174,10 +174,13 @@ class Core(object):
         Disciplina(id, nome, semestre, aprovacao)
         return True
 
-    def atualizar_disciplina(self, nome, semestre, aprovacao):
+    def atualizar_disciplina(self, nome, nome_novo, semestre, aprovacao):
         disciplina_dao = DisciplinaDao()
-        id = disciplina_dao.criar(nome, semestre, aprovacao)
-        Disciplina(id, nome, semestre, aprovacao)
+        id = disciplina_dao.atualizar(nome, nome_novo,semestre, aprovacao)
+        objeto_disciplina = Disciplina.obter_disciplina(id)
+        objeto_disciplina.nome = nome_novo
+        objeto_disciplina.semestre = semestre
+        objeto_disciplina.aprovacao = aprovacao
         return True
 
     def obter_id_logado(self):

@@ -1,6 +1,7 @@
 from Controller.Controlador import Controlador
 from PyQt5 import QtCore, QtWidgets
 from Model.Objetos.Disciplina import Disciplina
+from Dao.Disciplina import DisciplinaDao
 import sip
 
 
@@ -13,7 +14,9 @@ class Interface(object):
         elementos (botão, label, input e etc).
         """
         self.controlador = Controlador(self)
+
         self.disciplina = Disciplina("teste", 5, 50,5)
+
         """
         Todos os elementos criados no mainframe são adicionados nessa lista.
         Quando é necessário trocar de layout, é chamada uma função que exclui todos elementos dessa lista
@@ -25,8 +28,8 @@ class Interface(object):
         #self.controlador.atualizar_disciplinas("portugues", 6, 50)
 
         #teste = self.
-        teste = Disciplina.obter_disciplina(1)
-        print(teste)
+        #DisciplinaDao.atualizar(self,"matematica", 6, 90, "matematica2222")
+        #self.controlador.atualizar_disciplina("chupa", "chupa 2", 6, 90)
 
         # Código configuração da janela
         main_window.setObjectName("engsoft")

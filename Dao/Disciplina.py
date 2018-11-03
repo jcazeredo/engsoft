@@ -95,20 +95,30 @@ class DisciplinaDao(object):
             id = disciplina_row["id"]
             nome = disciplina_row["nome"]
             semestre = disciplina_row["semestre"]
-
-            Disciplina(id, nome, semestre)
+            taxa_aprovacao = disciplina_row["taxa_aprovacao"]
+            Disciplina(id, nome, semestre, taxa_aprovacao)
 
             return True
 
         else:
             return False
 
-    def atualizar(self):
-        pass
-        # conexao = DataSource()
-        # cursor = conexao.obter_cursor
-        #
-        # conexao.fechar_conexao()
+    def atualizar(self, nome,nome_novo, semestre, aprovacao):
+        conexao = DataSource()
+        cursor = conexao.obter_cursor
+
+        sql = "UPDATE disciplinas SET nome = %s , semestre = %s, taxa_aprovacao = %s WHERE nome = %s"
+        valores = (nome_novo, semestre, aprovacao,  nome)
+        cursor.execute(sql, valores)
+
+        conexao.commit()
+        conexao.fechar_conexao()
+
+        if cursor.rowcount > 0:
+            return self.obter_id_criado(nome_novo)
+        else:
+            return False
+
     def criar(self, nome,semestre, aprovacao):
         conexao = DataSource()
         cursor = conexao.obter_cursor

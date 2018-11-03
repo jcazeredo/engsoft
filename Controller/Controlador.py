@@ -37,8 +37,8 @@ class Controlador(object):
     def criar_disciplinas(self, nome, semestre, aprovacao):
         self.core.criar_disciplina(nome, semestre, aprovacao)
 
-    def atualizar_disciplina(self, nome, semestre, aprovacao):
-        self.core.atualizar_disciplina(nome, semestre, aprovacao)
+    def atualizar_disciplina(self, nome, nome_novo, semestre, aprovacao):
+        self.core.atualizar_disciplina(nome, nome_novo ,semestre, aprovacao)
 
     def ver_perfil(self):
         dados = self.core.carregar_dados_perfil()
