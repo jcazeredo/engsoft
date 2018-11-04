@@ -36,6 +36,13 @@ class Curso(object):
             return False
 
 
+    @staticmethod
+    def remover_curso(id):
+        try:
+            del Curso.__cursos[id]
+            return True
+        except:
+            return False
 
 
 

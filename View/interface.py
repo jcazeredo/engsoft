@@ -24,6 +24,11 @@ class Interface(object):
         self.elementos = []
 
         #testes
+
+        #self.controlador.criar_curso("engenharia de putaria")
+        #self.controlador.atualizar_curso("engenharia de putaria", "oioi")
+
+        self.controlador.excluir_curso("engenharia de putaria")
         #self.controlador.criar_disciplinas("portugues", 6, 50)
         #self.controlador.atualizar_disciplinas("portugues", 6, 50)
 

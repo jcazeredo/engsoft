@@ -183,5 +183,30 @@ class Core(object):
         objeto_disciplina.aprovacao = aprovacao
         return True
 
+    def criar_curso(self, nome):
+        curso_dao = CursoDao()
+        id = curso_dao.criar(nome)
+        Curso(id, nome)
+        return True
+
+    def atualizar_curso(self, nome, nome_novo):
+        curso_dao = CursoDao()
+        id = curso_dao.atualizar(nome, nome_novo)
+        objeto_disciplina = Curso.obter_curso(id)
+        objeto_disciplina.nome = nome_novo
+
+        return True
+
+    def excluir_curso(self, nome):
+        curso_dao = CursoDao()
+        id = curso_dao.obter_id_curso(nome)
+
+        if id != False:
+            if Curso.obter_curso(id) != False:
+                Curso.remover_curso(id)
+            return curso_dao.excluir(id)
+
+        return False
+
     def obter_id_logado(self):
         return self.__usuario_logado.__id

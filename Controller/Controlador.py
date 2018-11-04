@@ -40,6 +40,19 @@ class Controlador(object):
     def atualizar_disciplina(self, nome, nome_novo, semestre, aprovacao):
         self.core.atualizar_disciplina(nome, nome_novo ,semestre, aprovacao)
 
+    def criar_curso(self, nome):
+        self.core.criar_curso(nome)
+
+    def atualizar_curso(self, nome):
+        self.core.atualizar_curso(nome)
+
+    def excluir_curso(self, nome):
+        if self.core.excluir_curso(nome):
+            self.interface.setar_mensagem_status("Curso excluído com sucesso!")
+
+        else:
+            self.interface.setar_mensagem_status("Erro ao excluir curso!")
+
     def ver_perfil(self):
         dados = self.core.carregar_dados_perfil()
         cursos = self.core.carregar_nomes_cursos()
