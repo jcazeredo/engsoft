@@ -56,6 +56,13 @@ class Disciplina(object):
         else:
             return False
 
+    @staticmethod
+    def remover_disciplina(id):
+        try:
+            del Disciplina.__disciplinas[id]
+            return True
+        except:
+            return False
 
     def adicionar_curso(self, curso_id, associacao):
         self.__cursos[curso_id] = associacao

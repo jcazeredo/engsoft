@@ -161,9 +161,20 @@ class DisciplinaDao(object):
         else:
             return False
 
-    def excluir(self):
-        pass
-        # conexao = DataSource()
-        # cursor = conexao.obter_cursor
-        #
-        # conexao.fechar_conexao()
+
+
+    def excluir(self, id):
+        conexao = DataSource()
+        cursor = conexao.obter_cursor
+
+        sql = "DELETE FROM disciplinas WHERE id = %s"
+        valores = (id,)
+        cursor.execute(sql, valores)
+
+        conexao.commit()
+        conexao.fechar_conexao()
+
+        if cursor.rowcount > 0:
+            return True
+        else:
+            return False

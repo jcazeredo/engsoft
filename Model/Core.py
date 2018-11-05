@@ -183,5 +183,11 @@ class Core(object):
         objeto_disciplina.aprovacao = aprovacao
         return True
 
+    def excluir_disciplina(self, id):
+        disciplina = Disciplina.obter_disciplina(id)
+        disciplina.remover_disciplina(id)
+        disciplina_dao = DisciplinaDao()
+        disciplina_dao.excluir(id)
+
     def obter_id_logado(self):
         return self.__usuario_logado.__id
