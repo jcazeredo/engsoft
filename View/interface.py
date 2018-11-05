@@ -15,7 +15,7 @@ class Interface(object):
         """
         self.controlador = Controlador(self)
 
-        self.disciplina = Disciplina("teste", 5, 50,5)
+        #self.disciplina = Disciplina("teste", 5, 50,5)
 
         """
         Todos os elementos criados no mainframe são adicionados nessa lista.
@@ -24,12 +24,11 @@ class Interface(object):
         self.elementos = []
 
         #testes
-        #self.controlador.criar_disciplinas("portugues", 6, 50)
-        #self.controlador.atualizar_disciplinas("portugues", 6, 50)
+        #self.controlador.criar_disciplinas("portugues", 6, 50, 10, 20, 30, 40, 50)
 
         #teste = self.
         #DisciplinaDao.atualizar(self,"matematica", 6, 90, "matematica2222")
-        #self.controlador.atualizar_disciplina("chupa", "chupa 2", 6, 90)
+        #self.controlador.atualizar_disciplina("chupa", "chupa 2", 6, 90, 1, 2, 3, 4, 5)
 
         # Código configuração da janela
         main_window.setObjectName("engsoft")

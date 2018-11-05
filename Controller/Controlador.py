@@ -34,11 +34,11 @@ class Controlador(object):
         else:
             self.interface.criar_cadastro(cursos)
 
-    def criar_disciplinas(self, nome, semestre, aprovacao):
-        self.core.criar_disciplina(nome, semestre, aprovacao)
+    def criar_disciplinas(self, nome, semestre, aprovacao, segunda, terca, quarta, quinta, sexta):
+        self.core.criar_disciplina(nome, semestre, aprovacao, segunda, terca, quarta, quinta, sexta)
 
-    def atualizar_disciplina(self, nome, nome_novo, semestre, aprovacao):
-        self.core.atualizar_disciplina(nome, nome_novo ,semestre, aprovacao)
+    def atualizar_disciplina(self, nome, nome_novo, semestre, aprovacao, segunda, terca, quarta, quinta, sexta):
+        self.core.atualizar_disciplina(nome, nome_novo, semestre, aprovacao, segunda, terca, quarta, quinta, sexta)
 
     def excluir_disciplina(self, id):
         self.core.excluir_disciplina(id)

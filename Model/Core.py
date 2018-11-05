@@ -168,19 +168,24 @@ class Core(object):
         usuario_dao = UsuarioDao()
         return usuario_dao.criar(senha, nome, cartao_aluno, curso_id, privilegio)
 
-    def criar_disciplina(self, nome, semestre, aprovacao):
+    def criar_disciplina(self, nome, semestre, aprovacao, segunda, terca, quarta, quinta, sexta):
         disciplina_dao = DisciplinaDao()
-        id = disciplina_dao.criar(nome, semestre, aprovacao)
-        Disciplina(id, nome, semestre, aprovacao)
+        id = disciplina_dao.criar(nome, semestre, aprovacao, segunda, terca, quarta, quinta, sexta)
+        Disciplina(id, nome, semestre, aprovacao, segunda, terca, quarta, quinta, sexta)
         return True
 
-    def atualizar_disciplina(self, nome, nome_novo, semestre, aprovacao):
+    def atualizar_disciplina(self, nome, nome_novo, semestre, aprovacao, segunda, terca, quarta, quinta, sexta):
         disciplina_dao = DisciplinaDao()
-        id = disciplina_dao.atualizar(nome, nome_novo,semestre, aprovacao)
+        id = disciplina_dao.atualizar(nome, nome_novo,semestre, aprovacao, segunda, terca, quarta, quinta, sexta)
         objeto_disciplina = Disciplina.obter_disciplina(id)
         objeto_disciplina.nome = nome_novo
         objeto_disciplina.semestre = semestre
         objeto_disciplina.aprovacao = aprovacao
+        objeto_disciplina.segunda = segunda
+        objeto_disciplina.terca = terca
+        objeto_disciplina.quarta = quarta
+        objeto_disciplina.quinta = quinta
+        objeto_disciplina.sexta = sexta
         return True
 
     def excluir_disciplina(self, id):
