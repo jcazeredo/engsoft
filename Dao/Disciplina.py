@@ -96,19 +96,24 @@ class DisciplinaDao(object):
             nome = disciplina_row["nome"]
             semestre = disciplina_row["semestre"]
             taxa_aprovacao = disciplina_row["taxa_aprovacao"]
-            Disciplina(id, nome, semestre, taxa_aprovacao)
+            segunda = disciplina_row["segunda"]
+            terca = disciplina_row["terca"]
+            quarta = disciplina_row["quarta"]
+            quinta = disciplina_row["quinta"]
+            sexta = disciplina_row["sexta"]
+            Disciplina(id, nome, semestre, taxa_aprovacao, segunda, terca, quarta, quinta, sexta)
 
             return True
 
         else:
             return False
 
-    def atualizar(self, nome,nome_novo, semestre, aprovacao):
+    def atualizar(self, nome,nome_novo, semestre, aprovacao, segunda, terca, quarta, quinta, sexta):
         conexao = DataSource()
         cursor = conexao.obter_cursor
 
-        sql = "UPDATE disciplinas SET nome = %s , semestre = %s, taxa_aprovacao = %s WHERE nome = %s"
-        valores = (nome_novo, semestre, aprovacao,  nome)
+        sql = "UPDATE disciplinas SET nome = %s , semestre = %s, taxa_aprovacao = %s , segunda = %s, terca = %s, quarta = %s, quinta = %s, sexta = %s WHERE nome = %s"
+        valores = (nome_novo, semestre, aprovacao, segunda, terca, quarta, quinta, sexta, nome)
         cursor.execute(sql, valores)
 
         conexao.commit()
@@ -119,12 +124,12 @@ class DisciplinaDao(object):
         else:
             return False
 
-    def criar(self, nome,semestre, aprovacao):
+    def criar(self, nome, semestre, aprovacao, segunda, terca, quarta, quinta, sexta):
         conexao = DataSource()
         cursor = conexao.obter_cursor
 
-        sql = "INSERT INTO disciplinas (nome, semestre, taxa_aprovacao) VALUES (%s, %s, %s)"
-        valores = (nome, semestre, aprovacao)
+        sql = "INSERT INTO disciplinas (nome, semestre, taxa_aprovacao, segunda, terca, quarta, quinta, sexta) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        valores = (nome, semestre, aprovacao, segunda, terca, quarta, quinta, sexta)
         cursor.execute(sql, valores)
 
         conexao.commit()
@@ -161,9 +166,20 @@ class DisciplinaDao(object):
         else:
             return False
 
-    def excluir(self):
-        pass
-        # conexao = DataSource()
-        # cursor = conexao.obter_cursor
-        #
-        # conexao.fechar_conexao()
+
+
+    def excluir(self, id):
+        conexao = DataSource()
+        cursor = conexao.obter_cursor
+
+        sql = "DELETE FROM disciplinas WHERE id = %s"
+        valores = (id,)
+        cursor.execute(sql, valores)
+
+        conexao.commit()
+        conexao.fechar_conexao()
+
+        if cursor.rowcount > 0:
+            return True
+        else:
+            return False
