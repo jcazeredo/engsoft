@@ -2,10 +2,10 @@
 -- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Tempo de geração: 02/11/2018 às 20:01
+-- Host: 127.0.0.1
+-- Generation Time: 05-Nov-2018 às 18:29
 -- Versão do servidor: 10.1.35-MariaDB
--- Versão do PHP: 7.2.9
+-- versão do PHP: 7.2.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,13 +19,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Banco de dados: `engsoft`
+-- Database: `engsoft`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `cursos`
+-- Estrutura da tabela `cursos`
 --
 
 CREATE TABLE `cursos` (
@@ -34,7 +34,7 @@ CREATE TABLE `cursos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Fazendo dump de dados para tabela `cursos`
+-- Extraindo dados da tabela `cursos`
 --
 
 INSERT INTO `cursos` (`id`, `nome`) VALUES
@@ -47,36 +47,41 @@ INSERT INTO `cursos` (`id`, `nome`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `disciplinas`
+-- Estrutura da tabela `disciplinas`
 --
 
 CREATE TABLE `disciplinas` (
   `id` int(10) UNSIGNED NOT NULL,
   `nome` varchar(255) NOT NULL,
   `semestre` int(11) NOT NULL,
-  `taxa_aprovacao` int(11) NOT NULL
+  `taxa_aprovacao` int(11) NOT NULL,
+  `segunda` int(11) NOT NULL,
+  `terca` int(11) NOT NULL,
+  `quarta` int(11) NOT NULL,
+  `quinta` int(11) NOT NULL,
+  `sexta` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Fazendo dump de dados para tabela `disciplinas`
+-- Extraindo dados da tabela `disciplinas`
 --
 
-INSERT INTO `disciplinas` (`id`, `nome`, `semestre`, `taxa_aprovacao`) VALUES
-(1, 'Circuitos Elétricos I', 2, 0),
-(2, 'Circuitos Elétricos II', 0, 0),
-(3, 'Cálculo I', 0, 0),
-(4, 'Física I', 0, 0),
-(5, 'Probabilidade', 0, 0),
-(6, 'Circuitos Elétricos I', 2, 0),
-(7, 'Circuitos Elétricos II', 3, 0),
-(8, 'Cálculo I', 4, 0),
-(9, 'Física I', 5, 0),
-(10, 'Probabilidade', 6, 0);
+INSERT INTO `disciplinas` (`id`, `nome`, `semestre`, `taxa_aprovacao`, `segunda`, `terca`, `quarta`, `quinta`, `sexta`) VALUES
+(1, 'Circuitos Elétricos I', 2, 0, 0, 0, 0, 0, 0),
+(2, 'Circuitos Elétricos II', 0, 0, 0, 0, 0, 0, 0),
+(3, 'Cálculo I', 0, 0, 0, 0, 0, 0, 0),
+(4, 'Física I', 0, 0, 0, 0, 0, 0, 0),
+(5, 'Probabilidade', 0, 0, 0, 0, 0, 0, 0),
+(6, 'Circuitos Elétricos I', 2, 0, 0, 0, 0, 0, 0),
+(7, 'Circuitos Elétricos II', 3, 0, 0, 0, 0, 0, 0),
+(8, 'Cálculo I', 4, 0, 0, 0, 0, 0, 0),
+(9, 'Física I', 5, 0, 0, 0, 0, 0, 0),
+(10, 'Probabilidade', 6, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `disciplinas_curso`
+-- Estrutura da tabela `disciplinas_curso`
 --
 
 CREATE TABLE `disciplinas_curso` (
@@ -86,7 +91,7 @@ CREATE TABLE `disciplinas_curso` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Fazendo dump de dados para tabela `disciplinas_curso`
+-- Extraindo dados da tabela `disciplinas_curso`
 --
 
 INSERT INTO `disciplinas_curso` (`id`, `curso_id`, `disciplina_id`) VALUES
@@ -98,7 +103,7 @@ INSERT INTO `disciplinas_curso` (`id`, `curso_id`, `disciplina_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `historico`
+-- Estrutura da tabela `historico`
 --
 
 CREATE TABLE `historico` (
@@ -108,7 +113,7 @@ CREATE TABLE `historico` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Fazendo dump de dados para tabela `historico`
+-- Extraindo dados da tabela `historico`
 --
 
 INSERT INTO `historico` (`id`, `usuario_id`, `disciplina_id`) VALUES
@@ -117,7 +122,7 @@ INSERT INTO `historico` (`id`, `usuario_id`, `disciplina_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `horarios_disciplinas`
+-- Estrutura da tabela `horarios_disciplinas`
 --
 
 CREATE TABLE `horarios_disciplinas` (
@@ -133,7 +138,7 @@ CREATE TABLE `horarios_disciplinas` (
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `requisitos`
+-- Estrutura da tabela `requisitos`
 --
 
 CREATE TABLE `requisitos` (
@@ -145,7 +150,7 @@ CREATE TABLE `requisitos` (
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `usuarios`
+-- Estrutura da tabela `usuarios`
 --
 
 CREATE TABLE `usuarios` (
@@ -158,98 +163,99 @@ CREATE TABLE `usuarios` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Fazendo dump de dados para tabela `usuarios`
+-- Extraindo dados da tabela `usuarios`
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `senha`, `privilegio`, `cartao_aluno`, `curso_id`) VALUES
+(0, 'root', 'admin', 0, '0', 0),
 (2, 'ss', '1', 1, '2', 1),
 (8, 'cristian dos anjos', '12', 1, '11', 2),
 (9, 'dassd', 'dssd', 1, '123', 3),
 (10, 'cu', 'adsasd', 1, '113', 3),
 (12, 'nomed', 'senha', 1, '1234', 4),
-(21, '14', '11', 0, '111', 0);
+(22, 'Ian Fischer Schilling', '1234', 0, '275603', 1);
 
 --
--- Índices de tabelas apagadas
+-- Indexes for dumped tables
 --
 
 --
--- Índices de tabela `cursos`
+-- Indexes for table `cursos`
 --
 ALTER TABLE `cursos`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `Único` (`nome`);
 
 --
--- Índices de tabela `disciplinas`
+-- Indexes for table `disciplinas`
 --
 ALTER TABLE `disciplinas`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices de tabela `disciplinas_curso`
+-- Indexes for table `disciplinas_curso`
 --
 ALTER TABLE `disciplinas_curso`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices de tabela `historico`
+-- Indexes for table `historico`
 --
 ALTER TABLE `historico`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices de tabela `requisitos`
+-- Indexes for table `requisitos`
 --
 ALTER TABLE `requisitos`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices de tabela `usuarios`
+-- Indexes for table `usuarios`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `usuario` (`cartao_aluno`);
 
 --
--- AUTO_INCREMENT de tabelas apagadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de tabela `cursos`
+-- AUTO_INCREMENT for table `cursos`
 --
 ALTER TABLE `cursos`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT de tabela `disciplinas`
+-- AUTO_INCREMENT for table `disciplinas`
 --
 ALTER TABLE `disciplinas`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT de tabela `disciplinas_curso`
+-- AUTO_INCREMENT for table `disciplinas_curso`
 --
 ALTER TABLE `disciplinas_curso`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT de tabela `historico`
+-- AUTO_INCREMENT for table `historico`
 --
 ALTER TABLE `historico`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT de tabela `requisitos`
+-- AUTO_INCREMENT for table `requisitos`
 --
 ALTER TABLE `requisitos`
   MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de tabela `usuarios`
+-- AUTO_INCREMENT for table `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
