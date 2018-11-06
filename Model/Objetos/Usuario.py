@@ -36,6 +36,10 @@ class Usuario(object):
     @property
     def privilegio(self):
         return self.__privilegio
+		
+    @property
+    def disciplinas(self):
+        return self.__disciplinas
 
     @id.setter
     def id(self, valor):

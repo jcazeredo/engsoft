@@ -96,7 +96,7 @@ class Disciplina(object):
     @staticmethod
     def obter_disciplina(disciplina_id):
         if disciplina_id in Disciplina.__disciplinas:
-            print(Disciplina.__disciplinas[disciplina_id])
+            #print(Disciplina.__disciplinas[disciplina_id])
             return Disciplina.__disciplinas[disciplina_id]
         else:
             return False
