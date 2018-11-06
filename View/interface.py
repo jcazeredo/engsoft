@@ -166,6 +166,7 @@ class Interface(object):
         self.gerenciar_horarios = QtWidgets.QPushButton(self.sidemenu)
         self.gerenciar_horarios.setGeometry(QtCore.QRect(10, 100, 131, 22))
         self.gerenciar_horarios.setObjectName("gerenciar_horarios")
+        self.gerenciar_horarios.clicked.connect(self.gerenciar_horarios_pressionado)
         self.gerenciar_horarios.setText("Gerenciar Horários")
 
         self.label_boas_vindas = QtWidgets.QLabel(self.sidemenu)
@@ -682,8 +683,10 @@ class Interface(object):
             except ValueError:
                 self.setar_mensagem_status("Cartão do aluno deve ter apenas números")
 
-
-
+	# Ação para botão Gerenciar Horários, no sidemenu
+    def gerenciar_horarios_pressionado(self):
+        self.controlador.gerenciar_horarios()
+				
     # Ação para botão Ver Perfil, no sidemenu
     def ver_perfil_pressionado(self):
         self.controlador.ver_perfil()
