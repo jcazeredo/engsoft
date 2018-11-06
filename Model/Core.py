@@ -88,10 +88,16 @@ class Core(object):
         return dados
 
     def carregar_curso(self, curso_id):
+        # Testa para ver se o curso já existe
+        curso = Curso.obter_curso(curso_id)
+
+        if curso != False:
+            return curso
+
         curso_dao = CursoDao()
         curso = curso_dao.obter_curso_id(curso_id)
 
-        if not curso:
+        if curso == False:
             return False
 
         # Carrega Disciplinas
@@ -109,17 +115,34 @@ class Core(object):
         return curso
 
     def carregar_dados_usuario(self, cartao_aluno):
-        usuario_dao = UsuarioDao()
-        usuario_obj = usuario_dao.obter_usuario(cartao_aluno)
+        print("Usuarios")
+        Usuario.exibir_tudo()
+        usuario_obj = Usuario.obter_usuario(cartao_aluno)
+        if usuario_obj == False:
+            usuario_dao = UsuarioDao()
+            usuario_obj = usuario_dao.obter_usuario(cartao_aluno)
 
         nome = usuario_obj.nome
         senha = usuario_obj.senha
-        cartao_aluno = usuario_obj.cartao_aluno
         curso_id = usuario_obj.curso_id
         if curso_id == 0:
             curso = "Nenhum"
         else:
-            curso = Curso.obter_curso(curso_id).nome
+            curso = Curso.obter_curso(curso_id)
+            if curso == False:
+                self.carregar_curso(curso_id)
+                curso = Curso.obter_curso(curso_id)
+                if curso == False:
+                    return False
+
+            curso = curso.nome
+        # Apagar
+        print("Usuarios")
+        Usuario.exibir_tudo()
+        print("Disciplinas")
+        Disciplina.exibir_tudo()
+        print("Cursos")
+        Curso.exibir_tudo()
 
         dados = {
             "nome": nome,
@@ -135,22 +158,39 @@ class Core(object):
         id = usuario_dao.obter_id_cartao(cartao_aluno)
 
         if id != False:
-            if Usuario.obter_usuario(id) != False:
+            if Usuario.obter_usuario(cartao_aluno) != False:
                 Usuario.remover_usuario(id)
             return usuario_dao.excluir(id)
 
-        print ("ERRO: Core.py - excluir_admin")
         return False
 
     def atualizar_perfil(self, nome, senha, curso):
-        curso_dao = CursoDao()
-        curso_id = curso_dao.obter_id_curso(curso)
+        # Caso Usuário não possua curso ainda, permite que ele escolha um.
+        if curso == "Nenhum":
+            curso_dao = CursoDao()
+            curso_id = curso_dao.obter_id_curso(curso)
+            curso_dao.obter_curso_id(curso_id)
+            self.__usuario_logado.curso_id = curso_id
+
         self.__usuario_logado.nome = nome
         self.__usuario_logado.senha = senha
-        self.__usuario_logado.curso_id = curso_id
+
         usuario_dao = UsuarioDao()
 
         return usuario_dao.atualizar(self.__usuario_logado)
+
+    def atualizar_admin(self, cartao_aluno, nome, senha, curso):
+        curso_dao = CursoDao()
+        curso_id = curso_dao.obter_id_curso(curso)
+        self.carregar_curso(curso_id)
+        usuario_obj = Usuario.obter_usuario(cartao_aluno)
+        usuario_obj.curso_id = curso_id
+
+        usuario_obj.nome = nome
+        usuario_obj.senha = senha
+
+        usuario_dao = UsuarioDao()
+        return usuario_dao.atualizar(usuario_obj)
 
     def carregar_nomes_cursos(self):
         curso_dao = CursoDao()

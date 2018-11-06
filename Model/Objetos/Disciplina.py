@@ -115,3 +115,6 @@ class Disciplina(object):
     def adicionar_usuario(self, usuario_id, associacao):
         self.__usuarios[usuario_id] = associacao
 
+    @staticmethod
+    def exibir_tudo():
+        print(Disciplina.__disciplinas)

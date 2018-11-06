@@ -44,5 +44,7 @@ class Curso(object):
         except:
             return False
 
-
+    @staticmethod
+    def exibir_tudo():
+        print(Curso.__cursos)
 

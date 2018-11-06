@@ -11,7 +11,7 @@ class Usuario(object):
         self.__privilegio = privilegio
         self.__disciplinas = {}
 
-        Usuario.__usuarios[id] = self
+        Usuario.__usuarios[cartao_aluno] = self
 
     @property
     def id(self):
@@ -82,3 +82,7 @@ class Usuario(object):
             return True
         except:
             return False
+
+    @staticmethod
+    def exibir_tudo():
+        print(Usuario.__usuarios)

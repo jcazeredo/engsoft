@@ -37,7 +37,7 @@ class Horario(object):
 	@tabela.setter
 	def tabela(self, valor):
 	# True - certo, False - erro
-		if (valor.dtype == '<U255') and (valor.shape == (__NLINHAS, __NCOLUNAS)):
+		if (valor.dtype == '<U255') and (valor.shape == (self.__NLINHAS, self.__NCOLUNAS)):
 			self.__tabela = valor
 			return True
 		else:
@@ -50,7 +50,7 @@ class Horario(object):
 			lin = linha
 		else:
 			try:
-				lin = __LDIC[linha]
+				lin = self.__LDIC[linha]
 			except:
 				print ("ERRO: Horario.py - elemento")
 				return False
@@ -59,7 +59,7 @@ class Horario(object):
 			col = coluna
 		else:
 			try:
-				col = __CDIC[coluna.lower()]
+				col = self.__CDIC[coluna.lower()]
 			except:
 				print ("ERRO: Horario.py - elemento")
 				return False

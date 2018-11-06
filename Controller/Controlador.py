@@ -72,6 +72,13 @@ class Controlador(object):
     def gerenciar_horarios(self):
         # TO DO
         self.core.gerar_horario_csv(r'C:\Users\Ian\UFRGS\EngSoft\teste.csv')
+        
+    def atualizar_admin(self, cartao_aluno, nome, senha, curso):
+        if self.core.atualizar_admin(cartao_aluno, nome, senha, curso):
+            self.interface.setar_mensagem_status("Perfil Atualizado com Sucesso!")
+            self.editar_admin(cartao_aluno)
+        else:
+            self.interface.setar_mensagem_status("Erro ao atualizar!")
 
     def nova_conta(self, senha, nome, cartao_aluno, curso):
         # Verifica se já existe cartão. Se existir, dá mensagem de erro

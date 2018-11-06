@@ -135,7 +135,7 @@ class UsuarioDao(object):
         curso_id = usuario.curso_id
 
         sql = "UPDATE usuarios SET nome = %s, senha = %s, curso_id = %s WHERE id = %s"
-        valores = (nome, senha, id, curso_id)
+        valores = (nome, senha, curso_id, id)
         cursor.execute(sql, valores)
 
         conexao.commit()

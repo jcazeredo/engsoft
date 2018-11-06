@@ -588,6 +588,7 @@ class Interface(object):
         dummy.addItem("Nenhum")
         for curso in cursos:
             dummy.addItem(curso)
+        dummy.setCurrentText(dados["curso"])
         self.elementos.append(dummy)
 
         # 14 - Input Admin
@@ -614,6 +615,7 @@ class Interface(object):
 
     def editar_admin_pressionado(self):
         admin = self.elementos[12].currentText()
+        print(admin)
         self.controlador.editar_admin(admin)
 
     def excluir_admin_pressionado2(self):
@@ -621,14 +623,16 @@ class Interface(object):
         self.controlador.excluir_admin(admin)
 
 
-
     # Ação para botão de Gerenciar Admins, no sidemenu
     def gerenciar_admins_pressionado(self):
         self.controlador.gerenciar_admins()
 
     def atualizar_admin_pressionado(self):
-        pass
-
+        input_nome = self.elementos[10].text()
+        input_senha = self.elementos[11].text()
+        input_cartao = self.elementos[9].text()
+        input_curso = self.elementos[12].currentText()
+        self.controlador.atualizar_admin(input_cartao, input_nome, input_senha, input_curso)
 
 
     # Ação para botão de Editar Histórico, no layout Ver Perfil
