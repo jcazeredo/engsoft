@@ -37,11 +37,33 @@ class DisciplinaDao(object):
 
         return disciplinas
 
+    def obter_nome_disciplinas(self):
+        conexao = DataSource()
+
+        if not conexao.esta_logado:
+            return False
+
+        cursor = conexao.obter_cursor
+
+        sql = "SELECT * FROM disciplinas"
+        cursor.execute(sql)
+
+        resultado_sql = cursor.fetchall()
+        conexao.fechar_conexao()
+
+        # Disciplinas Existem
+        if cursor.rowcount != 0:
+            nomes_disciplinas = []
+            for disciplina_row in resultado_sql:
+                nome = disciplina_row["nome"]
+                nomes_disciplinas.append(nome)
+
+        return nomes_disciplinas
+
     """
     Obtém todas disciplinas relacionadas ao usuario.
     Retorno: False || Lista[Ids Disciplinas]
     """
-
     def obter_disciplinas_usuario(self, usuario_id):
         conexao = DataSource()
 

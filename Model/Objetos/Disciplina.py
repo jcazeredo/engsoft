@@ -65,27 +65,27 @@ class Disciplina(object):
     def semestre(self, valor):
         self.__semestre = valor
 
-    @semestre.setter
+    @aprovacao.setter
     def aprovacao(self, valor):
         self.__aprovacao = valor
 
-    @semestre.setter
+    @segunda.setter
     def segunda(self, valor):
         self.__segunda = valor
 
-    @semestre.setter
+    @terca.setter
     def terca(self, valor):
         self.__terca = valor
 
-    @semestre.setter
+    @quarta.setter
     def quarta(self, valor):
         self.__quarta = valor
 
-    @semestre.setter
+    @quinta.setter
     def quinta(self, valor):
         self.__quinta = valor
 
-    @semestre.setter
+    @sexta.setter
     def sexta(self, valor):
         self.__sexta = valor
 
@@ -96,7 +96,6 @@ class Disciplina(object):
     @staticmethod
     def obter_disciplina(disciplina_id):
         if disciplina_id in Disciplina.__disciplinas:
-            #print(Disciplina.__disciplinas[disciplina_id])
             return Disciplina.__disciplinas[disciplina_id]
         else:
             return False

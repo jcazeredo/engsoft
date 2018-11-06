@@ -22,6 +22,7 @@ class Interface(object):
         Quando é necessário trocar de layout, é chamada uma função que exclui todos elementos dessa lista
         """
         self.elementos = []
+        self.temp = None
 
         #testes
         #self.controlador.criar_disciplinas("portugues", 6, 50, 10, 20, 30, 40, 50)
@@ -195,6 +196,7 @@ class Interface(object):
             self.gerenciar_disciplinas = QtWidgets.QPushButton(self.sidemenu)
             self.gerenciar_disciplinas.setGeometry(QtCore.QRect(10, 230, 141, 22))
             self.gerenciar_disciplinas.setObjectName("gerenciar_disciplinas")
+            self.gerenciar_disciplinas.clicked.connect(self.gerenciar_disciplinas_pressionado)
             self.gerenciar_disciplinas.setText("Gerenciar Disciplinas")
 
             self.gerenciar_admins = QtWidgets.QPushButton(self.sidemenu)
@@ -483,6 +485,404 @@ class Interface(object):
         # dummy.setCurrentText()
         self.elementos.append(dummy)
 
+        self.mainframe.setVisible(True)
+
+
+    # Cria layout Gerenciar Disciplinas
+    def criar_gerenciar_disciplinas(self, disciplinas):
+        self.novo_frame()
+
+        horarios = ["8h", "10h", "13h", "15h", "17h", "19h", "21h"]
+
+        # 1 - Label Nome
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(140, 100, 41, 21))
+        dummy.setObjectName("label_nome")
+        dummy.setText("Nome:")
+        self.elementos.append(dummy)
+
+        # 2 - Label Semestre
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(120, 130, 61, 21))
+        dummy.setObjectName("label_semestre")
+        dummy.setText("Semestre:")
+        self.elementos.append(dummy)
+
+        # 3 - Input Taxa Aprovação
+        dummy = QtWidgets.QLineEdit(self.mainframe)
+        dummy.setEnabled(True)
+        dummy.setGeometry(QtCore.QRect(190, 160, 31, 22))
+        dummy.setObjectName("input_taxa_aprovacao")
+        self.elementos.append(dummy)
+
+        # 4 - Label Taxa Aprovação
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(40, 160, 151, 21))
+        dummy.setObjectName("label_taxa_aprovacao")
+        dummy.setText("Taxa de Aprovação (%):")
+        self.elementos.append(dummy)
+
+        # 5 - Botão Criar Disciplina
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(50, 330, 101, 22))
+        dummy.setObjectName("botao_criarDisciplina")
+        dummy.setText("Criar Disciplina")
+        dummy.clicked.connect(self.criar_disciplina_pressionado)
+        self.elementos.append(dummy)
+
+        # 6 - Label Disciplina
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(80, 40, 71, 21))
+        dummy.setObjectName("label_disciplina")
+        dummy.setText("Disciplina:")
+        self.elementos.append(dummy)
+
+        # 7 - Botão Editar Disciplina
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(240, 60, 61, 22))
+        dummy.setObjectName("botao_editarDisciplina")
+        dummy.setText("Editar")
+        if len(disciplinas) == 0:
+            dummy.setEnabled(False)
+        dummy.clicked.connect(self.editar_disciplina_pressionado)
+        self.elementos.append(dummy)
+
+        # 8 - Botão Excluir Disciplina
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(310, 60, 61, 22))
+        dummy.setObjectName("botao_excluirDisciplina")
+        dummy.setText("Excluir")
+        if len(disciplinas) == 0:
+            dummy.setEnabled(False)
+        dummy.clicked.connect(self.excluir_disciplina_pressionado)
+        self.elementos.append(dummy)
+
+        # 9 - Input Semestre
+        dummy = QtWidgets.QComboBox(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(190, 130, 41, 22))
+        dummy.setObjectName("input_semestre")
+        dummy.addItem("1")
+        dummy.addItem("2")
+        dummy.addItem("3")
+        dummy.addItem("4")
+        dummy.addItem("5")
+        dummy.addItem("6")
+        dummy.addItem("7")
+        dummy.addItem("8")
+        dummy.addItem("9")
+        dummy.addItem("10")
+        dummy.addItem("11")
+        dummy.addItem("12")
+        self.elementos.append(dummy)
+
+        # 10 - Label Horários
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(40, 200, 61, 21))
+        dummy.setObjectName("label_horarios")
+        dummy.setText("Horários:")
+        self.elementos.append(dummy)
+
+        # 11 - Input Segunda
+        dummy = QtWidgets.QComboBox(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(190, 230, 51, 22))
+        dummy.setObjectName("input_segunda")
+        dummy.addItem("-")
+        for horario in horarios:
+            dummy.addItem(horario)
+        self.elementos.append(dummy)
+
+        # 12 - Label Terça
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(110, 260, 71, 21))
+        dummy.setObjectName("label_terca")
+        dummy.setText("Terça-feira:")
+        self.elementos.append(dummy)
+
+        # 13 - Label Quarta
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(100, 290, 81, 21))
+        dummy.setObjectName("label_quarta")
+        dummy.setText("Quarta-feira:")
+        self.elementos.append(dummy)
+
+        # 14 - Input Terça
+        dummy = QtWidgets.QComboBox(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(190, 260, 51, 22))
+        dummy.setObjectName("input_terca")
+        dummy.addItem("-")
+        for horario in horarios:
+            dummy.addItem(horario)
+        self.elementos.append(dummy)
+
+        # 15 - Input Quarta
+        dummy = QtWidgets.QComboBox(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(190, 290, 51, 22))
+        dummy.setObjectName("input_quarta")
+        dummy.addItem("-")
+        for horario in horarios:
+            dummy.addItem(horario)
+        self.elementos.append(dummy)
+
+        # 16 - Input Quinta
+        dummy = QtWidgets.QComboBox(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(345, 230, 51, 22))
+        dummy.setObjectName("input_quinta")
+        dummy.addItem("-")
+        for horario in horarios:
+            dummy.addItem(horario)
+        self.elementos.append(dummy)
+
+        # 17 - Input Sexta
+        dummy = QtWidgets.QComboBox(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(345, 260, 51, 22))
+        dummy.setObjectName("input_sexta")
+        dummy.addItem("-")
+        for horario in horarios:
+            dummy.addItem(horario)
+        self.elementos.append(dummy)
+
+        # 18 - Label Quinta
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(260, 230, 81, 21))
+        dummy.setObjectName("label_quinta")
+        dummy.setText("Quinta-feira:")
+        self.elementos.append(dummy)
+
+        # 19 - Label Sexta
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(265, 260, 71, 21))
+        dummy.setObjectName("label_sexta")
+        dummy.setText("Sexta-feira:")
+        self.elementos.append(dummy)
+
+        # 20 - Input Nome
+        dummy = QtWidgets.QLineEdit(self.mainframe)
+        dummy.setEnabled(True)
+        dummy.setGeometry(QtCore.QRect(190, 100, 113, 22))
+        dummy.setObjectName("input_nome")
+        self.elementos.append(dummy)
+
+        # 21 - Input Disciplina
+        dummy = QtWidgets.QComboBox(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(80, 60, 151, 22))
+        dummy.setObjectName("input_disciplina")
+        for disciplina in disciplinas:
+            dummy.addItem(disciplina)
+        self.elementos.append(dummy)
+
+        # 22 - Label Segunda
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(90, 230, 91, 21))
+        dummy.setObjectName("label_segunda")
+        dummy.setText("Segunda-feira:")
+        self.elementos.append(dummy)
+
+        self.mainframe.setVisible(True)
+
+    # Cria layout Gerenciar Disciplinas
+    def criar_editar_disciplina(self, disciplinas, dados):
+        self.novo_frame()
+
+        horarios = ["8h", "10h", "13h", "15h", "17h", "19h", "21h"]
+        self.temp = dados["nome"]
+
+        # 1 - Label Nome
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(140, 100, 41, 21))
+        dummy.setObjectName("label_nome")
+        dummy.setText("Nome:")
+        self.elementos.append(dummy)
+
+        # 2 - Label Semestre
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(120, 130, 61, 21))
+        dummy.setObjectName("label_semestre")
+        dummy.setText("Semestre:")
+        self.elementos.append(dummy)
+
+        # 3 - Input Taxa Aprovação
+        dummy = QtWidgets.QLineEdit(self.mainframe)
+        dummy.setEnabled(True)
+        dummy.setGeometry(QtCore.QRect(190, 160, 31, 22))
+        dummy.setObjectName("input_taxa_aprovacao")
+        dummy.setText(str(dados["aprovacao"]))
+        self.elementos.append(dummy)
+
+        # 4 - Label Taxa Aprovação
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(40, 160, 151, 21))
+        dummy.setObjectName("label_taxa_aprovacao")
+        dummy.setText("Taxa de Aprovação (%):")
+        self.elementos.append(dummy)
+
+        # 5 - Botão Criar Disciplina
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(50, 330, 121, 22))
+        dummy.setObjectName("botao_atualizarDisciplina")
+        dummy.setText("Atualizar Disciplina")
+        dummy.clicked.connect(self.atualizar_disciplina_pressionado)
+        self.elementos.append(dummy)
+
+        # 6 - Label Disciplina
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(80, 40, 71, 21))
+        dummy.setObjectName("label_disciplina")
+        dummy.setText("Disciplina:")
+        self.elementos.append(dummy)
+
+        # 7 - Botão Editar Disciplina
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(240, 60, 61, 22))
+        dummy.setObjectName("botao_editarDisciplina")
+        dummy.setText("Editar")
+        if len(disciplinas) == 0:
+            dummy.setEnabled(False)
+        dummy.clicked.connect(self.editar_disciplina_pressionado)
+        self.elementos.append(dummy)
+
+        # 8 - Botão Excluir Disciplina
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(180, 330, 61, 22))
+        dummy.setObjectName("botao_excluirDisciplina")
+        dummy.setText("Excluir")
+        dummy.clicked.connect(self.excluir_disciplina_pressionado2)
+        self.elementos.append(dummy)
+
+        # 9 - Input Semestre
+        dummy = QtWidgets.QComboBox(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(190, 130, 41, 22))
+        dummy.setObjectName("input_semestre")
+        dummy.addItem("1")
+        dummy.addItem("2")
+        dummy.addItem("3")
+        dummy.addItem("4")
+        dummy.addItem("5")
+        dummy.addItem("6")
+        dummy.addItem("7")
+        dummy.addItem("8")
+        dummy.addItem("9")
+        dummy.addItem("10")
+        dummy.addItem("11")
+        dummy.addItem("12")
+        dummy.setCurrentText(dados["semestre"])
+        self.elementos.append(dummy)
+
+        # 10 - Label Horários
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(40, 200, 61, 21))
+        dummy.setObjectName("label_horarios")
+        dummy.setText("Horários:")
+        self.elementos.append(dummy)
+
+        # 11 - Input Segunda
+        dummy = QtWidgets.QComboBox(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(190, 230, 51, 22))
+        dummy.setObjectName("input_segunda")
+        dummy.addItem("-")
+        for horario in horarios:
+            dummy.addItem(horario)
+        dummy.setCurrentText(dados["segunda"])
+        self.elementos.append(dummy)
+
+        # 12 - Label Terça
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(110, 260, 71, 21))
+        dummy.setObjectName("label_terca")
+        dummy.setText("Terça-feira:")
+        self.elementos.append(dummy)
+
+        # 13 - Label Quarta
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(100, 290, 81, 21))
+        dummy.setObjectName("label_quarta")
+        dummy.setText("Quarta-feira:")
+        self.elementos.append(dummy)
+
+        # 14 - Input Terça
+        dummy = QtWidgets.QComboBox(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(190, 260, 51, 22))
+        dummy.setObjectName("input_terca")
+        dummy.addItem("-")
+        for horario in horarios:
+            dummy.addItem(horario)
+        dummy.setCurrentText(dados["terca"])
+        self.elementos.append(dummy)
+
+        # 15 - Input Quarta
+        dummy = QtWidgets.QComboBox(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(190, 290, 51, 22))
+        dummy.setObjectName("input_quarta")
+        dummy.addItem("-")
+        for horario in horarios:
+            dummy.addItem(horario)
+        dummy.setCurrentText(dados["quarta"])
+        self.elementos.append(dummy)
+
+        # 16 - Input Quinta
+        dummy = QtWidgets.QComboBox(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(345, 230, 51, 22))
+        dummy.setObjectName("input_quinta")
+        dummy.addItem("-")
+        for horario in horarios:
+            dummy.addItem(horario)
+        dummy.setCurrentText(dados["quinta"])
+        self.elementos.append(dummy)
+
+        # 17 - Input Sexta
+        dummy = QtWidgets.QComboBox(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(345, 260, 51, 22))
+        dummy.setObjectName("input_sexta")
+        dummy.addItem("-")
+        for horario in horarios:
+            dummy.addItem(horario)
+        dummy.setCurrentText(dados["sexta"])
+        self.elementos.append(dummy)
+
+        # 18 - Label Quinta
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(260, 230, 81, 21))
+        dummy.setObjectName("label_quinta")
+        dummy.setText("Quinta-feira:")
+        self.elementos.append(dummy)
+
+        # 19 - Label Sexta
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(265, 260, 71, 21))
+        dummy.setObjectName("label_sexta")
+        dummy.setText("Sexta-feira:")
+        self.elementos.append(dummy)
+
+        # 20 - Input Nome
+        dummy = QtWidgets.QLineEdit(self.mainframe)
+        dummy.setEnabled(True)
+        dummy.setGeometry(QtCore.QRect(190, 100, 113, 22))
+        dummy.setObjectName("input_nome")
+        dummy.setText(dados["nome"])
+        self.elementos.append(dummy)
+
+        # 21 - Input Disciplina
+        dummy = QtWidgets.QComboBox(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(80, 60, 151, 22))
+        dummy.setObjectName("input_disciplina")
+        for disciplina in disciplinas:
+            dummy.addItem(disciplina)
+        dummy.setCurrentText(dados["nome"])
+        self.elementos.append(dummy)
+
+        # 22 - Label Segunda
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(90, 230, 91, 21))
+        dummy.setObjectName("label_segunda")
+        dummy.setText("Segunda-feira:")
+        self.elementos.append(dummy)
+
+        # 23 - Botão Voltar
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(250, 330, 61, 22))
+        dummy.setObjectName("botao_voltar")
+        dummy.setText("Voltar")
+        dummy.clicked.connect(self.voltar_editar_disciplina_pressionado)
+        self.elementos.append(dummy)
 
         self.mainframe.setVisible(True)
 
@@ -606,7 +1006,9 @@ class Interface(object):
     def voltar_editar_admin_pressionado(self):
         self.controlador.gerenciar_admins()
 
-
+    # Ação para botão de Voltar, no layout Editar Disciplinas
+    def voltar_editar_disciplina_pressionado(self):
+        self.controlador.gerenciar_disciplinas()
 
     # Ação para botão de Excluir, no layout Excluir Admin
     def excluir_admin_pressionado(self):
@@ -615,13 +1017,23 @@ class Interface(object):
 
     def editar_admin_pressionado(self):
         admin = self.elementos[12].currentText()
-        print(admin)
         self.controlador.editar_admin(admin)
 
     def excluir_admin_pressionado2(self):
         admin = self.elementos[9].text()
         self.controlador.excluir_admin(admin)
 
+    def excluir_disciplina_pressionado2(self):
+        disciplina = self.elementos[20].currentText()
+        self.controlador.excluir_disciplina(disciplina)
+
+    def editar_disciplina_pressionado(self):
+        disciplina = self.elementos[20].currentText()
+        self.controlador.editar_disciplina(disciplina)
+
+    def excluir_disciplina_pressionado(self):
+        disciplina = self.elementos[20].currentText()
+        self.controlador.excluir_disciplina(disciplina)
 
     # Ação para botão de Gerenciar Admins, no sidemenu
     def gerenciar_admins_pressionado(self):
@@ -634,6 +1046,40 @@ class Interface(object):
         input_curso = self.elementos[12].currentText()
         self.controlador.atualizar_admin(input_cartao, input_nome, input_senha, input_curso)
 
+    def atualizar_disciplina_pressionado(self):
+        nome = self.elementos[19].text()
+        semestre = int(self.elementos[8].currentText())
+        aprovacao = self.elementos[2].text()
+
+        try:
+            segunda = self.elementos[10].currentText()
+            segunda = segunda.replace("h", "")
+            segunda = int(segunda)
+
+            terca = self.elementos[13].currentText()
+            terca = terca.replace("h", "")
+            terca = int(terca)
+
+            quarta = self.elementos[14].currentText()
+            quarta = quarta.replace("h", "")
+            quarta = int(quarta)
+
+            quinta = self.elementos[15].currentText()
+            quinta = quinta.replace("h", "")
+            quinta = int(quinta)
+
+            sexta = self.elementos[16].currentText()
+            sexta = sexta.replace("h", "")
+            sexta = int(sexta)
+
+        except:
+            segunda = 0
+            terca = 0
+            quarta = 0
+            quinta = 0
+            sexta = 0
+
+        self.controlador.atualizar_disciplina(self.temp, nome, semestre, aprovacao, segunda, terca, quarta, quinta, sexta)
 
     # Ação para botão de Editar Histórico, no layout Ver Perfil
     def editar_historico_pressionado(self):
@@ -687,6 +1133,41 @@ class Interface(object):
             except ValueError:
                 self.setar_mensagem_status("Cartão do aluno deve ter apenas números")
 
+    def criar_disciplina_pressionado(self):
+        nome = self.elementos[19].text()
+        semestre = int(self.elementos[8].currentText())
+        aprovacao = self.elementos[2].text()
+
+        try:
+            segunda = self.elementos[10].currentText()
+            segunda = segunda.replace("h", "")
+            segunda = int(segunda)
+
+            terca = self.elementos[13].currentText()
+            terca = terca.replace("h", "")
+            terca = int(terca)
+
+            quarta = self.elementos[14].currentText()
+            quarta = quarta.replace("h", "")
+            quarta = int(quarta)
+
+            quinta = self.elementos[15].currentText()
+            quinta = quinta.replace("h", "")
+            quinta = int(quinta)
+
+            sexta = self.elementos[16].currentText()
+            sexta = sexta.replace("h", "")
+            sexta = int(sexta)
+
+        except:
+            segunda = 0
+            terca = 0
+            quarta = 0
+            quinta = 0
+            sexta = 0
+
+        self.controlador.criar_disciplinas(nome, semestre, aprovacao, segunda, terca, quarta, quinta, sexta)
+
 	# Ação para botão Gerenciar Horários, no sidemenu
     def gerenciar_horarios_pressionado(self):
         self.controlador.gerenciar_horarios()
@@ -701,7 +1182,7 @@ class Interface(object):
 
     # Ação para botão Gerenciar Disciplinas, no sidemenu
     def gerenciar_disciplinas_pressionado(self):
-        pass
+        self.controlador.gerenciar_disciplinas()
 
     # Ação para botão login, no layout Login
     def login_pressionado(self):

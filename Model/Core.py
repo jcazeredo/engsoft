@@ -87,6 +87,58 @@ class Core(object):
 
         return dados
 
+    def carregar_disciplina(self, nome):
+        disciplina_dao = DisciplinaDao()
+        id = disciplina_dao.obter_id_criado(nome)
+
+        # Testa para ver se a disciplina já existe
+        disciplina = Disciplina.obter_disciplina(id)
+
+        if disciplina == False:
+            disciplina_dao.obter_disciplina_id(id)
+            disciplina = Disciplina.obter_disciplina(id)
+
+            if disciplina == False:
+                return False
+
+        if disciplina.segunda == 0:
+            segunda = "-"
+        else:
+            segunda = str(disciplina.segunda) + "h"
+
+        if disciplina.terca == 0:
+            terca = "-"
+        else:
+            terca = str(disciplina.terca) + "h"
+
+        if disciplina.quarta == 0:
+            quarta = "-"
+        else:
+            quarta = str(disciplina.quarta) + "h"
+
+        if disciplina.quinta == 0:
+            quinta = "-"
+        else:
+            quinta = str(disciplina.quinta) + "h"
+
+        if disciplina.sexta == 0:
+            sexta = "-"
+        else:
+            sexta = str(disciplina.sexta) + "h"
+
+        dados = {
+            "nome": str(nome),
+            "semestre": str(disciplina.semestre),
+            "aprovacao": disciplina.aprovacao,
+            "segunda": segunda,
+            "terca": terca,
+            "quarta": quarta,
+            "quinta": quinta,
+            "sexta": sexta
+        }
+
+        return dados
+
     def carregar_curso(self, curso_id):
         # Testa para ver se o curso já existe
         curso = Curso.obter_curso(curso_id)
@@ -106,6 +158,9 @@ class Core(object):
         # Recebe lista com as ids de disciplinas cursadas pelo curso
         disciplinas_curso = disciplina_dao.obter_disciplinas_curso(curso_id)
 
+        if disciplinas_curso == False:
+            return curso
+
         # Criar Associações Disciplinas-Cursos
         for disciplina in disciplinas_curso:
             associacao = DisciplinaCurso(curso_id, disciplina)
@@ -115,8 +170,6 @@ class Core(object):
         return curso
 
     def carregar_dados_usuario(self, cartao_aluno):
-        print("Usuarios")
-        Usuario.exibir_tudo()
         usuario_obj = Usuario.obter_usuario(cartao_aluno)
         if usuario_obj == False:
             usuario_dao = UsuarioDao()
@@ -196,6 +249,10 @@ class Core(object):
         curso_dao = CursoDao()
         return curso_dao.obter_nome_cursos()
 
+    def carregar_nomes_disciplinas(self):
+        disciplina_dao = DisciplinaDao()
+        return disciplina_dao.obter_nome_disciplinas()
+
     def carregar_cartoes_admins(self):
         usuario_dao = UsuarioDao()
         return usuario_dao.obter_cartao_admins(self.__usuario_logado.id)
@@ -213,6 +270,8 @@ class Core(object):
     def criar_disciplina(self, nome, semestre, aprovacao, segunda, terca, quarta, quinta, sexta):
         disciplina_dao = DisciplinaDao()
         id = disciplina_dao.criar(nome, semestre, aprovacao, segunda, terca, quarta, quinta, sexta)
+        if id == False:
+            return False
         Disciplina(id, nome, semestre, aprovacao, segunda, terca, quarta, quinta, sexta)
         return True
 
@@ -256,11 +315,18 @@ class Core(object):
         print ("ERRO: Core.py - excluir_curso")
         return False
 
-    def excluir_disciplina(self, id):
-        disciplina = Disciplina.obter_disciplina(id)
-        disciplina.remover_disciplina(id)
+    def excluir_disciplina(self, disciplina):
         disciplina_dao = DisciplinaDao()
+        id = disciplina_dao.obter_id_criado(disciplina)
+        if id == False:
+            return False
+        disciplina = Disciplina.obter_disciplina(id)
+
+        if disciplina != False:
+            disciplina.remover_disciplina(id)
         disciplina_dao.excluir(id)
+
+        return True
 
     def obter_id_logado(self):
         return self.__usuario_logado.__id

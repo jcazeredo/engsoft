@@ -27,6 +27,14 @@ class Controlador(object):
         else:
             self.interface.criar_gerenciar_admins(admins, cursos)
 
+    def gerenciar_disciplinas(self):
+        disciplinas = self.core.carregar_nomes_disciplinas()
+
+        if disciplinas == False:
+            print("Erro ao obter disciplinas")
+        else:
+            self.interface.criar_gerenciar_disciplinas(disciplinas)
+
     def criar_cadastro(self):
         cursos = self.core.carregar_nomes_cursos()
         if not cursos:
@@ -35,13 +43,24 @@ class Controlador(object):
             self.interface.criar_cadastro(cursos)
 
     def criar_disciplinas(self, nome, semestre, aprovacao, segunda, terca, quarta, quinta, sexta):
-        self.core.criar_disciplina(nome, semestre, aprovacao, segunda, terca, quarta, quinta, sexta)
+        resultado = self.core.criar_disciplina(nome, semestre, aprovacao, segunda, terca, quarta, quinta, sexta)
+        if resultado:
+            self.gerenciar_disciplinas()
+            self.interface.setar_mensagem_status("Disciplina adicionada com sucesso!")
 
     def atualizar_disciplina(self, nome, nome_novo, semestre, aprovacao, segunda, terca, quarta, quinta, sexta):
-        self.core.atualizar_disciplina(nome, nome_novo, semestre, aprovacao, segunda, terca, quarta, quinta, sexta)
+        if self.core.atualizar_disciplina(nome, nome_novo, semestre, aprovacao, segunda, terca, quarta, quinta, sexta):
+            self.interface.setar_mensagem_status("Disciplina Atualizada com Sucesso!")
+            self.editar_disciplina(nome_novo)
+        else:
+            self.interface.setar_mensagem_status("Erro ao atualizar!")
 
-    def excluir_disciplina(self, id):
-        self.core.excluir_disciplina(id)
+    def excluir_disciplina(self, disciplina):
+        if self.core.excluir_disciplina(disciplina):
+            self.interface.setar_mensagem_status("Disciplina excluída com sucesso!")
+            self.gerenciar_disciplinas()
+        else:
+            self.interface.setar_mensagem_status("Erro ao excluir disciplina!")
 
     def criar_curso(self, nome):
         self.core.criar_curso(nome)
@@ -126,5 +145,16 @@ class Controlador(object):
             print("Erro ao obter admins")
         else:
             self.interface.criar_editar_admin(admins, cursos, dados)
+
+    def editar_disciplina(self, disciplina_selecionada):
+        dados = self.core.carregar_disciplina(disciplina_selecionada)
+        disciplinas = self.core.carregar_nomes_disciplinas()
+
+        if dados == False:
+            print("Erro ao obter disciplina")
+        elif disciplinas == False:
+            print("Erro ao obter disciplinas")
+        else:
+            self.interface.criar_editar_disciplina(disciplinas, dados)
 
 
