@@ -6,6 +6,7 @@ from Model.Associacoes.UsuarioDisciplina import UsuarioDisciplina
 from Model.Objetos.Curso import Curso
 from Model.Objetos.Usuario import Usuario
 from Model.Objetos.Disciplina import Disciplina
+from Model.Objetos.Horario import Horario
 
 
 class Core(object):
@@ -39,7 +40,7 @@ class Core(object):
 
         # Recebe lista com as ids de disciplinas cursadas pelo curso
         disciplinas_curso = disciplina_dao.obter_disciplinas_curso(curso_id)
-
+		
         # Recebe lista com as ids de disciplinas cursadas pelo usuário
         disciplinas_usuario = disciplina_dao.obter_disciplinas_usuario(usuario.id)
 
@@ -138,6 +139,7 @@ class Core(object):
                 Usuario.remover_usuario(id)
             return usuario_dao.excluir(id)
 
+        print ("ERRO: Core.py - excluir_admin")
         return False
 
     def atualizar_perfil(self, nome, senha, curso):
@@ -211,6 +213,7 @@ class Core(object):
                 Curso.remover_curso(id)
             return curso_dao.excluir(id)
 
+        print ("ERRO: Core.py - excluir_curso")
         return False
 
     def excluir_disciplina(self, id):
@@ -221,3 +224,25 @@ class Core(object):
 
     def obter_id_logado(self):
         return self.__usuario_logado.__id
+	
+    def gerar_horario_csv(self, path_or_buf):
+		# True - certo, False - erro
+        disciplinas_usuario = self.__usuario_logado.disciplinas
+
+        horario = Horario()
+
+        for x in disciplinas_usuario:
+            id = disciplinas_usuario[x].disciplina_id
+            disciplina_aux = Disciplina.obter_disciplina(id)
+            if (disciplina_aux.segunda() > 0) and (disciplina_aux.segunda() < 17):
+                horario.elemento((disciplina_aux.segunda()-1), "segunda", disciplina_aux.nome())
+            if (disciplina_aux.terca() > 0) and (disciplina_aux.terca() < 17):
+                horario.elemento((disciplina_aux.terca()-1), "terca", disciplina_aux.nome())
+            if (disciplina_aux.quarta() > 0) and (disciplina_aux.quarta() < 17):
+                horario.elemento((disciplina_aux.quarta()-1), "quarta", disciplina_aux.nome())
+            if (disciplina_aux.quinta() > 0) and (disciplina_aux.quinta() < 17):
+                horario.elemento((disciplina_aux.quinta()-1), "quinta", disciplina_aux.nome())
+            if (disciplina_aux.sexta() > 0) and (disciplina_aux.sexta() < 17):
+                horario.elemento((disciplina_aux.sexta()-1), "sexta", disciplina_aux.nome())
+
+        horario.to_csv(path_or_buf)
