@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 02/11/2018 às 20:01
+-- Tempo de geração: 07/11/2018 às 00:48
 -- Versão do servidor: 10.1.35-MariaDB
 -- Versão do PHP: 7.2.9
 
@@ -54,24 +54,32 @@ CREATE TABLE `disciplinas` (
   `id` int(10) UNSIGNED NOT NULL,
   `nome` varchar(255) NOT NULL,
   `semestre` int(11) NOT NULL,
-  `taxa_aprovacao` int(11) NOT NULL
+  `taxa_aprovacao` int(11) NOT NULL,
+  `segunda` int(11) NOT NULL,
+  `terca` int(11) NOT NULL,
+  `quarta` int(11) NOT NULL,
+  `quinta` int(11) NOT NULL,
+  `sexta` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Fazendo dump de dados para tabela `disciplinas`
 --
 
-INSERT INTO `disciplinas` (`id`, `nome`, `semestre`, `taxa_aprovacao`) VALUES
-(1, 'Circuitos Elétricos I', 2, 0),
-(2, 'Circuitos Elétricos II', 0, 0),
-(3, 'Cálculo I', 0, 0),
-(4, 'Física I', 0, 0),
-(5, 'Probabilidade', 0, 0),
-(6, 'Circuitos Elétricos I', 2, 0),
-(7, 'Circuitos Elétricos II', 3, 0),
-(8, 'Cálculo I', 4, 0),
-(9, 'Física I', 5, 0),
-(10, 'Probabilidade', 6, 0);
+INSERT INTO `disciplinas` (`id`, `nome`, `semestre`, `taxa_aprovacao`, `segunda`, `terca`, `quarta`, `quinta`, `sexta`) VALUES
+(1, 'asdasda', 0, 0, 0, 0, 0, 0, 0),
+(2, 'Circuitos Elétricos II', 0, 0, 0, 0, 0, 0, 0),
+(3, 'Cálculo I', 0, 0, 0, 0, 0, 0, 0),
+(5, 'Probabilidade', 0, 0, 0, 0, 0, 0, 0),
+(6, 'Circuitos Elétricos I', 2, 0, 0, 0, 0, 0, 0),
+(7, 'Circuitos Elétricos II', 3, 0, 0, 0, 0, 0, 0),
+(8, 'Cálculo I', 4, 0, 0, 0, 0, 0, 0),
+(9, 'Física I', 5, 0, 0, 0, 0, 0, 0),
+(10, 'Probabilidade', 6, 0, 0, 0, 0, 0, 0),
+(11, 'asdd', 2, 12, 10, 8, 13, 15, 17),
+(12, 'Engenharia de cu', 4, 10, 0, 0, 0, 0, 0),
+(13, 'das', 1, 12, 10, 10, 10, 10, 10),
+(15, 'asdd', 2, 12, 10, 8, 13, 15, 17);
 
 -- --------------------------------------------------------
 
@@ -117,22 +125,6 @@ INSERT INTO `historico` (`id`, `usuario_id`, `disciplina_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `horarios_disciplinas`
---
-
-CREATE TABLE `horarios_disciplinas` (
-  `id` int(11) NOT NULL,
-  `disciplina_id` int(11) NOT NULL,
-  `segunda` int(11) NOT NULL,
-  `terca` int(11) NOT NULL,
-  `quarta` int(11) NOT NULL,
-  `quinta` int(11) NOT NULL,
-  `sexta` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Estrutura para tabela `requisitos`
 --
 
@@ -167,7 +159,8 @@ INSERT INTO `usuarios` (`id`, `nome`, `senha`, `privilegio`, `cartao_aluno`, `cu
 (9, 'dassd', 'dssd', 1, '123', 3),
 (10, 'cu', 'adsasd', 1, '113', 3),
 (12, 'nomed', 'senha', 1, '1234', 4),
-(21, '14', '11', 0, '111', 0);
+(21, '14', '11', 0, '111', 0),
+(24, 'sad2', 'sad2', 0, '132', 1);
 
 --
 -- Índices de tabelas apagadas
@@ -225,7 +218,7 @@ ALTER TABLE `cursos`
 -- AUTO_INCREMENT de tabela `disciplinas`
 --
 ALTER TABLE `disciplinas`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de tabela `disciplinas_curso`
@@ -249,7 +242,7 @@ ALTER TABLE `requisitos`
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
