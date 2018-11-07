@@ -26,6 +26,11 @@ class Core(object):
 
         return self.carregar_dados_login(usuario)
 
+    def obter_disciplinas_usuario(self):
+        disciplina_dao = DisciplinaDao()
+        disciplinas_usuario = disciplina_dao.obter_disciplinas_usuario(self.__usuario_logado.id)
+        return disciplinas_usuario
+
     def carregar_dados_login(self, usuario):
         # Carrega Curso
         curso_dao = CursoDao()
@@ -354,12 +359,21 @@ class Core(object):
         curso_dao.atualiza_disciplinas(curso_id, adicionar)
         curso_dao.remover_disciplinas(curso_id, excluir)
 
-        
     def obter_disciplinas_curso(self, nome):
         curso_dao = CursoDao()
         id = curso_dao.obter_id_curso(nome)
         disciplina_dao = DisciplinaDao()
         lista_disciplinas = disciplina_dao.obter_disciplinas_curso(id)
+        lista_nomes = []
+        for disciplina in lista_disciplinas:
+            nome = disciplina_dao.obter_nome_disciplina(disciplina)
+            lista_nomes.append(nome)
+
+        return lista_nomes
+
+    def obter_disciplinas_curso_usuario(self):
+        disciplina_dao = DisciplinaDao()
+        lista_disciplinas = disciplina_dao.obter_disciplinas_curso(self.__usuario_logado.curso_id)
         lista_nomes = []
         for disciplina in lista_disciplinas:
             nome = disciplina_dao.obter_nome_disciplina(disciplina)

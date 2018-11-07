@@ -198,3 +198,12 @@ class Controlador(object):
             print("Erro ao obter disciplinas")
         else:
             self.interface.criar_relacionar_disciplinas(disciplinas, disciplinas_curso)
+
+    def editar_historico(self):
+        disciplinas_usuario = self.core.obter_disciplinas_usuario()
+        disciplinas_curso = self.core.obter_disciplinas_curso_usuario()
+
+        if disciplinas_curso == False or disciplinas_usuario == False:
+            print("Erro ao obter disciplinas")
+        else:
+            self.interface.criar_historico_disciplinas(disciplinas_usuario, disciplinas_curso)
