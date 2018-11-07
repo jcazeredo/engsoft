@@ -277,7 +277,8 @@ class Core(object):
 
     def atualizar_disciplina(self, nome, nome_novo, semestre, aprovacao, segunda, terca, quarta, quinta, sexta):
         disciplina_dao = DisciplinaDao()
-        id = disciplina_dao.atualizar(nome, nome_novo,semestre, aprovacao, segunda, terca, quarta, quinta, sexta)
+        id = disciplina_dao.atualizar(nome, nome_novo, semestre, aprovacao, segunda, terca, quarta, quinta, sexta)
+
         objeto_disciplina = Disciplina.obter_disciplina(id)
         objeto_disciplina.nome = nome_novo
         objeto_disciplina.semestre = semestre

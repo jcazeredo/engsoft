@@ -130,21 +130,19 @@ class DisciplinaDao(object):
         else:
             return False
 
-    def atualizar(self, nome,nome_novo, semestre, aprovacao, segunda, terca, quarta, quinta, sexta):
+    def atualizar(self, nome, nome_novo, semestre, aprovacao, segunda, terca, quarta, quinta, sexta):
         conexao = DataSource()
         cursor = conexao.obter_cursor
 
         sql = "UPDATE disciplinas SET nome = %s , semestre = %s, taxa_aprovacao = %s , segunda = %s, terca = %s, quarta = %s, quinta = %s, sexta = %s WHERE nome = %s"
         valores = (nome_novo, semestre, aprovacao, segunda, terca, quarta, quinta, sexta, nome)
+
         cursor.execute(sql, valores)
 
         conexao.commit()
         conexao.fechar_conexao()
 
-        if cursor.rowcount > 0:
-            return self.obter_id_criado(nome_novo)
-        else:
-            return False
+        return self.obter_id_criado(nome_novo)
 
     def criar(self, nome, semestre, aprovacao, segunda, terca, quarta, quinta, sexta):
         conexao = DataSource()

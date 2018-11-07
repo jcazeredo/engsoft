@@ -35,7 +35,6 @@ class Curso(object):
         else:
             return False
 
-
     @staticmethod
     def remover_curso(id):
         try:

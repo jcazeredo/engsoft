@@ -1003,6 +1003,62 @@ class Interface(object):
 
         self.mainframe.setVisible(True)
 
+    # Cria layout gerenciar cursos
+    def criar_gerenciar_cursos(self, cursos):
+        self.novo_frame()
+
+        # 1 - Label Nome
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(80, 160, 41, 21))
+        dummy.setObjectName("label_nome")
+        dummy.setText("Nome:")
+        self.elementos.append(dummy)
+
+        # 2 - Input Nome
+        dummy = QtWidgets.QLineEdit(self.mainframe)
+        dummy.setEnabled(True)
+        dummy.setGeometry(QtCore.QRect(130, 160, 113, 22))
+        dummy.setObjectName("input_nome")
+        self.elementos.append(dummy)
+
+        # 3 - Botão Criar Curso
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(80, 200, 91, 22))
+        dummy.setObjectName("botao_criarCurso")
+        dummy.setText("Criar Curso:")
+        self.elementos.append(dummy)
+
+        # 4 - Input Curso
+        dummy = QtWidgets.QComboBox(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(80, 120, 151, 22))
+        dummy.setObjectName("input_curso")
+        for curso in cursos:
+            dummy.addItem(curso)
+        self.elementos.append(dummy)
+
+        # 5 - Label Curso
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(80, 100, 51, 21))
+        dummy.setObjectName("label_curso")
+        dummy.setText("Curso:")
+        self.elementos.append(dummy)
+
+        # 6 - Botão Editar Curso
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(240, 120, 61, 22))
+        dummy.setObjectName("botao_editarCurso")
+        dummy.setText("Editar:")
+        self.elementos.append(dummy)
+
+        # 7 - Botão Excluir Curso
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(310, 120, 61, 22))
+        dummy.setObjectName("botao_excluirCurso")
+        dummy.setText("Excluir")
+        self.elementos.append(dummy)
+
+        self.mainframe.setVisible(True)
+
     # Ação para botão de Voltar, no layout Editar Admin
     def voltar_editar_admin_pressionado(self):
         self.controlador.gerenciar_admins()
@@ -1052,33 +1108,41 @@ class Interface(object):
         semestre = int(self.elementos[8].currentText())
         aprovacao = self.elementos[2].text()
 
-        try:
-            segunda = self.elementos[10].currentText()
+        segunda = self.elementos[10].currentText()
+        if segunda == "-":
+            segunda = 0
+        else:
             segunda = segunda.replace("h", "")
             segunda = int(segunda)
 
-            terca = self.elementos[13].currentText()
+        terca = self.elementos[13].currentText()
+        if terca == "-":
+            terca = 0
+        else:
             terca = terca.replace("h", "")
             terca = int(terca)
 
-            quarta = self.elementos[14].currentText()
+        quarta = self.elementos[14].currentText()
+        if quarta == "-":
+            quarta = 0
+        else:
             quarta = quarta.replace("h", "")
             quarta = int(quarta)
 
-            quinta = self.elementos[15].currentText()
+        quinta = self.elementos[15].currentText()
+        if quinta == "-":
+            quinta = 0
+        else:
             quinta = quinta.replace("h", "")
             quinta = int(quinta)
 
-            sexta = self.elementos[16].currentText()
+        sexta = self.elementos[16].currentText()
+        if sexta == "-":
+            sexta = 0
+        else:
             sexta = sexta.replace("h", "")
             sexta = int(sexta)
 
-        except:
-            segunda = 0
-            terca = 0
-            quarta = 0
-            quinta = 0
-            sexta = 0
 
         self.controlador.atualizar_disciplina(self.temp, nome, semestre, aprovacao, segunda, terca, quarta, quinta, sexta)
 
@@ -1179,7 +1243,7 @@ class Interface(object):
 
     # Ação para botão Gerenciar Cursos, no sidemenu
     def gerenciar_cursos_pressionado(self):
-        pass
+        self.controlador.gerenciar_cursos()
 
     # Ação para botão Gerenciar Disciplinas, no sidemenu
     def gerenciar_disciplinas_pressionado(self):

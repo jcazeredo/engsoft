@@ -35,6 +35,14 @@ class Controlador(object):
         else:
             self.interface.criar_gerenciar_disciplinas(disciplinas)
 
+    def gerenciar_cursos(self):
+        disciplinas = self.core.carregar_nomes_disciplinas()
+
+        if disciplinas == False:
+            print("Erro ao obter disciplinas")
+        else:
+            self.interface.criar_gerenciar_disciplinas(disciplinas)
+
     def criar_cadastro(self):
         cursos = self.core.carregar_nomes_cursos()
         if not cursos:
