@@ -3,8 +3,8 @@ import numpy as np
 
 class Horario(object):
 	def __init__(self):
-		self.__NLINHAS = 16
-		self.__LINHAS = ["7h30", "8h30", "9h30", "10h30", "11h30", "12h30", "13h30", "14h30", "15h30", "16h30", "17h30", "18h30", "19h30", "20h30", "21h30", "22h30"]
+		self.__NLINHAS = 7
+		self.__LINHAS = ["8h", "10h", "13h", "15h", "17h", "19h", "21h"]
 		self.__NCOLUNAS = 5
 		self.__COLUNAS = ["Segunda", "Terca", "Quarta", "Quinta", "Sexta"]
 		self.__LDIC = {"7h30":0, "8h30":1, "9h30":2, "10h30":3, "11h30":4, "12h30":5, "13h30":6, "14h30":7, "15h30":8, "16h30":9, "17h30":10, "18h30":11, "19h30":12, "20h30":13, "21h30":14, "22h30":15}
