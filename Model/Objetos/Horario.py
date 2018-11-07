@@ -13,6 +13,7 @@ class Horario(object):
 		self.__tabela ={}
 		self.__tabela = np.empty((self.__NLINHAS, self.__NCOLUNAS), dtype="U255")
 		self.__tabela[:] = "-"
+		self.__df = {}
 
 	@property
 	def tabela(self):
@@ -33,6 +34,11 @@ class Horario(object):
 	@property
 	def colunas(self):
 		return self.__COLUNAS
+		
+	@property
+	def dataframe(self):
+		self.__df = pd.DataFrame(self.__tabela, index=self.__LINHAS, columns=self.__COLUNAS)
+		return self.__df
 
 	@tabela.setter
 	def tabela(self, valor):
@@ -63,8 +69,8 @@ class Horario(object):
 	def to_csv(self, path_or_buf):
 		# True - certo, False - erro
 		try:
-			__df = pd.DataFrame(self.__tabela, index=self.__LINHAS, columns=self.__COLUNAS)
-			__df.to_csv(path_or_buf)
+			self.__df = pd.DataFrame(self.__tabela, index=self.__LINHAS, columns=self.__COLUNAS)
+			self.__df.to_csv(path_or_buf)
 		except:
 			print ("ERRO: Horario.py - to_csv")
 			return False
