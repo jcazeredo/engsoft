@@ -205,6 +205,55 @@ class Interface(object):
 
         self.mainframe.setVisible(True)
 
+    def criar_historico_disciplinas(self, disciplinas_curso, disciplinas):
+        self.novo_frame()
+
+        # 1 - Botão Adicionar Disciplinas
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(70, 340, 141, 22))
+        dummy.setObjectName("botao_adicionar_disciplinas")
+        dummy.setText("Adicionar Disciplinas")
+        dummy.clicked.connect(self.atualizar_historico_pressionado)
+        self.elementos.append(dummy)
+
+        # 2 - Botão Voltar
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(220, 340, 61, 22))
+        dummy.setObjectName("botao_voltar")
+        dummy.setText("Voltar")
+        dummy.clicked.connect(self.ver_perfil_pressionado)
+        self.elementos.append(dummy)
+
+        # 3 - Tabela
+        dummy = QtWidgets.QTableWidget(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(70, 40, 231, 281))
+        dummy.setObjectName("tableWidget")
+        dummy.setColumnCount(1)
+        dummy.setRowCount(len(disciplinas))
+
+        item = QtWidgets.QTableWidgetItem()
+        item.setText("Disciplinas")
+        dummy.setHorizontalHeaderItem(0, item)
+
+        for i in range(len(disciplinas)):
+            item = QtWidgets.QTableWidgetItem()
+            item.setText(disciplinas[i])
+            dummy.setItem(i, 0, item)
+            if disciplinas[i] in disciplinas_curso:
+                item.setSelected(True)
+
+        dummy.horizontalHeader().setDefaultSectionSize(200)
+        self.elementos.append(dummy)
+
+        # 4 - Label Disciplinas
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(70, 20, 81, 16))
+        dummy.setObjectName("label_disciplinas")
+        dummy.setText("Disciplinas:")
+        self.elementos.append(dummy)
+
+        self.mainframe.setVisible(True)
+
     # Cria elementos do menu lateral esquerdo, baseado no privilegio do usuário logado
     def criar_sidemenu(self, nome, privilegio):
         self.novo_frame()
@@ -1308,8 +1357,7 @@ class Interface(object):
 
     # Ação para botão de Editar Histórico, no layout Ver Perfil
     def editar_historico_pressionado(self):
-        # TO-DO
-        pass
+        self.controlador.editar_historico()
 
     # Ação para botão atualizar, no layout Ver Perfil
     def atualizar_pressionado(self):
