@@ -331,24 +331,23 @@ class Core(object):
     def obter_id_logado(self):
         return self.__usuario_logado.__id
 	
-    def gerar_horario_csv(self, path_or_buf):
+    def gerar_horario_csv(self, path_or_buf, disciplinas_usuario):
 		# True - certo, False - erro
-        disciplinas_usuario = self.__usuario_logado.disciplinas
+        # disciplinas_usuario é uma lista com os ids das disciplinas que o usuario vai cursar
 
         horario = Horario()
 
-        for x in disciplinas_usuario:
-            id = disciplinas_usuario[x].disciplina_id
+        for id in disciplinas_usuario:
             disciplina_aux = Disciplina.obter_disciplina(id)
-            if (disciplina_aux.segunda() > 0) and (disciplina_aux.segunda() < 17):
-                horario.elemento((disciplina_aux.segunda()-1), "segunda", disciplina_aux.nome())
-            if (disciplina_aux.terca() > 0) and (disciplina_aux.terca() < 17):
-                horario.elemento((disciplina_aux.terca()-1), "terca", disciplina_aux.nome())
-            if (disciplina_aux.quarta() > 0) and (disciplina_aux.quarta() < 17):
-                horario.elemento((disciplina_aux.quarta()-1), "quarta", disciplina_aux.nome())
-            if (disciplina_aux.quinta() > 0) and (disciplina_aux.quinta() < 17):
-                horario.elemento((disciplina_aux.quinta()-1), "quinta", disciplina_aux.nome())
-            if (disciplina_aux.sexta() > 0) and (disciplina_aux.sexta() < 17):
-                horario.elemento((disciplina_aux.sexta()-1), "sexta", disciplina_aux.nome())
+            if (disciplina_aux.segunda > 0) and (disciplina_aux.segunda < (horario.nlinhas+1)):
+                horario.elemento((disciplina_aux.segunda-1), "segunda", disciplina_aux.nome)
+            if (disciplina_aux.terca > 0) and (disciplina_aux.terca < (horario.nlinhas+1)):
+                horario.elemento((disciplina_aux.terca()-1), "terca", disciplina_aux.nome)
+            if (disciplina_aux.quarta > 0) and (disciplina_aux.quarta < (horario.nlinhas+1)):
+                horario.elemento((disciplina_aux.quarta-1), "quarta", disciplina_aux.nome)
+            if (disciplina_aux.quinta > 0) and (disciplina_aux.quinta < (horario.nlinhas+1)):
+                horario.elemento((disciplina_aux.quinta-1), "quinta", disciplina_aux.nome)
+            if (disciplina_aux.sexta > 0) and (disciplina_aux.sexta < (horario.nlinhas+1)):
+                horario.elemento((disciplina_aux.sexta-1), "sexta", disciplina_aux.nome)
 
         horario.to_csv(path_or_buf)

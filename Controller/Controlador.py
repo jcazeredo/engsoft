@@ -90,7 +90,8 @@ class Controlador(object):
 
     def gerenciar_horarios(self):
         # TO DO
-        self.core.gerar_horario_csv(r'C:\Users\Ian\UFRGS\EngSoft\teste.csv')
+        dis = [1,2,3]
+        self.core.gerar_horario_csv(r'C:\Users\Ian\UFRGS\EngSoft\teste.csv', dis)
         
     def atualizar_admin(self, cartao_aluno, nome, senha, curso):
         if self.core.atualizar_admin(cartao_aluno, nome, senha, curso):
