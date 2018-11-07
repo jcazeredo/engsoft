@@ -3,6 +3,7 @@ from PyQt5 import QtCore, QtWidgets
 from Model.Objetos.Disciplina import Disciplina
 from Dao.Disciplina import DisciplinaDao
 import sip
+import pandas as pd
 
 
 # View
@@ -1239,6 +1240,10 @@ class Interface(object):
         self.elementos.append(dummy)
 
         self.mainframe.setVisible(True)
+		
+    def criar_gerenciar_horarios(self, horarios):
+        # TO DO - printar tabela de horários na tela
+        pass
 
     def relacionar_disciplinas_pressionado(self):
         self.controlador.relacionar_disciplinas(self.temp)

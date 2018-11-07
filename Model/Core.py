@@ -7,6 +7,7 @@ from Model.Objetos.Curso import Curso
 from Model.Objetos.Usuario import Usuario
 from Model.Objetos.Disciplina import Disciplina
 from Model.Objetos.Horario import Horario
+import pandas as pd
 
 
 class Core(object):
@@ -409,14 +410,37 @@ class Core(object):
     def obter_id_logado(self):
         return self.__usuario_logado.__id
 	
-    def gerar_horario_csv(self, path_or_buf, disciplinas_usuario):
+    def gerar_horarios(self, disciplinas_usuario):
 		# True - certo, False - erro
         # disciplinas_usuario é uma lista com os ids das disciplinas que o usuario vai cursar
-
         horario = Horario()
-
+        try:
+            for id in disciplinas_usuario:
+                print (id)
+                disciplina_aux = Disciplina.obter_disciplina(id)
+                print (disciplina_aux.nome)
+                if (disciplina_aux.segunda > 0):
+                    horario.elemento(disciplina_aux.segunda, "segunda", disciplina_aux.nome)
+                if (disciplina_aux.terca > 0):
+                    horario.elemento(disciplina_aux.terca, "terca", disciplina_aux.nome)
+                if (disciplina_aux.quarta > 0):
+                    horario.elemento(disciplina_aux.quarta, "quarta", disciplina_aux.nome)
+                if (disciplina_aux.quinta > 0):
+                    horario.elemento(disciplina_aux.quinta, "quinta", disciplina_aux.nome)
+                if (disciplina_aux.sexta > 0):
+                    horario.elemento(disciplina_aux.sexta, "sexta", disciplina_aux.nome)
+            return horario.dataframe
+        except:
+            print ("ERRO: Core.py - gerar_horario")
+            return horario.dataframe
+				
+    def gerar_horarios_csv(self, disciplinas_usuario, path_or_buf):
+		# True - certo, False - erro
+        # disciplinas_usuario é uma lista com os ids das disciplinas que o usuario vai cursar
+        horario = Horario()
         for id in disciplinas_usuario:
             disciplina_aux = Disciplina.obter_disciplina(id)
+            print (disciplina_aux.nome)
             if (disciplina_aux.segunda > 0):
                 horario.elemento(disciplina_aux.segunda, "segunda", disciplina_aux.nome)
             if (disciplina_aux.terca > 0):
@@ -427,6 +451,5 @@ class Core(object):
                 horario.elemento(disciplina_aux.quinta, "quinta", disciplina_aux.nome)
             if (disciplina_aux.sexta > 0):
                 horario.elemento(disciplina_aux.sexta, "sexta", disciplina_aux.nome)
-
         horario.to_csv(path_or_buf)
 

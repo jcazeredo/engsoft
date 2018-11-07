@@ -1,4 +1,5 @@
 from Model.Core import Core
+import pandas as pd
 
 class Controlador(object):
     def __init__(self, interface):
@@ -107,9 +108,14 @@ class Controlador(object):
 
     def gerenciar_horarios(self):
         # TO DO
-        dis = [1,2,3]
-        self.core.gerar_horario_csv(r'C:\Users\Ian\UFRGS\EngSoft\teste.csv', dis)
-        
+        # exibir na interface a tabela de horario e permitir exportar como csv
+        # self.core.gerar_horarios_csv(id_disciplinas, path_or_buf)
+        id_disciplinas = [1,2,3,4,5]
+        #horarios = self.core.gerar_horarios(id_disciplinas) # devolve um dataframe
+        #self.interface.criar_gerenciar_horarios(horarios)
+        path_or_buf = r"C:\Users\Ian\UFRGS\EngSoft\teste.csv"
+        self.core.gerar_horarios_csv(id_disciplinas, path_or_buf)		
+		
     def atualizar_admin(self, cartao_aluno, nome, senha, curso):
         if self.core.atualizar_admin(cartao_aluno, nome, senha, curso):
             self.interface.setar_mensagem_status("Perfil Atualizado com Sucesso!")
