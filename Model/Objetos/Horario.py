@@ -7,7 +7,7 @@ class Horario(object):
 		self.__LINHAS = ["8h", "10h", "13h", "15h", "17h", "19h", "21h"]
 		self.__NCOLUNAS = 5
 		self.__COLUNAS = ["Segunda", "Terca", "Quarta", "Quinta", "Sexta"]
-		self.__LDIC = {"7h30":0, "8h30":1, "9h30":2, "10h30":3, "11h30":4, "12h30":5, "13h30":6, "14h30":7, "15h30":8, "16h30":9, "17h30":10, "18h30":11, "19h30":12, "20h30":13, "21h30":14, "22h30":15}
+		self.__LDIC = {"8":0, "10":1, "13":2, "15":3, "17":4, "19":5, "21":6}
 		self.__CDIC = {"segunda":0, "terca":1, "quarta":2, "quinta":3, "sexta":4}
 		self.__horario ={}
 		self.__tabela ={}
@@ -46,14 +46,7 @@ class Horario(object):
 
 	def elemento(self, linha, coluna, valor):
 		# True - certo, False - erro
-		if type(linha) is int:
-			lin = linha
-		else:
-			try:
-				lin = self.__LDIC[linha]
-			except:
-				print ("ERRO: Horario.py - elemento")
-				return False
+		lin = self.__LDIC[str(linha)]
 
 		if type(coluna) is int:
 			col = coluna

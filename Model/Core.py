@@ -340,15 +340,15 @@ class Core(object):
 
         for id in disciplinas_usuario:
             disciplina_aux = Disciplina.obter_disciplina(id)
-            if (disciplina_aux.segunda > 0) and (disciplina_aux.segunda < (horario.nlinhas+1)):
-                horario.elemento((disciplina_aux.segunda-1), "segunda", disciplina_aux.nome)
-            if (disciplina_aux.terca > 0) and (disciplina_aux.terca < (horario.nlinhas+1)):
-                horario.elemento((disciplina_aux.terca()-1), "terca", disciplina_aux.nome)
-            if (disciplina_aux.quarta > 0) and (disciplina_aux.quarta < (horario.nlinhas+1)):
-                horario.elemento((disciplina_aux.quarta-1), "quarta", disciplina_aux.nome)
-            if (disciplina_aux.quinta > 0) and (disciplina_aux.quinta < (horario.nlinhas+1)):
-                horario.elemento((disciplina_aux.quinta-1), "quinta", disciplina_aux.nome)
-            if (disciplina_aux.sexta > 0) and (disciplina_aux.sexta < (horario.nlinhas+1)):
-                horario.elemento((disciplina_aux.sexta-1), "sexta", disciplina_aux.nome)
+            if (disciplina_aux.segunda > 0):
+                horario.elemento(disciplina_aux.segunda, "segunda", disciplina_aux.nome)
+            if (disciplina_aux.terca > 0):
+                horario.elemento(disciplina_aux.terca, "terca", disciplina_aux.nome)
+            if (disciplina_aux.quarta > 0):
+                horario.elemento(disciplina_aux.quarta, "quarta", disciplina_aux.nome)
+            if (disciplina_aux.quinta > 0):
+                horario.elemento(disciplina_aux.quinta, "quinta", disciplina_aux.nome)
+            if (disciplina_aux.sexta > 0):
+                horario.elemento(disciplina_aux.sexta, "sexta", disciplina_aux.nome)
 
         horario.to_csv(path_or_buf)
