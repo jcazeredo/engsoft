@@ -50,7 +50,7 @@ class Horario(object):
 			print ("ERRO: Horario.py - tabela")
 			return False
 
-	def elemento(self, linha, coluna, valor):
+	def add_elemento(self, linha, coluna, valor):
 		# True - certo, False - erro
 		lin = self.__LDIC[str(linha)]
 
@@ -65,6 +65,14 @@ class Horario(object):
 
 		self.__tabela[lin, col] = valor
 		return True
+		
+	def remove_disciplina(self, nome):
+		for i in range(0, self.__NLINHAS):
+			for j in range(0, self.__NCOLUNAS):
+				if (self.__tabela[i][j] == nome):
+					self.__tabela[i][j] = "-"
+		self.__df = pd.DataFrame(self.__tabela, index=self.__LINHAS, columns=self.__COLUNAS)
+		return self.__df
 
 	def to_csv(self, path_or_buf):
 		# True - certo, False - erro

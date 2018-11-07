@@ -420,15 +420,15 @@ class Core(object):
                 disciplina_aux = Disciplina.obter_disciplina(id)
                 print (disciplina_aux.nome)
                 if (disciplina_aux.segunda > 0):
-                    horario.elemento(disciplina_aux.segunda, "segunda", disciplina_aux.nome)
+                    horario.add_elemento(disciplina_aux.segunda, "segunda", disciplina_aux.nome)
                 if (disciplina_aux.terca > 0):
-                    horario.elemento(disciplina_aux.terca, "terca", disciplina_aux.nome)
+                    horario.add_elemento(disciplina_aux.terca, "terca", disciplina_aux.nome)
                 if (disciplina_aux.quarta > 0):
-                    horario.elemento(disciplina_aux.quarta, "quarta", disciplina_aux.nome)
+                    horario.add_elemento(disciplina_aux.quarta, "quarta", disciplina_aux.nome)
                 if (disciplina_aux.quinta > 0):
-                    horario.elemento(disciplina_aux.quinta, "quinta", disciplina_aux.nome)
+                    horario.add_elemento(disciplina_aux.quinta, "quinta", disciplina_aux.nome)
                 if (disciplina_aux.sexta > 0):
-                    horario.elemento(disciplina_aux.sexta, "sexta", disciplina_aux.nome)
+                    horario.add_elemento(disciplina_aux.sexta, "sexta", disciplina_aux.nome)
             return horario.dataframe
         except:
             print ("ERRO: Core.py - gerar_horario")
@@ -442,14 +442,14 @@ class Core(object):
             disciplina_aux = Disciplina.obter_disciplina(id)
             print (disciplina_aux.nome)
             if (disciplina_aux.segunda > 0):
-                horario.elemento(disciplina_aux.segunda, "segunda", disciplina_aux.nome)
+                horario.add_add_elemento(disciplina_aux.segunda, "segunda", disciplina_aux.nome)
             if (disciplina_aux.terca > 0):
-                horario.elemento(disciplina_aux.terca, "terca", disciplina_aux.nome)
+                horario.add_elemento(disciplina_aux.terca, "terca", disciplina_aux.nome)
             if (disciplina_aux.quarta > 0):
-                horario.elemento(disciplina_aux.quarta, "quarta", disciplina_aux.nome)
+                horario.add_elemento(disciplina_aux.quarta, "quarta", disciplina_aux.nome)
             if (disciplina_aux.quinta > 0):
-                horario.elemento(disciplina_aux.quinta, "quinta", disciplina_aux.nome)
+                horario.add_elemento(disciplina_aux.quinta, "quinta", disciplina_aux.nome)
             if (disciplina_aux.sexta > 0):
-                horario.elemento(disciplina_aux.sexta, "sexta", disciplina_aux.nome)
+                horario.add_elemento(disciplina_aux.sexta, "sexta", disciplina_aux.nome)
         horario.to_csv(path_or_buf)
 
