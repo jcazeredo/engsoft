@@ -122,7 +122,33 @@ class CursoDao(object):
         else:
             return False
 
-    def atualizar(self, nome,nome_novo):
+    def atualiza_disciplinas(self, curso_id, lista_id):
+        conexao = DataSource()
+        cursor = conexao.obter_cursor
+
+        for disciplina_id in lista_id:
+            sql = "INSERT INTO disciplinas_curso (curso_id, disciplina_id) VALUES (%s, %s)"
+            valores = (curso_id, disciplina_id)
+            cursor.execute(sql, valores)
+
+        conexao.commit()
+        conexao.fechar_conexao()
+
+    def remover_disciplinas(self, curso_id, lista_id):
+        conexao = DataSource()
+        cursor = conexao.obter_cursor
+
+        for disciplina_id in lista_id:
+            sql = "DELETE FROM disciplinas_curso WHERE disciplina_id = %s"
+            valores = (disciplina_id,)
+            cursor.execute(sql, valores)
+
+        conexao.commit()
+        conexao.fechar_conexao()
+
+
+
+    def atualizar(self, nome, nome_novo):
         conexao = DataSource()
         cursor = conexao.obter_cursor
 
@@ -133,10 +159,7 @@ class CursoDao(object):
         conexao.commit()
         conexao.fechar_conexao()
 
-        if cursor.rowcount > 0:
-            return self.obter_id_criado(nome_novo)
-        else:
-            return False
+        return self.obter_id_criado(nome_novo)
 
     def excluir(self, id):
         conexao = DataSource()

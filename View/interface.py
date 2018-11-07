@@ -153,7 +153,57 @@ class Interface(object):
     def pos_login(self):
         self.mainframe.setVisible(True)
         self.setar_mensagem_status("Login efetuado com sucesso!")
-        #self.controlador.atualizar_curso("Biologia", "oioi")
+
+    def criar_relacionar_disciplinas(self, disciplinas, disciplinas_curso):
+        self.novo_frame()
+
+        # 1 - Botão Adicionar Disciplinas
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(70, 340, 141, 22))
+        dummy.setObjectName("botao_adicionar_disciplinas")
+        dummy.setText("Adicionar Disciplinas")
+        dummy.clicked.connect(self.adicionar_disciplinas_pressionado)
+        self.elementos.append(dummy)
+
+        # 2 - Botão Voltar
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(220, 340, 61, 22))
+        dummy.setObjectName("botao_voltar")
+        dummy.setText("Voltar")
+        dummy.clicked.connect(self.voltar_editar_curso_pressionado)
+        self.elementos.append(dummy)
+
+        # 3 - Tabela
+        dummy = QtWidgets.QTableWidget(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(70, 40, 231, 281))
+        dummy.setObjectName("tableWidget")
+        dummy.setColumnCount(1)
+        dummy.setRowCount(len(disciplinas))
+
+        item = QtWidgets.QTableWidgetItem()
+        item.setText("Disciplinas")
+        dummy.setHorizontalHeaderItem(0, item)
+
+        print(disciplinas_curso)
+
+        for i in range(len(disciplinas)):
+            item = QtWidgets.QTableWidgetItem()
+            item.setText(disciplinas[i])
+            dummy.setItem(i, 0, item)
+            if disciplinas[i] in disciplinas_curso:
+                item.setSelected(True)
+
+        dummy.horizontalHeader().setDefaultSectionSize(200)
+        self.elementos.append(dummy)
+
+        # 4 - Label Disciplinas
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(70, 20, 81, 16))
+        dummy.setObjectName("label_disciplinas")
+        dummy.setText("Disciplinas:")
+        self.elementos.append(dummy)
+
+        self.mainframe.setVisible(True)
 
     # Cria elementos do menu lateral esquerdo, baseado no privilegio do usuário logado
     def criar_sidemenu(self, nome, privilegio):
@@ -192,6 +242,7 @@ class Interface(object):
             self.gerenciar_cursos = QtWidgets.QPushButton(self.sidemenu)
             self.gerenciar_cursos.setGeometry(QtCore.QRect(10, 200, 121, 22))
             self.gerenciar_cursos.setObjectName("gerenciar_cursos")
+            self.gerenciar_cursos.clicked.connect(self.gerenciar_cursos_pressionado)
             self.gerenciar_cursos.setText("Gerenciar Cursos")
 
             self.gerenciar_disciplinas = QtWidgets.QPushButton(self.sidemenu)
@@ -1009,7 +1060,7 @@ class Interface(object):
 
         # 1 - Label Nome
         dummy = QtWidgets.QLabel(self.mainframe)
-        dummy.setGeometry(QtCore.QRect(80, 160, 41, 21))
+        dummy.setGeometry(QtCore.QRect(80, 100, 41, 21))
         dummy.setObjectName("label_nome")
         dummy.setText("Nome:")
         self.elementos.append(dummy)
@@ -1017,20 +1068,21 @@ class Interface(object):
         # 2 - Input Nome
         dummy = QtWidgets.QLineEdit(self.mainframe)
         dummy.setEnabled(True)
-        dummy.setGeometry(QtCore.QRect(130, 160, 113, 22))
+        dummy.setGeometry(QtCore.QRect(130, 100, 113, 22))
         dummy.setObjectName("input_nome")
         self.elementos.append(dummy)
 
         # 3 - Botão Criar Curso
         dummy = QtWidgets.QPushButton(self.mainframe)
-        dummy.setGeometry(QtCore.QRect(80, 200, 91, 22))
+        dummy.setGeometry(QtCore.QRect(80, 140, 91, 22))
         dummy.setObjectName("botao_criarCurso")
-        dummy.setText("Criar Curso:")
+        dummy.setText("Criar Curso")
+        dummy.clicked.connect(self.criar_curso_pressionado)
         self.elementos.append(dummy)
 
         # 4 - Input Curso
         dummy = QtWidgets.QComboBox(self.mainframe)
-        dummy.setGeometry(QtCore.QRect(80, 120, 151, 22))
+        dummy.setGeometry(QtCore.QRect(80, 60, 151, 22))
         dummy.setObjectName("input_curso")
         for curso in cursos:
             dummy.addItem(curso)
@@ -1038,30 +1090,116 @@ class Interface(object):
 
         # 5 - Label Curso
         dummy = QtWidgets.QLabel(self.mainframe)
-        dummy.setGeometry(QtCore.QRect(80, 100, 51, 21))
+        dummy.setGeometry(QtCore.QRect(80, 40, 51, 21))
         dummy.setObjectName("label_curso")
         dummy.setText("Curso:")
         self.elementos.append(dummy)
 
         # 6 - Botão Editar Curso
         dummy = QtWidgets.QPushButton(self.mainframe)
-        dummy.setGeometry(QtCore.QRect(240, 120, 61, 22))
+        dummy.setGeometry(QtCore.QRect(240, 60, 61, 22))
         dummy.setObjectName("botao_editarCurso")
-        dummy.setText("Editar:")
+        dummy.setText("Editar")
+        dummy.clicked.connect(self.editar_curso_pressionado)
         self.elementos.append(dummy)
 
         # 7 - Botão Excluir Curso
         dummy = QtWidgets.QPushButton(self.mainframe)
-        dummy.setGeometry(QtCore.QRect(310, 120, 61, 22))
+        dummy.setGeometry(QtCore.QRect(310, 60, 61, 22))
         dummy.setObjectName("botao_excluirCurso")
         dummy.setText("Excluir")
+        dummy.clicked.connect(self.excluir_curso_pressionado)
         self.elementos.append(dummy)
 
         self.mainframe.setVisible(True)
 
+    def criar_editar_curso(self, cursos, dados):
+        self.novo_frame()
+
+        self.temp = dados
+
+        # 1 - Label Nome
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(80, 100, 41, 21))
+        dummy.setObjectName("label_nome")
+        dummy.setText("Nome:")
+        self.elementos.append(dummy)
+
+        # 2 - Input Nome
+        dummy = QtWidgets.QLineEdit(self.mainframe)
+        dummy.setEnabled(True)
+        dummy.setGeometry(QtCore.QRect(130, 100, 113, 22))
+        dummy.setObjectName("input_nome")
+        dummy.setText(dados)
+        self.elementos.append(dummy)
+
+        # 3 - Botão Atualizar
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(80, 140, 91, 22))
+        dummy.setObjectName("botao_criarCurso")
+        dummy.setText("Atualizar")
+        dummy.clicked.connect(self.atualizar_curso_pressionado)
+        self.elementos.append(dummy)
+
+        # 4 - Input Curso
+        dummy = QtWidgets.QComboBox(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(80, 60, 151, 22))
+        dummy.setObjectName("input_curso")
+        for curso in cursos:
+            dummy.addItem(curso)
+        dummy.setCurrentText(dados)
+        self.elementos.append(dummy)
+
+        # 5 - Label Curso
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(80, 40, 51, 21))
+        dummy.setObjectName("label_curso")
+        dummy.setText("Curso:")
+        self.elementos.append(dummy)
+
+        # 6 - Botão Editar Curso
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(240, 60, 61, 22))
+        dummy.setObjectName("botao_editarCurso")
+        dummy.setText("Editar")
+        dummy.clicked.connect(self.editar_curso_pressionado)
+        self.elementos.append(dummy)
+
+        # 7 - Botão Excluir Curso
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(330, 140, 61, 22))
+        dummy.setObjectName("botao_excluirCurso")
+        dummy.setText("Excluir")
+        dummy.clicked.connect(self.excluir_curso_pressionado)
+        self.elementos.append(dummy)
+
+        # 8 - Botão Voltar
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(400, 140, 61, 22))
+        dummy.setObjectName("botao_excluirCurso")
+        dummy.setText("Voltar")
+        dummy.clicked.connect(self.voltar_editar_curso_pressionado)
+        self.elementos.append(dummy)
+
+        # 8 - Botão Adicionar Horários
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(180, 140, 141, 22))
+        dummy.setObjectName("botao_relacionar_horarios")
+        dummy.setText("Relacionar Horários")
+        dummy.clicked.connect(self.relacionar_disciplinas_pressionado)
+        self.elementos.append(dummy)
+
+        self.mainframe.setVisible(True)
+
+    def relacionar_disciplinas_pressionado(self):
+        self.controlador.relacionar_disciplinas(self.temp)
+
     # Ação para botão de Voltar, no layout Editar Admin
     def voltar_editar_admin_pressionado(self):
         self.controlador.gerenciar_admins()
+
+    def voltar_editar_curso_pressionado(self):
+        self.controlador.gerenciar_cursos()
 
     # Ação para botão de Voltar, no layout Editar Disciplinas
     def voltar_editar_disciplina_pressionado(self):
@@ -1088,6 +1226,18 @@ class Interface(object):
         disciplina = self.elementos[20].currentText()
         self.controlador.editar_disciplina(disciplina)
 
+    def editar_curso_pressionado(self):
+        curso = self.elementos[3].currentText()
+        self.controlador.editar_curso(curso)
+
+    def excluir_curso_pressionado(self):
+        curso = self.elementos[3].currentText()
+        self.controlador.excluir_curso(curso)
+
+    def excluir_curso_pressionado2(self):
+        curso = self.elementos[1].text()
+        self.controlador.excluir_curso(curso)
+
     def excluir_disciplina_pressionado(self):
         disciplina = self.elementos[20].currentText()
         self.controlador.excluir_disciplina(disciplina)
@@ -1102,6 +1252,17 @@ class Interface(object):
         input_cartao = self.elementos[9].text()
         input_curso = self.elementos[12].currentText()
         self.controlador.atualizar_admin(input_cartao, input_nome, input_senha, input_curso)
+
+    def adicionar_disciplinas_pressionado(self):
+        lista_disciplinas = []
+        for item_selecionado in self.elementos[2].selectedItems():
+            lista_disciplinas.append(item_selecionado.text())
+
+        self.controlador.adicionar_disciplinas(self.temp, lista_disciplinas)
+
+    def atualizar_curso_pressionado(self):
+        input_nome = self.elementos[1].text()
+        self.controlador.atualizar_curso(self.temp, input_nome)
 
     def atualizar_disciplina_pressionado(self):
         nome = self.elementos[19].text()
@@ -1142,7 +1303,6 @@ class Interface(object):
         else:
             sexta = sexta.replace("h", "")
             sexta = int(sexta)
-
 
         self.controlador.atualizar_disciplina(self.temp, nome, semestre, aprovacao, segunda, terca, quarta, quinta, sexta)
 
@@ -1197,6 +1357,10 @@ class Interface(object):
                 self.controlador.novo_admin(senha, nome, str(cartao_aluno), curso)
             except ValueError:
                 self.setar_mensagem_status("Cartão do aluno deve ter apenas números")
+
+    def criar_curso_pressionado(self):
+        nome = self.elementos[1].text()
+        self.controlador.criar_curso(nome)
 
     def criar_disciplina_pressionado(self):
         nome = self.elementos[19].text()
