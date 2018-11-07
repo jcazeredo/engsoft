@@ -2,6 +2,7 @@ from Dao.DataSource import DataSource
 from Model.Objetos.Disciplina import Disciplina
 
 
+
 class DisciplinaDao(object):
     """
     Obtém todas disciplinas relacionadas ao curso_id.
@@ -59,6 +60,28 @@ class DisciplinaDao(object):
                 nomes_disciplinas.append(nome)
 
         return nomes_disciplinas
+
+    def obter_nome_disciplina(self, id):
+        conexao = DataSource()
+
+        if not conexao.esta_logado:
+            return False
+
+        cursor = conexao.obter_cursor
+
+        sql = "SELECT * FROM disciplinas WHERE id = %s"
+        valores = (id,)
+        cursor.execute(sql, valores)
+
+        resultado_sql = cursor.fetchall()
+        conexao.fechar_conexao()
+
+        # Disciplinas Existem
+        if cursor.rowcount != 0:
+            disciplina_row = resultado_sql[0]
+            nome = disciplina_row["nome"]
+
+        return nome
 
     """
     Obtém todas disciplinas relacionadas ao usuario.

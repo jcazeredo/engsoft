@@ -169,6 +169,37 @@ class Core(object):
             disciplina_obj.adicionar_curso(curso_id, associacao)
         return curso
 
+    def carregar_curso_por_nome(self, nome):
+        curso_dao = CursoDao()
+        curso_id = curso_dao.obter_id_curso(nome)
+        # Testa para ver se o curso já existe
+        curso = Curso.obter_curso(curso_id)
+
+        if curso != False:
+            return curso
+
+        curso = curso_dao.obter_curso_id(curso_id)
+
+        if curso == False:
+            return False
+
+        # Carrega Disciplinas
+        disciplina_dao = DisciplinaDao()
+
+        # Recebe lista com as ids de disciplinas cursadas pelo curso
+        disciplinas_curso = disciplina_dao.obter_disciplinas_curso(curso_id)
+
+        if disciplinas_curso == False:
+            return curso
+
+        # Criar Associações Disciplinas-Cursos
+        for disciplina in disciplinas_curso:
+            associacao = DisciplinaCurso(curso_id, disciplina)
+            curso.adicionar_disciplina(disciplina, associacao)
+            disciplina_obj = Disciplina.obter_disciplina(disciplina)
+            disciplina_obj.adicionar_curso(curso_id, associacao)
+        return curso
+
     def carregar_dados_usuario(self, cartao_aluno):
         usuario_obj = Usuario.obter_usuario(cartao_aluno)
         if usuario_obj == False:
@@ -299,10 +330,42 @@ class Core(object):
     def atualizar_curso(self, nome, nome_novo):
         curso_dao = CursoDao()
         id = curso_dao.atualizar(nome, nome_novo)
-        objeto_disciplina = Curso.obter_curso(id)
-        objeto_disciplina.nome = nome_novo
+        objeto_curso = Curso.obter_curso(id)
+        objeto_curso.nome = nome_novo
 
         return True
+
+    def adicionar_disciplinas(self, nome_curso, lista_disciplinas):
+        curso_dao = CursoDao()
+        disciplina_dao = DisciplinaDao()
+
+        lista_id_disciplina = []
+
+        for disciplina in lista_disciplinas:
+            id = disciplina_dao.obter_id_criado(disciplina)
+            lista_id_disciplina.append(id)
+
+        curso_id = curso_dao.obter_id_curso(nome_curso)
+        lista_disciplinas_antiga = disciplina_dao.obter_disciplinas_curso(curso_id)
+
+        adicionar = [e for e in lista_id_disciplina if e not in lista_disciplinas_antiga]
+        excluir = [e for e in lista_disciplinas_antiga if e not in lista_id_disciplina]
+
+        curso_dao.atualiza_disciplinas(curso_id, adicionar)
+        curso_dao.remover_disciplinas(curso_id, excluir)
+
+        
+    def obter_disciplinas_curso(self, nome):
+        curso_dao = CursoDao()
+        id = curso_dao.obter_id_curso(nome)
+        disciplina_dao = DisciplinaDao()
+        lista_disciplinas = disciplina_dao.obter_disciplinas_curso(id)
+        lista_nomes = []
+        for disciplina in lista_disciplinas:
+            nome = disciplina_dao.obter_nome_disciplina(disciplina)
+            lista_nomes.append(nome)
+
+        return lista_nomes
 
     def excluir_curso(self, nome):
         curso_dao = CursoDao()
@@ -352,3 +415,4 @@ class Core(object):
                 horario.elemento(disciplina_aux.sexta, "sexta", disciplina_aux.nome)
 
         horario.to_csv(path_or_buf)
+
