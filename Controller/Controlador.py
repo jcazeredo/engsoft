@@ -65,8 +65,8 @@ class Controlador(object):
     def criar_curso(self, nome):
         self.core.criar_curso(nome)
 
-    def atualizar_curso(self, nome):
-        self.core.atualizar_curso(nome)
+    def atualizar_curso(self, nome, nome_novo):
+        self.core.atualizar_curso(nome, nome_novo)
 
     def excluir_curso(self, nome):
         if self.core.excluir_curso(nome):

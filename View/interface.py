@@ -153,6 +153,7 @@ class Interface(object):
     def pos_login(self):
         self.mainframe.setVisible(True)
         self.setar_mensagem_status("Login efetuado com sucesso!")
+        #self.controlador.atualizar_curso("Biologia", "oioi")
 
     # Cria elementos do menu lateral esquerdo, baseado no privilegio do usuário logado
     def criar_sidemenu(self, nome, privilegio):
