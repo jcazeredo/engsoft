@@ -226,13 +226,7 @@ class Core(object):
                     return False
 
             curso = curso.nome
-        # Apagar
-        print("Usuarios")
-        Usuario.exibir_tudo()
-        print("Disciplinas")
-        Disciplina.exibir_tudo()
-        print("Cursos")
-        Curso.exibir_tudo()
+
 
         dados = {
             "nome": nome,
@@ -256,7 +250,7 @@ class Core(object):
 
     def atualizar_perfil(self, nome, senha, curso):
         # Caso Usuário não possua curso ainda, permite que ele escolha um.
-        if curso == "Nenhum":
+        if self.__usuario_logado.curso_id == 0:
             curso_dao = CursoDao()
             curso_id = curso_dao.obter_id_curso(curso)
             curso_dao.obter_curso_id(curso_id)
@@ -360,6 +354,40 @@ class Core(object):
         curso_dao.atualiza_disciplinas(curso_id, adicionar)
         curso_dao.remover_disciplinas(curso_id, excluir)
 
+    def atualizar_historico(self, lista_disciplinas):
+        usuario_dao = UsuarioDao()
+        disciplina_dao = DisciplinaDao()
+
+        lista_id_disciplina = []
+
+        for disciplina in lista_disciplinas:
+            id = disciplina_dao.obter_id_criado(disciplina)
+            lista_id_disciplina.append(id)
+
+        lista_disciplinas_antiga = self.obter_historico()
+
+        adicionar = [e for e in lista_id_disciplina if e not in lista_disciplinas_antiga]
+        excluir = [e for e in lista_disciplinas_antiga if e not in lista_id_disciplina]
+
+        usuario_dao.atualiza_disciplinas(self.__usuario_logado.id, adicionar)
+        usuario_dao.remover_disciplinas(self.__usuario_logado.id, excluir)
+
+    def obter_historico(self):
+        disciplina_dao = DisciplinaDao()
+        lista_disciplinas = disciplina_dao.obter_disciplinas_usuario(self.__usuario_logado.id)
+
+        return lista_disciplinas
+
+    def obter_historico_nomes(self):
+        disciplina_dao = DisciplinaDao()
+        lista_disciplinas = disciplina_dao.obter_disciplinas_usuario(self.__usuario_logado.id)
+        lista_nomes = []
+        for disciplina in lista_disciplinas:
+            nome = disciplina_dao.obter_nome_disciplina(disciplina)
+            lista_nomes.append(nome)
+
+        return lista_nomes
+
     def obter_disciplinas_curso(self, nome):
         curso_dao = CursoDao()
         id = curso_dao.obter_id_curso(nome)
@@ -381,6 +409,12 @@ class Core(object):
             lista_nomes.append(nome)
 
         return lista_nomes
+
+    def obter_id_disciplinas_curso_usuario(self):
+        disciplina_dao = DisciplinaDao()
+        lista_disciplinas = disciplina_dao.obter_disciplinas_curso(self.__usuario_logado.curso_id)
+
+        return lista_disciplinas
 
     def excluir_curso(self, nome):
         curso_dao = CursoDao()

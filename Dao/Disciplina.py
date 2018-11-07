@@ -52,9 +52,9 @@ class DisciplinaDao(object):
         resultado_sql = cursor.fetchall()
         conexao.fechar_conexao()
 
+        nomes_disciplinas = []
         # Disciplinas Existem
         if cursor.rowcount != 0:
-            nomes_disciplinas = []
             for disciplina_row in resultado_sql:
                 nome = disciplina_row["nome"]
                 nomes_disciplinas.append(nome)

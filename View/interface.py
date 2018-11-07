@@ -209,6 +209,9 @@ class Interface(object):
     def criar_historico_disciplinas(self, disciplinas_curso, disciplinas):
         self.novo_frame()
 
+        print(disciplinas_curso)
+        print(disciplinas)
+
         # 1 - Botão Adicionar Disciplinas
         dummy = QtWidgets.QPushButton(self.mainframe)
         dummy.setGeometry(QtCore.QRect(70, 340, 141, 22))
@@ -1151,6 +1154,8 @@ class Interface(object):
         dummy.setObjectName("botao_editarCurso")
         dummy.setText("Editar")
         dummy.clicked.connect(self.editar_curso_pressionado)
+        if len(cursos) == 0:
+            dummy.setEnabled(False)
         self.elementos.append(dummy)
 
         # 7 - Botão Excluir Curso
@@ -1159,6 +1164,8 @@ class Interface(object):
         dummy.setObjectName("botao_excluirCurso")
         dummy.setText("Excluir")
         dummy.clicked.connect(self.excluir_curso_pressionado)
+        if len(cursos) == 0:
+            dummy.setEnabled(False)
         self.elementos.append(dummy)
 
         self.mainframe.setVisible(True)
@@ -1213,6 +1220,8 @@ class Interface(object):
         dummy.setObjectName("botao_editarCurso")
         dummy.setText("Editar")
         dummy.clicked.connect(self.editar_curso_pressionado)
+        if len(cursos) == 0:
+            dummy.setEnabled(False)
         self.elementos.append(dummy)
 
         # 7 - Botão Excluir Curso
@@ -1313,6 +1322,13 @@ class Interface(object):
             lista_disciplinas.append(item_selecionado.text())
 
         self.controlador.adicionar_disciplinas(self.temp, lista_disciplinas)
+
+    def atualizar_historico_pressionado(self):
+        lista_disciplinas = []
+        for item_selecionado in self.elementos[2].selectedItems():
+            lista_disciplinas.append(item_selecionado.text())
+
+        self.controlador.atualizar_historico(lista_disciplinas)
 
     def atualizar_curso_pressionado(self):
         input_nome = self.elementos[1].text()
@@ -1420,33 +1436,40 @@ class Interface(object):
         semestre = int(self.elementos[8].currentText())
         aprovacao = self.elementos[2].text()
 
-        try:
-            segunda = self.elementos[10].currentText()
+        segunda = self.elementos[10].currentText()
+        if segunda == "-":
+            segunda = 0
+        else:
             segunda = segunda.replace("h", "")
             segunda = int(segunda)
 
-            terca = self.elementos[13].currentText()
+        terca = self.elementos[13].currentText()
+        if terca == "-":
+            terca = 0
+        else:
             terca = terca.replace("h", "")
             terca = int(terca)
 
-            quarta = self.elementos[14].currentText()
+        quarta = self.elementos[14].currentText()
+        if quarta == "-":
+            quarta = 0
+        else:
             quarta = quarta.replace("h", "")
             quarta = int(quarta)
 
-            quinta = self.elementos[15].currentText()
+        quinta = self.elementos[15].currentText()
+        if quinta == "-":
+            quinta = 0
+        else:
             quinta = quinta.replace("h", "")
             quinta = int(quinta)
 
-            sexta = self.elementos[16].currentText()
+        sexta = self.elementos[16].currentText()
+        if sexta == "-":
+            sexta = 0
+        else:
             sexta = sexta.replace("h", "")
             sexta = int(sexta)
-
-        except:
-            segunda = 0
-            terca = 0
-            quarta = 0
-            quinta = 0
-            sexta = 0
 
         self.controlador.criar_disciplinas(nome, semestre, aprovacao, segunda, terca, quarta, quinta, sexta)
 

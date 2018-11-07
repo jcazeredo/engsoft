@@ -185,6 +185,10 @@ class Controlador(object):
         self.core.adicionar_disciplinas(nome_curso, lista_disciplinas)
         self.relacionar_disciplinas(nome_curso)
 
+    def atualizar_historico(self, lista_disciplinas):
+        self.core.atualizar_historico(lista_disciplinas)
+        self.editar_historico()
+
     def editar_curso(self, curso_selecionado):
         dados = self.core.carregar_curso_por_nome(curso_selecionado)
         cursos = self.core.carregar_nomes_cursos()
@@ -206,7 +210,7 @@ class Controlador(object):
             self.interface.criar_relacionar_disciplinas(disciplinas, disciplinas_curso)
 
     def editar_historico(self):
-        disciplinas_usuario = self.core.obter_disciplinas_usuario()
+        disciplinas_usuario = self.core.obter_historico_nomes()
         disciplinas_curso = self.core.obter_disciplinas_curso_usuario()
 
         if disciplinas_curso == False or disciplinas_usuario == False:

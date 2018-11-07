@@ -39,6 +39,30 @@ class UsuarioDao(object):
         else:
             return False
 
+    def atualiza_disciplinas(self, user_id, lista_id):
+        conexao = DataSource()
+        cursor = conexao.obter_cursor
+
+        for disciplina_id in lista_id:
+            sql = "INSERT INTO historico (usuario_id, disciplina_id) VALUES (%s, %s)"
+            valores = (user_id, disciplina_id)
+            cursor.execute(sql, valores)
+
+        conexao.commit()
+        conexao.fechar_conexao()
+
+    def remover_disciplinas(self, user_id, lista_id):
+        conexao = DataSource()
+        cursor = conexao.obter_cursor
+
+        for disciplina_id in lista_id:
+            sql = "DELETE FROM historico WHERE disciplina_id = %s AND usuario_id = %s"
+            valores = (disciplina_id, user_id)
+            cursor.execute(sql, valores)
+
+        conexao.commit()
+        conexao.fechar_conexao()
+
     """
     Obtém um usuário pelo cartão do aluno.
     Retorno: False || Objeto Usuário

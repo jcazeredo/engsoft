@@ -139,13 +139,12 @@ class CursoDao(object):
         cursor = conexao.obter_cursor
 
         for disciplina_id in lista_id:
-            sql = "DELETE FROM disciplinas_curso WHERE disciplina_id = %s"
-            valores = (disciplina_id,)
+            sql = "DELETE FROM disciplinas_curso WHERE disciplina_id = %s AND curso_id = %s"
+            valores = (disciplina_id, curso_id)
             cursor.execute(sql, valores)
 
         conexao.commit()
         conexao.fechar_conexao()
-
 
 
     def atualizar(self, nome, nome_novo):
