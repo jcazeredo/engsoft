@@ -8,9 +8,6 @@ from Model.Objetos.Usuario import Usuario
 from Model.Objetos.Disciplina import Disciplina
 from Model.Objetos.Horario import Horario
 import os
-# import pandas as pd
-# import numpy as np
-
 
 class Core(object):
     def __init__(self):
@@ -59,12 +56,15 @@ class Core(object):
             disciplina_obj = Disciplina.obter_disciplina(disciplina)
             disciplina_obj.adicionar_curso(curso_id, associacao)
 
-        # Criar Associações Disciplinas-Usuarios
-        for disciplina in disciplinas_usuario:
-            associacao = UsuarioDisciplina(disciplina, usuario.id)
-            usuario.adicionar_disciplina(disciplina, associacao)
-            disciplina_obj = Disciplina.obter_disciplina(disciplina)
-            disciplina_obj.adicionar_usuario(usuario.id, associacao)
+        try:
+            # Criar Associações Disciplinas-Usuarios
+            for disciplina in disciplinas_usuario:
+                associacao = UsuarioDisciplina(disciplina, usuario.id)
+                usuario.adicionar_disciplina(disciplina, associacao)
+                disciplina_obj = Disciplina.obter_disciplina(disciplina)
+                disciplina_obj.adicionar_usuario(usuario.id, associacao)
+        except:
+            pass
 
         return True
 

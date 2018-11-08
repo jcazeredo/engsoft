@@ -1,7 +1,6 @@
 from Dao.DataSource import DataSource
 from Model.Objetos.Curso import Curso
 
-
 class CursoDao(object):
     """
     Obtém curso que possui a id. Retorno: False || Obj Curso

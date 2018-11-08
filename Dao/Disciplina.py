@@ -1,8 +1,6 @@
 from Dao.DataSource import DataSource
 from Model.Objetos.Disciplina import Disciplina
 
-
-
 class DisciplinaDao(object):
     """
     Obtém todas disciplinas relacionadas ao curso_id.
