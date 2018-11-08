@@ -476,7 +476,7 @@ class Core(object):
             disciplina_aux = Disciplina.obter_disciplina(id)
             print (disciplina_aux.nome)
             if (disciplina_aux.segunda > 0):
-                horario.add_add_elemento(disciplina_aux.segunda, "segunda", disciplina_aux.nome)
+                horario.add_elemento(disciplina_aux.segunda, "segunda", disciplina_aux.nome)
             if (disciplina_aux.terca > 0):
                 horario.add_elemento(disciplina_aux.terca, "terca", disciplina_aux.nome)
             if (disciplina_aux.quarta > 0):
