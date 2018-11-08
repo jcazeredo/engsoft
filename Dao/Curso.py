@@ -186,16 +186,20 @@ class CursoDao(object):
         cursor.execute(sql, valores)
 
         resultado_sql = cursor.fetchall()
-        conexao.fechar_conexao()
 
         lista_usuarios = []
 
         if cursor.rowcount != 0:
-            row = resultado_sql[0]
+            for row in resultado_sql:
+                id = row["id"]
+                lista_usuarios.append(id)
 
-            id = curso_row["id"]
+        for id in lista_usuarios:
+            sql = "UPDATE usuarios SET curso_id = %s WHERE id = %s"
+            valores = (0, id,)
+            cursor.execute(sql, valores)
 
-            return id
+        conexao.commit()
+        conexao.fechar_conexao()
 
-        else:
-            return False
+        return True
