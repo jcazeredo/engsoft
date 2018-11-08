@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 07/11/2018 às 00:48
+-- Tempo de geração: 08/11/2018 às 02:49
 -- Versão do servidor: 10.1.35-MariaDB
 -- Versão do PHP: 7.2.9
 
@@ -38,11 +38,8 @@ CREATE TABLE `cursos` (
 --
 
 INSERT INTO `cursos` (`id`, `nome`) VALUES
-(3, 'Biologia'),
-(4, 'Ciência da Computação'),
-(1, 'Engenharia da Computação'),
-(2, 'Física'),
-(0, 'Nenhum');
+(0, 'Nenhum'),
+(7, 'teste');
 
 -- --------------------------------------------------------
 
@@ -67,19 +64,12 @@ CREATE TABLE `disciplinas` (
 --
 
 INSERT INTO `disciplinas` (`id`, `nome`, `semestre`, `taxa_aprovacao`, `segunda`, `terca`, `quarta`, `quinta`, `sexta`) VALUES
-(1, 'asdasda', 0, 0, 0, 0, 0, 0, 0),
-(2, 'Circuitos Elétricos II', 0, 0, 0, 0, 0, 0, 0),
-(3, 'Cálculo I', 0, 0, 0, 0, 0, 0, 0),
-(5, 'Probabilidade', 0, 0, 0, 0, 0, 0, 0),
-(6, 'Circuitos Elétricos I', 2, 0, 0, 0, 0, 0, 0),
-(7, 'Circuitos Elétricos II', 3, 0, 0, 0, 0, 0, 0),
-(8, 'Cálculo I', 4, 0, 0, 0, 0, 0, 0),
-(9, 'Física I', 5, 0, 0, 0, 0, 0, 0),
-(10, 'Probabilidade', 6, 0, 0, 0, 0, 0, 0),
-(11, 'asdd', 2, 12, 10, 8, 13, 15, 17),
-(12, 'Engenharia de cu', 4, 10, 0, 0, 0, 0, 0),
-(13, 'das', 1, 12, 10, 10, 10, 10, 10),
-(15, 'asdd', 2, 12, 10, 8, 13, 15, 17);
+(18, 'Física II', 3, 70, 8, 0, 8, 10, 8),
+(19, 'Teomag', 5, 80, 17, 0, 17, 0, 0),
+(20, 'Física III', 3, 12, 19, 0, 0, 0, 19),
+(21, 'Circuitos Elétricos I', 3, 70, 0, 17, 0, 17, 0),
+(22, 'Circuitos Elétricos II', 4, 70, 15, 0, 15, 0, 0),
+(23, 'Física I', 1, 40, 8, 0, 8, 0, 8);
 
 -- --------------------------------------------------------
 
@@ -98,10 +88,13 @@ CREATE TABLE `disciplinas_curso` (
 --
 
 INSERT INTO `disciplinas_curso` (`id`, `curso_id`, `disciplina_id`) VALUES
-(2, 1, 3),
-(3, 1, 1),
-(4, 1, 2),
-(5, 2, 2);
+(20, 5, 23),
+(21, 5, 22),
+(22, 5, 21),
+(23, 5, 18),
+(24, 7, 23),
+(25, 7, 21),
+(26, 7, 20);
 
 -- --------------------------------------------------------
 
@@ -120,19 +113,8 @@ CREATE TABLE `historico` (
 --
 
 INSERT INTO `historico` (`id`, `usuario_id`, `disciplina_id`) VALUES
-(7, 8, 2);
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `requisitos`
---
-
-CREATE TABLE `requisitos` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `disciplina_id` int(11) NOT NULL,
-  `disciplina_requisto_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+(33, 1, 20),
+(34, 1, 23);
 
 -- --------------------------------------------------------
 
@@ -154,13 +136,8 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `senha`, `privilegio`, `cartao_aluno`, `curso_id`) VALUES
-(2, 'ss', '1', 1, '2', 1),
-(8, 'cristian dos anjos', '12', 1, '11', 2),
-(9, 'dassd', 'dssd', 1, '123', 3),
-(10, 'cu', 'adsasd', 1, '113', 3),
-(12, 'nomed', 'senha', 1, '1234', 4),
-(21, '14', '11', 0, '111', 0),
-(24, 'sad2', 'sad2', 0, '132', 1);
+(1, 'Admin', '1', 0, '1', 7),
+(25, 'Ian', 'ian', 0, '285682', 0);
 
 --
 -- Índices de tabelas apagadas
@@ -192,12 +169,6 @@ ALTER TABLE `historico`
   ADD PRIMARY KEY (`id`);
 
 --
--- Índices de tabela `requisitos`
---
-ALTER TABLE `requisitos`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Índices de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
@@ -212,37 +183,31 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de tabela `cursos`
 --
 ALTER TABLE `cursos`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de tabela `disciplinas`
 --
 ALTER TABLE `disciplinas`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de tabela `disciplinas_curso`
 --
 ALTER TABLE `disciplinas_curso`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT de tabela `historico`
 --
 ALTER TABLE `historico`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT de tabela `requisitos`
---
-ALTER TABLE `requisitos`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
