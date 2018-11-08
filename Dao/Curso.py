@@ -171,7 +171,31 @@ class CursoDao(object):
         conexao.commit()
         conexao.fechar_conexao()
 
-        if cursor.rowcount > 0:
-            return True
+        return True
+
+    def excluir_dos_usuarios(self, curso_id):
+        conexao = DataSource()
+
+        if not conexao.esta_logado:
+            return False
+
+        cursor = conexao.obter_cursor
+
+        sql = "SELECT * FROM usuarios WHERE curso_id = %s"
+        valores = (curso_id,)
+        cursor.execute(sql, valores)
+
+        resultado_sql = cursor.fetchall()
+        conexao.fechar_conexao()
+
+        lista_usuarios = []
+
+        if cursor.rowcount != 0:
+            row = resultado_sql[0]
+
+            id = curso_row["id"]
+
+            return id
+
         else:
             return False

@@ -222,7 +222,30 @@ class DisciplinaDao(object):
         conexao.commit()
         conexao.fechar_conexao()
 
-        if cursor.rowcount > 0:
-            return True
-        else:
-            return False
+        return True
+
+    def excluir_do_historico(self, id):
+        conexao = DataSource()
+        cursor = conexao.obter_cursor
+
+        sql = "DELETE FROM historico WHERE disciplina_id = %s"
+        valores = (id,)
+        cursor.execute(sql, valores)
+
+        conexao.commit()
+        conexao.fechar_conexao()
+
+        return True
+
+    def excluir_dos_cursos(self, id):
+        conexao = DataSource()
+        cursor = conexao.obter_cursor
+
+        sql = "DELETE FROM disciplinas_curso WHERE disciplina_id = %s"
+        valores = (id,)
+        cursor.execute(sql, valores)
+
+        conexao.commit()
+        conexao.fechar_conexao()
+
+        return True

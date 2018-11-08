@@ -107,15 +107,17 @@ class Controlador(object):
             self.interface.setar_mensagem_status("Erro ao atualizar!")
 
     def gerenciar_horarios(self):
-        # TO DO
-        # exibir na interface a tabela de horario e permitir exportar como csv
-        # self.core.gerar_horarios_csv(id_disciplinas, path_or_buf)
-        id_disciplinas = [1,2,3,4,5]
-        #horarios = self.core.gerar_horarios(id_disciplinas) # devolve um dataframe
-        #self.interface.criar_gerenciar_horarios(horarios)
-        path_or_buf = r"C:\Users\Ian\UFRGS\EngSoft\teste.csv"
-        self.core.gerar_horarios_csv(id_disciplinas, path_or_buf)		
-		
+        disciplinas_restantes = self.core.obter_disciplinas_restantes()
+        self.interface.criar_gerenciar_horarios(disciplinas_restantes)
+
+    def gerar_horario(self, disciplinas):
+        horarios = self.core.gerar_horarios(disciplinas)
+        self.interface.criar_horario_gerado(horarios[0], horarios[1], horarios[2])
+
+    def salvar_horarios(self):
+        self.core.salvar_csv()
+        self.interface.setar_mensagem_status("Horários salvos com sucesso!")
+
     def atualizar_admin(self, cartao_aluno, nome, senha, curso):
         if self.core.atualizar_admin(cartao_aluno, nome, senha, curso):
             self.interface.setar_mensagem_status("Perfil Atualizado com Sucesso!")

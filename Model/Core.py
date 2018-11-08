@@ -7,7 +7,9 @@ from Model.Objetos.Curso import Curso
 from Model.Objetos.Usuario import Usuario
 from Model.Objetos.Disciplina import Disciplina
 from Model.Objetos.Horario import Horario
-import pandas as pd
+import os
+# import pandas as pd
+# import numpy as np
 
 
 class Core(object):
@@ -372,6 +374,13 @@ class Core(object):
         usuario_dao.atualiza_disciplinas(self.__usuario_logado.id, adicionar)
         usuario_dao.remover_disciplinas(self.__usuario_logado.id, excluir)
 
+    def obter_disciplinas_restantes(self):
+        historico = self.obter_historico_nomes()
+        disciplinas_curso = self.obter_disciplinas_curso_usuario()
+        restantes = [e for e in disciplinas_curso if e not in historico]
+
+        return restantes
+
     def obter_historico(self):
         disciplina_dao = DisciplinaDao()
         lista_disciplinas = disciplina_dao.obter_disciplinas_usuario(self.__usuario_logado.id)
@@ -423,9 +432,10 @@ class Core(object):
         if id != False:
             if Curso.obter_curso(id) != False:
                 Curso.remover_curso(id)
-            return curso_dao.excluir(id)
+            curso_dao.excluir(id)
+            curso_dao.excluir_dos_usuarios(id)
+            return True
 
-        print ("ERRO: Core.py - excluir_curso")
         return False
 
     def excluir_disciplina(self, disciplina):
@@ -438,21 +448,34 @@ class Core(object):
         if disciplina != False:
             disciplina.remover_disciplina(id)
         disciplina_dao.excluir(id)
+        disciplina_dao.excluir_do_historico(id)
+        disciplina_dao.excluir_dos_cursos(id)
 
         return True
 
     def obter_id_logado(self):
         return self.__usuario_logado.__id
-	
-    def gerar_horarios(self, disciplinas_usuario):
-		# True - certo, False - erro
-        # disciplinas_usuario é uma lista com os ids das disciplinas que o usuario vai cursar
+
+    def gerar_horarios(self, disciplinas):
+        disciplina_dao = DisciplinaDao()
+
+        disciplinas_usuario = []
+        for disciplina in disciplinas:
+            id = disciplina_dao.obter_id_criado(disciplina)
+            disciplinas_usuario.append(id)
+
+        # disciplinas_usuario = self.seleciona_horarios(disciplinas_usuario)
         horario = Horario()
         try:
+            count_aprovacao_baixa = 0
+            aprovacao_media = 0
+            aviso_reprovacao = False
             for id in disciplinas_usuario:
-                print (id)
                 disciplina_aux = Disciplina.obter_disciplina(id)
-                print (disciplina_aux.nome)
+
+                aprovacao_media += disciplina_aux.aprovacao
+                if disciplina_aux.aprovacao < 40:
+                    count_aprovacao_baixa += 1
                 if (disciplina_aux.segunda > 0):
                     horario.add_elemento(disciplina_aux.segunda, "segunda", disciplina_aux.nome)
                 if (disciplina_aux.terca > 0):
@@ -463,10 +486,15 @@ class Core(object):
                     horario.add_elemento(disciplina_aux.quinta, "quinta", disciplina_aux.nome)
                 if (disciplina_aux.sexta > 0):
                     horario.add_elemento(disciplina_aux.sexta, "sexta", disciplina_aux.nome)
-            return horario.dataframe
         except:
-            print ("ERRO: Core.py - gerar_horario")
-            return horario.dataframe
+            pass
+
+        aprovacao_media = aprovacao_media / len(disciplinas_usuario)
+        self.ultimo_horario = horario
+        if count_aprovacao_baixa >= 2:
+            aviso_reprovacao = True
+
+        return (horario.dataframe, aviso_reprovacao, aprovacao_media)
 				
     def gerar_horarios_csv(self, disciplinas_usuario, path_or_buf):
 		# True - certo, False - erro
@@ -474,7 +502,6 @@ class Core(object):
         horario = Horario()
         for id in disciplinas_usuario:
             disciplina_aux = Disciplina.obter_disciplina(id)
-            print (disciplina_aux.nome)
             if (disciplina_aux.segunda > 0):
                 horario.add_elemento(disciplina_aux.segunda, "segunda", disciplina_aux.nome)
             if (disciplina_aux.terca > 0):
@@ -487,3 +514,17 @@ class Core(object):
                 horario.add_elemento(disciplina_aux.sexta, "sexta", disciplina_aux.nome)
         horario.to_csv(path_or_buf)
 
+    def salvar_csv(self):
+        diretorio_atual = os.getcwd() + "/"
+        caminho_arquivo = diretorio_atual + "horario_gerado.csv"
+        self.ultimo_horario.to_csv(caminho_arquivo)
+
+    # # Remove horários conflitantes
+	# def seleciona_horarios(self, disciplinas_id):
+    #     pass
+    #     # TO-DO
+    #     # horarios_ocupados = pd.DataFrame(index=["13h", "15h"], columns=["segunda-feira", "terca-feira"])
+    #     # if horarios_ocupados.loc["13h"]["segunda-feira"] is np.nan:
+    #     #     xd = 1
+    #     # for id in disciplinas_id:
+    #     #     disciplina_aux = Disciplina.obter_disciplina(id)

@@ -16,27 +16,12 @@ class Interface(object):
         """
         self.controlador = Controlador(self)
 
-        #self.disciplina = Disciplina("teste", 5, 50,5)
-
         """
         Todos os elementos criados no mainframe são adicionados nessa lista.
         Quando é necessário trocar de layout, é chamada uma função que exclui todos elementos dessa lista
         """
         self.elementos = []
         self.temp = None
-
-        #testes
-        #self.controlador.criar_disciplinas("portugues", 6, 50, 10, 20, 30, 40, 50)
-
-        #self.controlador.criar_curso("engenharia de putaria")
-        #self.controlador.atualizar_curso("engenharia de putaria", "oioi")
-        #self.controlador.atualizar_disciplinas("portugues", 6, 50)
-        #self.controlador.criar_disciplinas("portugues", 6, 50)
-
-
-        #teste = self.
-        #DisciplinaDao.atualizar(self,"matematica", 6, 90, "matematica2222")
-        #self.controlador.atualizar_disciplina("chupa", "chupa 2", 6, 90, 1, 2, 3, 4, 5)
 
         # Código configuração da janela
         main_window.setObjectName("engsoft")
@@ -185,8 +170,6 @@ class Interface(object):
         item.setText("Disciplinas")
         dummy.setHorizontalHeaderItem(0, item)
 
-        print(disciplinas_curso)
-
         for i in range(len(disciplinas)):
             item = QtWidgets.QTableWidgetItem()
             item.setText(disciplinas[i])
@@ -208,9 +191,6 @@ class Interface(object):
 
     def criar_historico_disciplinas(self, disciplinas_curso, disciplinas):
         self.novo_frame()
-
-        print(disciplinas_curso)
-        print(disciplinas)
 
         # 1 - Botão Adicionar Disciplinas
         dummy = QtWidgets.QPushButton(self.mainframe)
@@ -1249,10 +1229,176 @@ class Interface(object):
         self.elementos.append(dummy)
 
         self.mainframe.setVisible(True)
-		
-    def criar_gerenciar_horarios(self, horarios):
-        # TO DO - printar tabela de horários na tela
-        pass
+
+    def criar_horario_gerado(self, dataframe, aviso_reprovacao, aprovacao_media):
+        self.novo_frame()
+
+        # 1 - Botão Salvar CSV
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(70, 310, 111, 22))
+        dummy.setObjectName("botao_salvar_csv")
+        dummy.setText("Salvar em CSV")
+        dummy.clicked.connect(self.controlador.salvar_horarios)
+        self.elementos.append(dummy)
+
+        # 2 - Botão Voltar
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(190, 310, 61, 22))
+        dummy.setObjectName("botao_voltar")
+        dummy.setText("Voltar")
+        dummy.clicked.connect(self.controlador.gerenciar_horarios)
+        self.elementos.append(dummy)
+
+        # 3 - Tabela Gerada
+        dummy = QtWidgets.QTableWidget(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(20, 60, 533, 233))
+        dummy.setObjectName("tableWidget")
+        dummy.setColumnCount(5)
+        dummy.setRowCount(7)
+        dummy.setSelectionMode(QtWidgets.QAbstractItemView.NoSelection)
+        item = QtWidgets.QTableWidgetItem()
+        item.setText("8h")
+        dummy.setVerticalHeaderItem(0, item)
+
+        item = QtWidgets.QTableWidgetItem()
+        dummy.setVerticalHeaderItem(1, item)
+        item.setText("10h")
+
+        item = QtWidgets.QTableWidgetItem()
+        dummy.setVerticalHeaderItem(2, item)
+        item.setText("13h")
+
+        item = QtWidgets.QTableWidgetItem()
+        dummy.setVerticalHeaderItem(3, item)
+        item.setText("15h")
+
+        item = QtWidgets.QTableWidgetItem()
+        dummy.setVerticalHeaderItem(4, item)
+        item.setText("17h")
+
+        item = QtWidgets.QTableWidgetItem()
+        dummy.setVerticalHeaderItem(5, item)
+        item.setText("19h")
+
+        item = QtWidgets.QTableWidgetItem()
+        dummy.setVerticalHeaderItem(6, item)
+        item.setText("21h")
+
+        item = QtWidgets.QTableWidgetItem()
+        dummy.setHorizontalHeaderItem(0, item)
+        item.setText("Segunda")
+
+        item = QtWidgets.QTableWidgetItem()
+        dummy.setHorizontalHeaderItem(1, item)
+        item.setText("Terça")
+
+        item = QtWidgets.QTableWidgetItem()
+        dummy.setHorizontalHeaderItem(2, item)
+        item.setText("Quarta")
+
+        item = QtWidgets.QTableWidgetItem()
+        dummy.setHorizontalHeaderItem(3, item)
+        item.setText("Quinta")
+
+        item = QtWidgets.QTableWidgetItem()
+        dummy.setHorizontalHeaderItem(4, item)
+        item.setText("Sexta")
+
+        ### Populate
+        for i in range(7):
+            for j in range(5):
+                item = QtWidgets.QTableWidgetItem()
+                horario = dataframe.iloc[i][j]
+                if horario == "-":
+                    item.setText("")
+                else:
+                    item.setText(horario)
+                dummy.setItem(i, j, item)
+
+        dummy.horizontalHeader().setDefaultSectionSize(100)
+        self.elementos.append(dummy)
+
+        # 4 - Label Horário Gerado
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(20, 40, 231, 16))
+        dummy.setObjectName("label_horario_gerado")
+        dummy.setText("Horário Gerado:")
+        self.elementos.append(dummy)
+
+        # 5 - Label Aviso Reprovação
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(180, 40, 371, 16))
+        dummy.setObjectName("label_aviso_reprovacao")
+        if aviso_reprovacao:
+            dummy.setText("Essa tabela contém disciplinas com alta taxa de reprovação!")
+        else:
+            dummy.setText("")
+        self.elementos.append(dummy)
+
+        # 6 - Label Taxa Média Aprovação
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(280, 310, 210, 16))
+        dummy.setObjectName("label_media_reprovacao")
+        texto = "Taxa Média de Aprovação: " + str(aprovacao_media) + "%"
+        dummy.setText(texto)
+        self.elementos.append(dummy)
+
+        self.mainframe.setVisible(True)
+
+
+    def criar_gerenciar_horarios(self, disciplinas):
+        self.novo_frame()
+
+        # 1 - Botão Adicionar Disciplinas
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(70, 340, 141, 22))
+        dummy.setObjectName("botao_gerar_horario")
+        dummy.setText("Gerar Horário")
+        dummy.clicked.connect(self.gerar_horario_pressionado)
+        self.elementos.append(dummy)
+
+        # 2 - Botão Voltar
+        dummy = QtWidgets.QPushButton(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(220, 340, 61, 22))
+        dummy.setObjectName("botao_voltar")
+        dummy.setText("Voltar")
+        dummy.clicked.connect(self.ver_perfil_pressionado)
+        self.elementos.append(dummy)
+
+        # 3 - Tabela
+        dummy = QtWidgets.QTableWidget(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(70, 40, 231, 281))
+        dummy.setObjectName("tableWidget")
+        dummy.setColumnCount(1)
+        dummy.setRowCount(len(disciplinas))
+
+        item = QtWidgets.QTableWidgetItem()
+        item.setText("Disciplinas")
+        dummy.setHorizontalHeaderItem(0, item)
+
+        for i in range(len(disciplinas)):
+            item = QtWidgets.QTableWidgetItem()
+            item.setText(disciplinas[i])
+            dummy.setItem(i, 0, item)
+
+        dummy.horizontalHeader().setDefaultSectionSize(200)
+        self.elementos.append(dummy)
+
+        # 4 - Label Disciplinas
+        dummy = QtWidgets.QLabel(self.mainframe)
+        dummy.setGeometry(QtCore.QRect(70, 20, 300, 16))
+        dummy.setObjectName("label_disciplinas")
+        dummy.setText("Selecione as disciplinas para gerar o horário:")
+        self.elementos.append(dummy)
+
+        self.mainframe.setVisible(True)
+
+    def gerar_horario_pressionado(self):
+        lista_disciplinas = []
+        for item_selecionado in self.elementos[2].selectedItems():
+            lista_disciplinas.append(item_selecionado.text())
+
+        self.controlador.gerar_horario(lista_disciplinas)
 
     def relacionar_disciplinas_pressionado(self):
         self.controlador.relacionar_disciplinas(self.temp)
